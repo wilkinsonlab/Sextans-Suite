@@ -51,15 +51,12 @@ production="true"
 
 
 echo "Sextans Sight Installation in Demilitarized Zone"
+echo ""
+echo "The next question asks for your permanent GUID."
+echo "If you are installing just to test things, "
+echo "please use a localhost:XXXX address to answer this question. "
+echo "IN THIS CASE, NOTE: XXXX must match your answer to the 'port for your Sight Server', in the next question!!"
 read -p "Your permanent GUID (e.g. https://w3id.org/my-organization): " uri
-
-if [ -z $P ]; then
-  read -p "enter a prefix for your components (e.g. euronmd) NOTE: All existing installations with the same prefix will be obliterated!!!!: " P
-  if [ -z $P ]; then
-    echo "invalid..."
-    exit 1
-  fi
-fi
 
 
 # FDP_PORT handling
@@ -104,6 +101,16 @@ if is_banned_port "$GDB_PORT"; then
   echo "This will prevent users from connecting to your server through those browsers."
   echo "Please choose a different port. Safe common options include 3000, 4000, 5000, 7200, 8080, 8000, or 9000."
   exit 1
+fi
+
+
+
+if [ -z $P ]; then
+  read -p "enter a prefix for your components (e.g. euronmd) NOTE: All existing installations with the same prefix will be obliterated!!!!: " P
+  if [ -z $P ]; then
+    echo "invalid..."
+    exit 1
+  fi
 fi
 
 
