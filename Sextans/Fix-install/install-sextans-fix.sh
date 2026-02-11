@@ -104,6 +104,7 @@ export TMPDIR=$HOME/tmp
 export FDP_PREFIX=$P
 
 docker network rm bootstrap_fix_default
+# this next line might throw an error if there was never a previous installation - that's fine!
 docker ps -a | egrep -oh "${P}-Sextans.*" | xargs docker rm
 docker rm -f  bootstrap_fix_graphdb_1 
 docker volume remove -f "${P}-graphdb"

@@ -75,12 +75,7 @@ services:
 volumes:
   {PREFIX}-graphdb:
     external: true
-  {PREFIX}-mongo-data:
-    external: true
-  {PREFIX}-mongo-init:
-    external: true
-  {PREFIX}-fdp-server:
-    external: true
+
 
 networks:
   {PREFIX}-default:

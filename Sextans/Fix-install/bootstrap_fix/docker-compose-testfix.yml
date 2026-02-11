@@ -1,0 +1,32 @@
+
+services:
+  graphdb:
+    image: fairdatasystems/gdb:2026-01-26
+    restart: always
+    hostname: graphdb
+    ports:
+      - 7200:7200
+    volumes:
+      - testfix-graphdb:/opt/graphdb/home
+    networks:
+      - graphdb_net
+    
+  #  This service create's `cde` and `fdp` repositories in graphdb	
+  graph_db_repo_manager:
+    build: ./graph-db-repo-manager
+    depends_on:
+      - graphdb
+    environment:
+      - "GRAPH_DB_URL=http://graphdb:7200"
+      - "GRAPH_DB_ADMIN_USERNAME=admin"
+      - "GRAPH_DB_ADMIN_PASSWORD=root"
+      - FDP_PREFIX=testfix
+    networks:
+      - graphdb_net
+
+volumes:
+  testfix-graphdb:
+    external: true
+
+networks:
+  graphdb_net:

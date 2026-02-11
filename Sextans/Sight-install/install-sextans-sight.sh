@@ -120,6 +120,7 @@ export TMPDIR=$HOME/tmp
 export FDP_PREFIX=$P
 
 docker network rm bootstrap_sight__default
+# this next line might throw an error if there was never a previous installation - that's fine!
 docker ps -a | egrep -oh "${P}-Sextans.*" | xargs docker rm
 docker rm -f  bootstrap_sight_graphdb_1 config_fdp_1 config_fdp_client_1
 docker volume remove -f "${P}-graphdb ${P}-fdp-client-assets ${P}-fdp-client-css ${P}-fdp-client-scss ${P}-fdp-server ${P}-mongo-data ${P}-mongo-init"
