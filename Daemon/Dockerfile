@@ -1,11 +1,7 @@
 #FROM ruby:3.0.6
-FROM ruby:3.3.6-alpine3.21
-RUN apk update && apk add --no-cache build-base git make gcc libffi-dev ruby-dev zlib-dev
+FROM ruby:ruby:3.2.4-alpine3.20
+RUN apk update && apk add --no-cache build-base git make gcc libffi-dev ruby-dev zlib-dev curl
 
-# RUN apt-get -y update
-# RUN apt-get -y dist-upgrade
-# RUN apt-get -y update
-# RUN apt-get -y install git
 RUN gem install bundler
 # throw errors if Gemfile has been modified since Gemfile.lock
 RUN bundle config --global frozen 1

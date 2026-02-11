@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'sinatra'
 require 'rest-client'
 require './http_utils'
@@ -25,9 +27,9 @@ def update
 end
 
 def caresm
-  warn "starting CareSM"
+  warn 'starting CareSM'
 
-  warn "calling the caresm interface"
+  warn 'calling the caresm interface'
   _res = RestClient.post('http://caresm:8000/toolkit', '{}')
   sleep 3
   warn _res.inspect
@@ -36,31 +38,31 @@ def caresm
 end
 
 def yarrrml_substitute
-  warn "starting yarrrml substitution"
-  baseURI = ENV.fetch('baseURI', 'http://example.org/')
-  baseURI = 'http://example.org/' if baseURI.empty?
-# template_list = Dir['/conf/CSV_yarrrml_template.yaml']
-# template_list.each do |t|  # now it is always /conf/CSV_yarrrml_template.yaml... but maybe one day we will be more flexible?
+  warn 'starting yarrrml substitution'
+  baseuri = ENV.fetch('baseURI', 'http://example.org/')
+  baseuri = 'http://example.org/' if baseuri.empty?
+  # template_list = Dir['/conf/CSV_yarrrml_template.yaml']
+  # template_list.each do |t|  # now it is always /conf/CSV_yarrrml_template.yaml... but maybe one day we will be more flexible?
   content = File.read('/data/CARE_Fiab_yarrrml.yaml')
-  content.gsub!('|||baseURI|||', baseURI)
-  f = File.open('/data/CARE_yarrrml.yaml', "w")
+  content.gsub!('|||baseURI|||', baseuri)
+  f = File.open('/data/CARE_yarrrml.yaml', 'w')
   f.puts content
   f.close
   # end
-  warn "finished yarrrml substitution"
+  warn 'finished yarrrml substitution'
 end
 
 def execute
-  warn "executing transform"
+  warn 'executing transform'
   purge_nt
   datatype_list = Dir['/data/CARE.csv']
   datatype_list.each do |d|
-    datatype = d.match(%r{.+/([^.]+)\.csv})[1]  # this is totally useless now... but we'll keep it just for posterity!
+    datatype = d.match(%r{.+/([^.]+)\.csv})[1] # this is totally useless now... but we'll keep it just for posterity!
     next unless datatype
 
     _resp = RestClient.get("http://yarrrml-rdfizer:4567/#{datatype}")
   end
-  warn "done transform"
+  warn 'done transform'
 end
 
 def load_cde
@@ -97,7 +99,7 @@ ensure
   warn 'looks like it is already clean in here!'
 end
 
-def metadata_update
+def metadata_update # rubocop:disable Metrics/AbcSize
   return if ENV['DIST_RECORDID'].nil? || ENV['DATASET_RECORDID'].nil? || ENV['DATA_SPARQL_ENDPOINT'].nil?
   return if ENV['DIST_RECORDID'].empty? || ENV['DATASET_RECORDID'].empty? || ENV['DATA_SPARQL_ENDPOINT'].empty?
 
