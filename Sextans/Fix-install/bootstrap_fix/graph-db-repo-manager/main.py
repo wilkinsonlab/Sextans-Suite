@@ -7,7 +7,7 @@ from requests.auth import HTTPBasicAuth
 
 GRAPHDB_ADMIN_USER = os.environ['GRAPH_DB_ADMIN_USERNAME']
 GRAPHDB_ADMIN_PASSWORD = os.environ['GRAPH_DB_ADMIN_PASSWORD']
-FDP_PREFIX = os.environ['FDP_PREFIX']
+GDB_PREFIX = os.environ['GDB_PREFIX']
 graphdb_url = os.environ['GRAPH_DB_URL']
 
 
@@ -77,7 +77,7 @@ def main(graphdb_url):
     '''
     Create sextans-fix repository in graph DB
     '''
-    repo_id = FDP_PREFIX + "-sextans-fix"
+    repo_id = GDB_PREFIX + "-sextans-fix"
     repo_description = "Repository to store CARE-SM RDF Data"
     create_repository(graphdb_url, repo_id, repo_description)
     print(repo_id + " Created")
@@ -88,8 +88,8 @@ def main(graphdb_url):
     secure_graphdb(graphdb_url)
 
 print("Repository manager script started")
-if FDP_PREFIX == '':
-  sys.exit("MUST SET FDP_PREFIX ENVIRONMENT VARIABLE")
+if GDB_PREFIX == '':
+  sys.exit("MUST SET GDB_PREFIX ENVIRONMENT VARIABLE")
 
 if graphdb_url.endswith("/"):
     graphdb_url = graphdb_url[:-1]

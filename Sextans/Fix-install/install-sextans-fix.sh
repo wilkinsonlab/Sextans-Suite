@@ -44,7 +44,13 @@ is_banned_port() {
   return 1  # not banned
 }
 
+echo ""
+echo ""
+echo ""
 echo "Sextans Fix Server Secure Environment Installation"
+echo ""
+echo ""
+echo ""
 
 if [ -z $P ]; then
   read -p "enter a prefix for your components (e.g. euronmd) NOTE: All existing installations IN THE SECURE SPACE with the same prefix will be obliterated!!!!: " P
@@ -101,7 +107,7 @@ fi
 mkdir $HOME/tmp
 export TMPDIR=$HOME/tmp
 # needed by the main.py script
-export FDP_PREFIX=$P
+export GDB_PREFIX=$P
 
 docker network rm bootstrap_fix_default
 # this next line might throw an error if there was never a previous installation - that's fine!
@@ -123,7 +129,9 @@ cp docker-compose-template.yml "docker-compose-${P}.yml"
 sed -i'' -e "s/{PREFIX}/${P}/" "docker-compose-${P}.yml"
 
 docker compose -f "docker-compose-${P}.yml" up --build -d
-sleep 120
+#docker compose -f "docker-compose-${P}.yml" up --build
+sleep 60
+"docker-compose-${P}.yml"
 
 echo ""
 echo -e "${GREEN}Creating a Sextans Fix Production Server folder in ${NC} ./${P}-Sextans-Fix/"

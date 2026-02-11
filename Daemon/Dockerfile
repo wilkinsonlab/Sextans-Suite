@@ -1,5 +1,5 @@
 #FROM ruby:3.0.6
-FROM ruby:ruby:3.2.4-alpine3.20
+FROM ruby:3.2.4-alpine
 RUN apk update && apk add --no-cache build-base git make gcc libffi-dev ruby-dev zlib-dev curl
 
 RUN gem install bundler

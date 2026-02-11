@@ -1,0 +1,23 @@
+Target,VulnerabilityID,Package,InstalledVersion,FixedVersion,Severity,Title,PrimaryURL
+fairdatasystems/cdeb:2026-02-11 (alpine 3.20.2),CVE-2025-15467,libcrypto3,3.3.1-r3,3.3.6-r0,CRITICAL,openssl: OpenSSL: Remote code execution or Denial of Service via oversized Initialization Vector in CMS parsing,https://avd.aquasec.com/nvd/cve-2025-15467
+fairdatasystems/cdeb:2026-02-11 (alpine 3.20.2),CVE-2024-12797,libcrypto3,3.3.1-r3,3.3.3-r0,HIGH,openssl: RFC7250 handshakes with unauthenticated servers don't abort as expected,https://avd.aquasec.com/nvd/cve-2024-12797
+fairdatasystems/cdeb:2026-02-11 (alpine 3.20.2),CVE-2024-6119,libcrypto3,3.3.1-r3,3.3.2-r0,HIGH,openssl: Possible denial of service in X.509 name checks,https://avd.aquasec.com/nvd/cve-2024-6119
+fairdatasystems/cdeb:2026-02-11 (alpine 3.20.2),CVE-2025-69419,libcrypto3,3.3.1-r3,3.3.6-r0,HIGH,openssl: OpenSSL: Arbitrary code execution due to out-of-bounds write in PKCS#12 processing,https://avd.aquasec.com/nvd/cve-2025-69419
+fairdatasystems/cdeb:2026-02-11 (alpine 3.20.2),CVE-2025-69421,libcrypto3,3.3.1-r3,3.3.6-r0,HIGH,openssl: OpenSSL: Denial of Service via malformed PKCS#12 file processing,https://avd.aquasec.com/nvd/cve-2025-69421
+fairdatasystems/cdeb:2026-02-11 (alpine 3.20.2),CVE-2025-15467,libssl3,3.3.1-r3,3.3.6-r0,CRITICAL,openssl: OpenSSL: Remote code execution or Denial of Service via oversized Initialization Vector in CMS parsing,https://avd.aquasec.com/nvd/cve-2025-15467
+fairdatasystems/cdeb:2026-02-11 (alpine 3.20.2),CVE-2024-12797,libssl3,3.3.1-r3,3.3.3-r0,HIGH,openssl: RFC7250 handshakes with unauthenticated servers don't abort as expected,https://avd.aquasec.com/nvd/cve-2024-12797
+fairdatasystems/cdeb:2026-02-11 (alpine 3.20.2),CVE-2024-6119,libssl3,3.3.1-r3,3.3.2-r0,HIGH,openssl: Possible denial of service in X.509 name checks,https://avd.aquasec.com/nvd/cve-2024-6119
+fairdatasystems/cdeb:2026-02-11 (alpine 3.20.2),CVE-2025-69419,libssl3,3.3.1-r3,3.3.6-r0,HIGH,openssl: OpenSSL: Arbitrary code execution due to out-of-bounds write in PKCS#12 processing,https://avd.aquasec.com/nvd/cve-2025-69419
+fairdatasystems/cdeb:2026-02-11 (alpine 3.20.2),CVE-2025-69421,libssl3,3.3.1-r3,3.3.6-r0,HIGH,openssl: OpenSSL: Denial of Service via malformed PKCS#12 file processing,https://avd.aquasec.com/nvd/cve-2025-69421
+fairdatasystems/cdeb:2026-02-11 (alpine 3.20.2),CVE-2025-26519,musl-utils,1.2.5-r0,1.2.5-r1,HIGH,musl libc 0.9.13 through 1.2.5 before 1.2.6 has an out-of-bounds write ...,https://avd.aquasec.com/nvd/cve-2025-26519
+Ruby,GHSA-353f-x4gh-cqq8,nokogiri,1.17.2,>= 1.18.9,CRITICAL,Nokogiri patches vendored libxml2 to resolve multiple CVEs,https://github.com/advisories/GHSA-353f-x4gh-cqq8
+Ruby,GHSA-mrxw-mxhj-p664,nokogiri,1.17.2,>= 1.18.4,HIGH,Nokogiri updates packaged libxslt to v1.1.43 to resolve multiple CVEs,https://github.com/advisories/GHSA-mrxw-mxhj-p664
+Ruby,CVE-2025-27111,rack,3.1.8,"~> 2.2.12, ~> 3.0.13, >= 3.1.11",HIGH,rack: rubygem-rack: Escape Sequence Injection vulnerability in Rack lead to Possible Log Injection,https://avd.aquasec.com/nvd/cve-2025-27111
+Ruby,CVE-2025-27610,rack,3.1.8,"~> 2.2.13, ~> 3.0.14, >= 3.1.12",HIGH,rack: rubygem-rack: Local File Inclusion in Rack::Static,https://avd.aquasec.com/nvd/cve-2025-27610
+Ruby,CVE-2025-46727,rack,3.1.8,"~> 2.2.14, ~> 3.0.16, >= 3.1.14",HIGH,rubygem-rack: Unbounded-Parameter DoS in Rack::QueryParser,https://avd.aquasec.com/nvd/cve-2025-46727
+Ruby,CVE-2025-61770,rack,3.1.8,"~> 2.2.19, ~> 3.1.17, >= 3.2.2",HIGH,rack: Rack's unbounded multipart preamble buffering enables DoS (memory exhaustion),https://avd.aquasec.com/nvd/cve-2025-61770
+Ruby,CVE-2025-61771,rack,3.1.8,"~> 2.2.19, ~> 3.1.17, >= 3.2.2",HIGH,"rack: Rack's multipart parser buffers large non‑file fields entirely in memory, enabling DoS (memory exhaustion)",https://avd.aquasec.com/nvd/cve-2025-61771
+Ruby,CVE-2025-61772,rack,3.1.8,"~> 2.2.19, ~> 3.1.17, >= 3.2.2",HIGH,rack: Rack memory exhaustion denial of service,https://avd.aquasec.com/nvd/cve-2025-61772
+Ruby,CVE-2025-61919,rack,3.1.8,"~> 2.2.20, ~> 3.1.18, >= 3.2.3",HIGH,rubygem-rack: Unbounded read in `Rack::Request` form parsing can lead to memory exhaustion,https://avd.aquasec.com/nvd/cve-2025-61919
+Ruby,CVE-2024-49761,rexml,3.2.5,>= 3.3.9,HIGH,rexml: REXML ReDoS vulnerability,https://avd.aquasec.com/nvd/cve-2024-49761
+Ruby,CVE-2025-61921,sinatra,4.1.1,>= 4.2.0,HIGH,sinatra: Sinatra has ReDoS vulnerability in ETag header value generation,https://avd.aquasec.com/nvd/cve-2025-61921

@@ -148,6 +148,7 @@ sleep 5
 
 docker compose -f "docker-compose-${P}.yml" up --build -d
 sleep 60
+rm "docker-compose-${P}.yml"
 
 echo ""
 echo -e "${GREEN}Setting up Sextans Sight client and server${NC}"

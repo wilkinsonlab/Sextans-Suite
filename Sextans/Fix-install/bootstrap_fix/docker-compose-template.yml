@@ -20,7 +20,7 @@ services:
       - "GRAPH_DB_URL=http://graphdb:7200"
       - "GRAPH_DB_ADMIN_USERNAME=admin"
       - "GRAPH_DB_ADMIN_PASSWORD=root"
-      - FDP_PREFIX={PREFIX}
+      - GDB_PREFIX={PREFIX}
     networks:
       - graphdb_net
 

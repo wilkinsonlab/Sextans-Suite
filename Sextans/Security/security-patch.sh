@@ -37,7 +37,7 @@ echo "END"
 
 # fairdata/fairdatapoint:1.17.6
 image="fairdata/fairdatapoint:1.17.6"
-name="fdp"
+name="fdpserv"
 outputfile=("./security_scan_output/scanresults_${name}_${timestamp}.json")
 docker run -d --name ${name} ${image}
 # use the appropriate distribution upgrade tool for that container’s operating system
@@ -123,8 +123,7 @@ echo "END"
 
 
 
-# markw/cde-box-daemon:0.7.0
-image="markw/cde-box-daemon:0.7.0"
+image="markw/cde-box-daemon:0.7.2"
 name="cdeb"
 outputfile=("./security_scan_output/scanresults_${name}_${timestamp}.json")
 docker run -d --name ${name} ${image}
