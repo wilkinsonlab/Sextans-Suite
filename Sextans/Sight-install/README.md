@@ -32,6 +32,7 @@ To use Sextans Sight you `must` meet the following requirements.
 
 - Docker engine ​
 - Docker-compose application​
+- Accessible via HTTP(S) calls from your user community (local or global)
 
 ---
 
