@@ -197,4 +197,9 @@ curl -X POST https://index.vp.ejprarediseases.org/ -H "Content-Type: application
 ```
 (you cannot use your localhost address for this call)
 
+
+###  IGNORE THIS FOR THE MOMENT
+
+####These instructions are under review.  Please use them only for general reference purposes.
+
 __Full instructions for modifying your default FAIR-in-a-box to match the schema requirements for the Virtual Platform can be found here:  https://github.com/ejp-rd-vp/FDP-Configuration__
