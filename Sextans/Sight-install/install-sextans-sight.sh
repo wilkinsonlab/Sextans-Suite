@@ -52,15 +52,37 @@ production="true"
 
 echo "Sextans Sight Installation in Demilitarized Zone"
 echo ""
+
+
+echo "The first question asks for a 'prefix'."
+echo "This is used to compartmentalize your installation, such that you can have multiple Sextans Sight servers running in parallel."
+echo "(effectively, it is a namespace for your installation)."
+echo "The installer tries to delete all existing containers and volumes with the same prefix, so please be careful when choosing this if you have existing installations you care about!" 
+echo ""
+
+if [ -z $P ]; then
+  read -p "enter a prefix for your components (e.g. euronmd) NOTE: All existing installations with the same prefix will be obliterated!!!!: " P
+  if [ -z $P ]; then
+    echo "invalid..."
+    exit 1
+  fi
+fi
+
+
+
 echo "The next question asks for your permanent GUID."
+echo "If you have a permanent identifier, please be sure that all proxies and redirects are alredy setup and working. "
+echo "If you have a proxy, you must know the port that the proxy is pointing to. "
 echo "If you are installing just to test things, "
-echo "please use a localhost:XXXX address to answer this question. "
-echo "IN THIS CASE, NOTE: XXXX must match your answer to the 'port for your Sight Server', in the next question!!"
+echo "please feel free to use a localhost:PORTXXXX address to answer this question. (you will not be able to register a localhost installation in any registry)"
+echo "IN THIS CASE, NOTE: PORTXXXX must match your answer to the 'port for your Sight Server', in the next question!!"
 read -p "Your permanent GUID (e.g. https://w3id.org/my-organization): " uri
 
 
 # FDP_PORT handling
 if [ -z "$FDP_PORT" ]; then
+  echo "If you have a permanent identifier, you will already have an SSL proxy and redirect. "
+  echo "The answer to the next question is the port that the proxy is pointing to. "
   read -p "Enter the port for your Sight Server (e.g. 7070): " FDP_PORT
 fi
 
@@ -83,6 +105,8 @@ fi
 
 # GDB_PORT handling
 if [ -z "$GDB_PORT" ]; then
+  echo "The next question relates to the GraphDB database that contains your Sight metadata. "
+  echo "By default, this will NOT be exposed after installation, but we capture the port number here so that it can easily be switched ON for troubleshooting or maintenance. "
   read -p "Enter the port where your GraphDB will serve (e.g. 7200): " GDB_PORT
 fi
 
@@ -101,16 +125,6 @@ if is_banned_port "$GDB_PORT"; then
   echo "This will prevent users from connecting to your server through those browsers."
   echo "Please choose a different port. Safe common options include 3000, 4000, 5000, 7200, 8080, 8000, or 9000."
   exit 1
-fi
-
-
-
-if [ -z $P ]; then
-  read -p "enter a prefix for your components (e.g. euronmd) NOTE: All existing installations with the same prefix will be obliterated!!!!: " P
-  if [ -z $P ]; then
-    echo "invalid..."
-    exit 1
-  fi
 fi
 
 
