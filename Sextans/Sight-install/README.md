@@ -61,19 +61,19 @@ git clone https://github.com/wilkinsonlab/Sextans-Suite.git
 At the beginning of the installation process you are asked three questions:
 
 ### A Prefix for your installation
-    The prefix is used as a "namespace" to isolate indepdent Sight installations from one another.  This allows you to run multiple Metadata servers on the same machine.  The prefix is used for the docker network, docker volumes, and appears in the configuration files and docker-compose yaml files.  This can be any set of letter/number characters.  Please do not use punctuation characters.  e.g. 'euronmd1'  We will use *'ACME'* for the remainder of this document.
+The prefix is used as a "namespace" to isolate indepdent Sight installations from one another.  This allows you to run multiple Metadata servers on the same machine.  The prefix is used for the docker network, docker volumes, and appears in the configuration files and docker-compose yaml files.  This can be any set of letter/number characters.  Please do not use punctuation characters.  e.g. 'euronmd1'  We will use *'ACME'* for the remainder of this document.
 
 ### Your permanent GUID
-  For production installations, you should have already decided what your server URL will be, you should have already set up a Permanent Identifier redirect (e.g. using w3id), and you should already have a reverse proxy on your server to manage incoming requests from that redirect and point them at a specific localhost:PORT.  
+For production installations, you should have already decided what your server URL will be, you should have already set up a Permanent Identifier redirect (e.g. using w3id), and you should already have a reverse proxy on your server to manage incoming requests from that redirect and point them at a specific localhost:PORT.  
 
-  For test installations, you can use a localhost:PORT address here.  Everything will work, but you cannot register your server in the central metadata index (e.g. the ERDERA VP Index). In this case, your PORT must match your answer to the next question about Sight Server port.
+For test installations, you can use a localhost:PORT address here.  Everything will work, but you cannot register your server in the central metadata index (e.g. the ERDERA VP Index). In this case, your PORT must match your answer to the next question about Sight Server port.
 
 ### Port for your Sight Server
-    This is the port that will be used by the FDP Client component.  This is validated against a list of "banned" ports (ports that are likely to be used by other software on your system).  It is a good idea to stay in the range of ~4000-10000.  If you have already set up an SSL proxy, this is the port that your proxy will point to.
+This is the port that will be used by the FDP Client component.  This is validated against a list of "banned" ports (ports that are likely to be used by other software on your system).  It is a good idea to stay in the range of ~4000-10000.  If you have already set up an SSL proxy, this is the port that your proxy will point to.
 
 ### Port for your GraphDB
-    This is the port that will be used by the GraphDB metadata database component.  This is validated against a list of "banned" ports (ports that are likely to be used by other software on your system).  It is a good idea to stay in the range of ~4000-10000. 
-    By detault, this port is disabled after installation, so your graphdb cannot be accessed.  You will need to enable it, at least once, to login to GraphDB's web page and create a secure user for your Sight server (and change the login for the Admin user!).  This port does NOT need to be enabled for the regular operation of Sight, and should be disabled when not needed.
+This is the port that will be used by the GraphDB metadata database component.  This is validated against a list of "banned" ports (ports that are likely to be used by other software on your system).  It is a good idea to stay in the range of ~4000-10000. 
+By detault, this port is disabled after installation, so your graphdb cannot be accessed.  You will need to enable it, at least once, to login to GraphDB's web page and create a secure user for your Sight server (and change the login for the Admin user!).  This port does NOT need to be enabled for the regular operation of Sight, and should be disabled when not needed.
 
 
 ## Installing Sextans Sight
