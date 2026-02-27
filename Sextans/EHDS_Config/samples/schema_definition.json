@@ -1,0 +1,37 @@
+[
+  {
+    "uuid": "2aa7ba63-d27a-4c0e-bfa6-3a4e250f4660",
+    "name": "Catalog",
+    "latest": {
+      "uuid": "2aa7ba63-d27a-4c0e-bfa6-3a4e250f4660",
+      "version": "1.0.0",
+      "versionUuid": "c9640671-945d-4114-88fb-e81314cb7ab2",
+      "previousVersionUuid": null,
+      "name": "Catalog",
+      "published": false,
+      "abstractSchema": false,
+      "latest": true,
+      "type": "INTERNAL",
+      "origin": "https://purl.org/fairdatapoint/app",
+      "importedFrom": "https://purl.org/fairdatapoint/app",
+      "definition": "@prefix :         <http://fairdatapoint.org/> .\n@prefix dash:     <http://datashapes.org/dash#> .\n@prefix dcat:     <http://www.w3.org/ns/dcat#> .\n@prefix dct:      <http://purl.org/dc/terms/> .\n@prefix foaf:     <http://xmlns.com/foaf/0.1/> .\n@prefix sh:       <http://www.w3.org/ns/shacl#> .\n@prefix xsd:      <http://www.w3.org/2001/XMLSchema#> .\n\n:CatalogShape a sh:NodeShape ;\n  sh:targetClass dcat:Catalog ;\n  sh:property [\n    sh:path dct:issued ;\n    sh:datatype xsd:dateTime ;\n    sh:maxCount 1 ;\n    dash:viewer dash:LiteralViewer ;\n    sh:order 20 ;\n  ], [\n    sh:path dct:modified ;\n    sh:datatype xsd:dateTime ;\n    sh:maxCount 1 ;\n    dash:viewer dash:LiteralViewer ;\n    sh:order 21 ;\n  ], [\n    sh:path foaf:homePage ;\n    sh:nodeKind sh:IRI ;\n    sh:maxCount 1 ;\n    dash:editor dash:URIEditor ;\n    dash:viewer dash:LabelViewer ;\n    sh:order 22 ;\n  ], [\n    sh:path dcat:themeTaxonomy ;\n    sh:nodeKind sh:IRI ;\n    dash:viewer dash:LabelViewer ;\n    sh:order 23 ;\n  ] .\n",
+      "description": "",
+      "targetClasses": [
+        "http://www.w3.org/ns/dcat#Catalog"
+      ],
+      "extendsSchemaUuids": [
+        "6a668323-3936-4b53-8380-a4fd2ed082ee"
+      ],
+      "suggestedResourceName": "Catalog",
+      "suggestedUrlPrefix": "catalog"
+    },
+    "draft": null,
+    "versions": [
+      "1.0.0"
+    ],
+    "extendSchemaUuids": [
+      "6a668323-3936-4b53-8380-a4fd2ed082ee"
+    ],
+    "childSchemaUuids": []
+  }
+]

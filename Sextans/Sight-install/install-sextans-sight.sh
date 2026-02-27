@@ -158,10 +158,10 @@ cd bootstrap_sight
 cp docker-compose-template.yml "docker-compose-${P}.yml"
 sed -i'' -e "s/{PREFIX}/${P}/" "docker-compose-${P}.yml"
 docker compose -f "docker-compose-${P}.yml" down
-sleep 5
+sleep 10
 
 docker compose -f "docker-compose-${P}.yml" up --build -d
-sleep 60
+sleep 120
 rm "docker-compose-${P}.yml"
 
 echo ""
@@ -192,7 +192,7 @@ docker compose -f "docker-compose-${P}.yml" up --build -d
 #docker compose -f "docker-compose-${P}.yml" up --build 
 
 
-sleep 60
+sleep 120
 
 echo ""
 echo -e "${GREEN}Creating a production server folder in ${NC} ./${P}-Sextans-Sight/"
