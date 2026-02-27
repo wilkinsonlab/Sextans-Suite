@@ -4,7 +4,7 @@ services:
     image: ontotext/graphdb:10.8.2
     restart: always
     hostname: graphdb
-    ports:
+#    ports:
       # - 7200:7200  #no need to expose graphdb here!
     volumes:
       - {PREFIX}-graphdb:/opt/graphdb/home
