@@ -1,0 +1,58 @@
+@prefix :         <http://fairdatapoint.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcatap: <http://data.europa.eu/r5r/> .
+@prefix healthdcatap: <http://data.europa.eu/healthdcat-ap#> .
+@prefix adms: <http://www.w3.org/ns/adms#> .
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dpv: <https://w3id.org/dpv#> .
+@prefix eli: <http://data.europa.eu/eli/ontology#> .
+@prefix dash:     <http://datashapes.org/dash#> .
+@prefix ejp:   <https://w3id.org/ejp-rd/vocabulary#> .
+@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
+
+
+:DistributionShape a sh:NodeShape ;
+  sh:targetClass dcat:Distribution ;
+    sh:property [
+        sh:name "Access URL (the URL for a direct download of the data)" ;
+        sh:path dcat:accessURL ;
+        sh:minCount 1 ;
+        sh:nodeKind sh:IRI ;
+        sh:severity sh:Violation ;
+        sh:message "Distribution must have at least one dcat:accessURL as an IRI (Health Data Access Body landing page)" ;
+    ] ,
+    sh:property [
+        sh:name "Data Format" ;
+        # TODO  what are the URLs for data format?
+        sh:path dct:format ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:nodeKind sh:IRI ;
+        sh:severity sh:Violation ;
+        sh:message "Distribution must have exactly one dct:format as an IRI" ;
+    ] ,
+    sh:property [
+        sh:name "Rights (the URL to the description of what you are allowed to do with this data download)" ;
+        sh:path dct:rights ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:nodeKind sh:IRI ;
+        sh:severity sh:Violation ;
+        sh:message "Distribution must have exactly one dct:rights statement" ;
+    ] ,
+    sh:property [
+        sh:name "Byte Size as an Integer (about how large is the download?  1Meg = 1000000)" ;
+        sh:path dcat:byteSize ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:nonNegativeInteger ;
+        sh:severity sh:Violation ;
+        sh:message "Distribution must have exactly one dcat:byteSize" ;
+    ]  .

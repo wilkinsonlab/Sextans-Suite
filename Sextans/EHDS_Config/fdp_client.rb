@@ -51,7 +51,6 @@ module FDP
       j = JSON.parse(response.body)
       uuids = {}
       j.each do |entry|
-        # puts "- #{entry['name']}"
         uuids[entry['name']] = { 'uuid' => entry['uuid'], 'definition' => entry['latest']['definition'] }
       end
       uuids
@@ -87,28 +86,6 @@ module FDP
         )
       end
       schemas
-    end
-
-    def write_schema(schema:)
-      payload = schema.to_api_payload
-      begin
-        response = RestClient.post(
-          "#{base_url}/metadata-schemas",
-          payload.to_json,
-          headers
-        )
-        result = JSON.parse(response.body)
-        warn 'Success! New biobank shape created.'
-        warn "UUID:       #{result['uuid']}"
-        warn "Location:   #{result['location'] || '(not returned)'}"
-        # warn "Full resp:  #{result.inspect}"
-      rescue RestClient::ExceptionWithResponse => e
-        warn "Upload failed (HTTP #{e.response.code}):"
-        warn e.response.body
-      rescue StandardError => e
-        puts "Error: #{e.message}"
-      end
-      result
     end
 
     def list_current_resources
@@ -150,6 +127,28 @@ module FDP
         resources << FDP::Resource.new(resourcejson: entry)
       end
       resources
+    end
+
+    def write_resource_definition(resource:)
+      payload = resource.to_api_payload
+      begin
+        response = RestClient.post(
+          "#{base_url}/metadata-schemas",
+          payload.to_json,
+          headers
+        )
+        result = JSON.parse(response.body)
+        warn 'Success! New biobank shape created.'
+        warn "UUID:       #{result['uuid']}"
+        warn "Location:   #{result['location'] || '(not returned)'}"
+        # warn "Full resp:  #{result.inspect}"
+      rescue RestClient::ExceptionWithResponse => e
+        warn "Upload failed (HTTP #{e.response.code}):"
+        warn e.response.body
+      rescue StandardError => e
+        puts "Error: #{e.message}"
+      end
+      result
     end
   end
 end

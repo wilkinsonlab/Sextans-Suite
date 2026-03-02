@@ -31,8 +31,9 @@ module FDP
     def write_to_fdp(client:)
       payload = to_api_payload
       begin
-        response = RestClient.post("#{client.base_url}/metadata-schemas", payload.to_json, client.headers)
+        response = RestClient.post("#{client.base_url}/resource-definitions", payload.to_json, client.headers)
         puts "Resource '#{name}' created successfully with UUID: #{JSON.parse(response.body)['uuid']}"
+        self.uuid = JSON.parse(response.body)['uuid'] # update UUID after creation
       rescue RestClient::ExceptionWithResponse => e
         warn "Error creating resource '#{name}':"
         warn "Status: #{e.response.code}"
