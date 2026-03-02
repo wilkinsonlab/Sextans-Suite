@@ -73,6 +73,7 @@ module FDP
       j.each do |entry|
         # :name, :label, :description, :prefix, :definition, :parents, :children, :uuid, :version,:targetclasses
         schemas << FDP::Schema.new(client: self,
+                                   uuid: entry['uuid'],
                                    name: entry['name'],
                                    label: entry['latest']['suggestedResourceName'],
                                    description: entry['latest']['description'],
@@ -80,7 +81,6 @@ module FDP
                                    prefix: entry['latest']['suggestedUrlPrefix'] || nil,
                                    parents: entry['latest']['extendsSchemaUuids'] || [],
                                    children: entry['latest']['childSchemaUuids'] || [],
-                                   uuid: entry['uuid'],
                                    version: entry['latest']['version'] || '1.0.0',
                                    targetclasses: entry['latest']['targetClassUris'] || ['http://www.w3.org/ns/dcat#Resource'])
       end

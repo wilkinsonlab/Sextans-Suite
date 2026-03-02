@@ -7,7 +7,10 @@ module FDP
                    children: [], uuid: nil, abstractschema: false)
       # required
       @client = client
-      validate_name(name: name) # throws an error if it exists... this breaks the FDP badly!
+      @uuid = uuid
+      unless uuid # if we're trying to mint something new
+        validate_name(name: name) # throws an error if it exists... this breaks the FDP badly!
+      end
       @name = name
       @label = label
       @description = description
@@ -18,7 +21,6 @@ module FDP
       # optional
       @parents = parents
       @children = children
-      @uuid = uuid
       @targetclasses = ['http://www.w3.org/ns/dcat#Resource', *targetclasses].uniq # everythign must be a resource at least
     end
 
@@ -26,10 +28,12 @@ module FDP
       return unless @client.list_current_schemas[name]
 
       raise ArgumentError,
-            'Your assigned schema name #{name} already exists - you MUST edit the existing record rather than create a new one'
+            "Your assigned schema name #{name} already exists - you MUST edit the existing record rather than create a new one"
     end
 
     def to_api_payload
+      children.uniq! # in case people are being silly
+      parents.uniq!
       {
         uuid: uuid, # include UUID for update if it exists, otherwise let the API generate a new one
         name: name, # short internal identifier (no spaces/special chars preferred)
@@ -42,17 +46,18 @@ module FDP
         extendsSchemaUuids: parents, # array! inheritance chain
         version: version,
         targetClasses: targetclasses,
-        childSchemaUuids: children
+        childSchemaUuids: children.uniq
 
       }.transform_keys { |k| k.to_s } # ensure string keys if API picky
     end
 
     def write_to_fdp(client:)
+      warn "current uuid is #{uuid} #{uuid}"
       if uuid.to_s.strip.empty?
+        write_new_schema_to_fdp(client: client)
+      else
         warn "Schema '#{name}' already has UUID #{uuid}. It will be overwritten with the new definition. If you want to keep the old version, make sure to change the name or remove the uuid before writing."
         overwrite_schema_in_fdp(client: client)
-      else
-        write_new_schema_to_fdp(client: client)
       end
     end
 

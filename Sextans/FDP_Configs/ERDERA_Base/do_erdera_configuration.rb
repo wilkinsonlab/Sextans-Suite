@@ -4,7 +4,7 @@ require '../fdp_client'
 require '../fdp_schema'
 require '../fdp_resource'
 
-base_url = 'http://localhost:9000'
+base_url = 'http://localhost:8000'
 email    = 'albert.einstein@example.com' # change this
 password = 'password' # change this
 schema_base = './Schemas'
@@ -32,41 +32,56 @@ schemaobjs.each do |schema|
 end
 
 # 1 Overwrite Resource Schema with new definition
-schemaobjs.each do |schema|
-  next unless schema.name == 'Resource'
+begin
+  schemaobjs.each do |schema|
+    next unless schema.name == 'Resource'
 
-  schema.name = 'Resource'
-  schema.description = 'A generic resource schema definition for ERDERA, based on the generic Resource shape but with added constraints and properties specific to ERDERA use cases'
-  schema.prefix = 'resource'
-  schema.label = 'ERDERA Resource'
-  schema.definition = File.read("#{schema_base}/resource.shacl")
-  warn "trying to overwrite existing schea with new name: #{schema.name} and same UUID: #{schema.uuid}"
-  schema.write_to_fdp(client: fdp)
+    warn "RFEsource #{schema.uuid} #{schema.version}"
+
+    schema.name = 'Resource'
+    schema.description = 'A generic resource schema definition for ERDERA, based on the generic Resource shape but with added constraints and properties specific to ERDERA use cases'
+    schema.prefix = 'resource'
+    schema.label = 'ERDERA Resource'
+    schema.definition = File.read("#{schema_base}/resource.shacl")
+    warn "trying to overwrite existing schema with name: #{schema.name} and same UUID: #{schema.uuid}"
+    schema.write_to_fdp(client: fdp)
+    warn "version #{schema.version}"
+  end
+rescue StandardError
+  warn 'ignoring error'
 end
 
 # 2 Overwrite DataService Schema with new
-schemaobjs.each do |schema|
-  next unless schema.name == 'Data Service'
+begin
+  schemaobjs.each do |schema|
+    next unless schema.name == 'Data Service'
 
-  schema.name = 'Data Service'
-  schema.description = 'A data service schema definition for ERDERA, based on the generic Data Service shape but with added constraints and properties specific to ERDERA use cases'
-  schema.prefix = 'dataservice'
-  schema.label = 'ERDERA Data Service'
-  schema.definition = File.read("#{schema_base}/data-service.shacl")
-  warn "trying to overwrite existing schema with new name: #{schema.name} and same UUID: #{schema.uuid}"
-  schema.write_to_fdp(client: fdp)
+    schema.name = 'Data Service'
+    schema.description = 'A data service schema definition for ERDERA, based on the generic Data Service shape but with added constraints and properties specific to ERDERA use cases'
+    schema.prefix = 'dataservice'
+    schema.label = 'ERDERA Data Service'
+    schema.definition = File.read("#{schema_base}/data-service.shacl")
+    warn "trying to overwrite existing schema with new name: #{schema.name} and same UUID: #{schema.uuid}"
+    schema.write_to_fdp(client: fdp)
+  end
+rescue StandardError
+  warn 'ignoring error'
 end
 
 # 3 Overwrite Dataset Schema with new
-schemaobjs.each do |schema|
-  next unless schema.name == 'Dataset'
+begin
+  schemaobjs.each do |schema|
+    next unless schema.name == 'Dataset'
 
-  schema.name = 'Dataset'
-  schema.description = 'A dataset schema definition for ERDERA, based on the generic Dataset shape but with added constraints and properties specific to ERDERA use cases'
-  schema.prefix = 'dataset'
-  schema.label = 'ERDERA Dataset'
-  warn "trying to overwrite existing schema with new name: #{schema.name} and same UUID: #{schema.uuid}"
-  schema.write_to_fdp(client: fdp)
+    schema.name = 'Dataset'
+    schema.description = 'A dataset schema definition for ERDERA, based on the generic Dataset shape but with added constraints and properties specific to ERDERA use cases'
+    schema.prefix = 'dataset'
+    schema.label = 'ERDERA Dataset'
+    warn "trying to overwrite existing schema with new name: #{schema.name} and same UUID: #{schema.uuid}"
+    schema.write_to_fdp(client: fdp)
+  end
+rescue StandardError
+  warn 'ignoring error'
 end
 
 uuids = fdp.list_current_schemas
@@ -74,69 +89,84 @@ resources = fdp.retrieve_current_resources
 schemaobjs = fdp.retrieve_current_schemas
 
 # 4 Create a Biobank Schema
-biobank = FDP::Schema.new(client: fdp,
-                          # targetclasses:, parents: [],
-                          # children: [], uuid: nil, abstractschema: false)
-                          name: 'Biobank',
-                          description: 'A biobank schema definition for ERDERA',
-                          version: '1.0.0', # must be major.minor.patch and must be incremented for each update
-                          definition: File.read("#{schema_base}/biobank.shacl"),
-                          prefix: 'biobank',
-                          label: 'Biobank',
-                          targetclasses: ['https://w3id.org/ejp-rd/vocabulary#Biobank'],
-                          parents: [uuids['Resource']['uuid']], # inherit from the generic Resource shape
-                          abstractschema: false)
+begin
+  biobank = FDP::Schema.new(client: fdp,
+                            # targetclasses:, parents: [],
+                            # children: [], uuid: nil, abstractschema: false)
+                            name: 'Biobank',
+                            description: 'A biobank schema definition for ERDERA',
+                            version: '1.0.0', # must be major.minor.patch and must be incremented for each update
+                            definition: File.read("#{schema_base}/biobank.shacl"),
+                            prefix: 'biobank',
+                            label: 'Biobank',
+                            targetclasses: ['https://w3id.org/ejp-rd/vocabulary#Biobank'],
+                            parents: [uuids['Resource']['uuid']], # inherit from the generic Resource shape
+                            abstractschema: false)
 
-puts "\nBiobank Schema Payload:"
-puts JSON.pretty_generate(biobank.to_api_payload)
+  puts "\nBiobank Schema Payload:"
+  puts JSON.pretty_generate(biobank.to_api_payload)
 
-biobank.write_to_fdp(client: fdp)
+  biobank.write_to_fdp(client: fdp)
+rescue StandardError
+  warn 'ignoring error'
+end
+
 # refresh
 uuids = fdp.list_current_schemas
 resources = fdp.retrieve_current_resources
 
 # 5 Create a Registry Schena
 #
-registry = FDP::Schema.new(client: fdp,
-                           # targetclasses:, parents: [],
-                           # children: [], uuid: nil, abstractschema: false)
-                           name: 'Patient Registry',
-                           description: 'A patient registry schema definition for ERDERA',
-                           version: '1.0.0', # must be major.minor.patch and must be incremented for each update
-                           definition: File.read("#{schema_base}/patient-registry.shacl"),
-                           prefix: 'patientregistry',
-                           label: 'Patient Registry',
-                           targetclasses: ['https://w3id.org/ejp-rd/vocabulary#PatientRegistry'],
-                           parents: [uuids['Resource']['uuid']], # inherit from the generic Resource shape
-                           abstractschema: false)
+begin
+  registry = FDP::Schema.new(client: fdp,
+                             # targetclasses:, parents: [],
+                             # children: [], uuid: nil, abstractschema: false)
+                             name: 'Patient Registry',
+                             description: 'A patient registry schema definition for ERDERA',
+                             version: '1.0.0', # must be major.minor.patch and must be incremented for each update
+                             definition: File.read("#{schema_base}/patient-registry.shacl"),
+                             prefix: 'patientregistry',
+                             label: 'Patient Registry',
+                             targetclasses: ['https://w3id.org/ejp-rd/vocabulary#PatientRegistry'],
+                             parents: [uuids['Resource']['uuid']], # inherit from the generic Resource shape
+                             abstractschema: false)
 
-puts "\Registry Schema Payload:"
-puts JSON.pretty_generate(registry.to_api_payload)
+  puts "\Registry Schema Payload:"
+  puts JSON.pretty_generate(registry.to_api_payload)
 
-registry.write_to_fdp(client: fdp)
+  registry.write_to_fdp(client: fdp)
+rescue StandardError
+  warn 'ignoring error'
+end
+
 # refresh
 uuids = fdp.list_current_schemas
 resources = fdp.retrieve_current_resources
 
 # 6 Create a Guideline Schena
 #
-guideline = FDP::Schema.new(client: fdp,
-                            # targetclasses:, parents: [],
-                            # children: [], uuid: nil, abstractschema: false)
-                            name: 'Guideline',
-                            description: 'A guideline schema definition for ERDERA',
-                            version: '1.0.0', # must be major.minor.patch and must be incremented for each update
-                            definition: File.read("#{schema_base}/guideline.shacl"),
-                            prefix: 'guideline',
-                            label: 'Guideline',
-                            targetclasses: ['https://w3id.org/ejp-rd/vocabulary#Guideline'],
-                            parents: [uuids['Resource']['uuid']], # inherit from the generic Resource shape
-                            abstractschema: false)
+begin
+  guideline = FDP::Schema.new(client: fdp,
+                              # targetclasses:, parents: [],
+                              # children: [], uuid: nil, abstractschema: false)
+                              name: 'Guideline',
+                              description: 'A guideline schema definition for ERDERA',
+                              version: '1.0.0', # must be major.minor.patch and must be incremented for each update
+                              definition: File.read("#{schema_base}/guideline.shacl"),
+                              prefix: 'guideline',
+                              label: 'Guideline',
+                              targetclasses: ['https://w3id.org/ejp-rd/vocabulary#Guideline'],
+                              parents: [uuids['Resource']['uuid']], # inherit from the generic Resource shape
+                              abstractschema: false)
 
-puts "\Guideline Schema Payload:"
-puts JSON.pretty_generate(guideline.to_api_payload)
+  puts "\Guideline Schema Payload:"
+  puts JSON.pretty_generate(guideline.to_api_payload)
 
-guideline.write_to_fdp(client: fdp)
+  guideline.write_to_fdp(client: fdp)
+rescue StandardError
+  warn 'ignoring error'
+end
+
 # refresh
 uuids = fdp.list_current_schemas
 resources = fdp.retrieve_current_resources
@@ -149,114 +179,127 @@ schemaobjs = fdp.retrieve_current_schemas
 # Resource Includes :name, :uuid, :schemas, :description, :prefix, :targeturis, :children, :external_links
 # Child:  :resourceDefinitionUuid, :relationUri, :listViewTitle, :listViewTagsUri, :listViewMetadata
 # External Link:  :url, :label, :description
-resource = FDP::Resource.new(client: fdp,
-                             name: 'ERDERA Patient Registry',
-                             description: 'A patient registry resource for ERDERA FDPs, conforming to the Patient Registry schema',
-                             prefix: 'patientregistry',
-                             schemas: [uuids['Patient Registry']['uuid']],
-                             targeturis: ['https://w3id.org/ejp-rd/vocabulary#PatientRegistry'])
+#
+begin
+  resource = FDP::Resource.new(client: fdp,
+                               name: 'ERDERA Patient Registry',
+                               description: 'A patient registry resource for ERDERA FDPs, conforming to the Patient Registry schema',
+                               prefix: 'patientregistry',
+                               schemas: [uuids['Patient Registry']['uuid']],
+                               targeturis: ['https://w3id.org/ejp-rd/vocabulary#PatientRegistry'])
 
-puts "\nPatient Registry Resource Payload:"
-puts JSON.pretty_generate(resource.to_api_payload)
+  puts "\nPatient Registry Resource Payload:"
+  puts JSON.pretty_generate(resource.to_api_payload)
 
-resource.write_to_fdp(client: fdp)
-
-abort
-
+  resource.write_to_fdp(client: fdp)
+rescue StandardError
+  warn 'ignoring error'
+end
 # 8  Create a Biobank Resource
 # Resource Includes :name, :uuid, :schemas, :description, :prefix, :targeturis, :children, :external_links
 # Child:  :resourceDefinitionUuid, :relationUri, :listViewTitle, :listViewTagsUri, :listViewMetadata
 # External Link:  :url, :label, :description
-resource = FDP::Resource.new(client: fdp,
-                             name: 'ERDERA Biobank',
-                             description: 'A Biobank resource definition for ERDERA FDPs, conforming to the Biobank schema',
-                             prefix: 'biobank',
-                             schemas: [uuids['Biobank']['uuid']],
-                             targeturis: ['https://w3id.org/ejp-rd/vocabulary#Biobank'])
 
-puts "\nPatient Biobank Payload:"
-puts JSON.pretty_generate(resource.to_api_payload)
+begin
+  resource = FDP::Resource.new(client: fdp,
+                               name: 'ERDERA Biobank',
+                               description: 'A Biobank resource definition for ERDERA FDPs, conforming to the Biobank schema',
+                               prefix: 'biobank',
+                               schemas: [uuids['Biobank']['uuid']],
+                               targeturis: ['https://w3id.org/ejp-rd/vocabulary#Biobank'])
 
-resource.write_to_fdp(client: fdp)
+  puts "\nPatient Biobank Payload:"
+  puts JSON.pretty_generate(resource.to_api_payload)
+
+  resource.write_to_fdp(client: fdp)
+rescue StandardError
+  warn 'ignoring error'
+end
 
 # 9  Create a Guideline Resource
 # Resource Includes :name, :uuid, :schemas, :description, :prefix, :targeturis, :children, :external_links
 # Child:  :resourceDefinitionUuid, :relationUri, :listViewTitle, :listViewTagsUri, :listViewMetadata
 # External Link:  :url, :label, :description
-resource = FDP::Resource.new(client: fdp,
-                             name: 'ERDERA Guideline',
-                             description: 'A Guideline resource definition for ERDERA FDPs, conforming to the Guideline schema',
-                             prefix: 'guideline',
-                             schemas: [uuids['Guideline']['uuid']],
-                             targeturis: ['https://w3id.org/ejp-rd/vocabulary#Guideline'])
+begin
+  resource = FDP::Resource.new(client: fdp,
+                               name: 'ERDERA Guideline',
+                               description: 'A Guideline resource definition for ERDERA FDPs, conforming to the Guideline schema',
+                               prefix: 'guideline',
+                               schemas: [uuids['Guideline']['uuid']],
+                               targeturis: ['https://w3id.org/ejp-rd/vocabulary#Guideline'])
 
-puts "\nPatient Guideline Payload:"
-puts JSON.pretty_generate(resource.to_api_payload)
+  puts "\nPatient Guideline Payload:"
+  puts JSON.pretty_generate(resource.to_api_payload)
 
-resource.write_to_fdp(client: fdp)
+  resource.write_to_fdp(client: fdp)
+rescue StandardError
+  warn 'ignoring error'
+end
 
 # 10  Create the first DataService Resource
 # Resource Includes :name, :uuid, :schemas, :description, :prefix, :targeturis, :children, :external_links
 # Child:  :resourceDefinitionUuid, :relationUri, :listViewTitle, :listViewTagsUri, :listViewMetadata
 # External Link:  :url, :label, :description
-resource = FDP::Resource.new(client: fdp,
-                             name: 'ERDERA Top Level Data Service',
-                             description: 'A top level data service resource definition for ERDERA FDPs. This is used for services that provide analytics, but not serving e.g. registry or biobank dasta',
-                             prefix: 'dataservice1',
-                             schemas: [uuids['Data Service']['uuid']],
-                             targeturis: ['https://w3id.org/ejp-rd/vocabulary#DataService'],
-                             external_links: [FDP::ResourceExternalLink.new(
-                               propertyuri: 'http://www.w3.org/ns/dcat#endpointURL',
-                               title: 'endpointURL'
-                             ), FDP::ResourceExternalLink.new(
-                               propertyuri: 'http://www.w3.org/ns/dcat#endpointDescription',
-                               title: 'endpointDescription'
-                             ), FDP::ResourceExternalLink.new(
-                               propertyuri: 'http://www.w3.org/ns/dcat#landingPage',
-                               title: 'landingPage'
-                             )])
+begin
+  resource = FDP::Resource.new(client: fdp,
+                               name: 'ERDERA Top Level Data Service',
+                               description: 'A top level data service resource definition for ERDERA FDPs. This is used for services that provide analytics, but not serving e.g. registry or biobank dasta',
+                               prefix: 'dataservice1',
+                               schemas: [uuids['Data Service']['uuid']],
+                               targeturis: ['https://w3id.org/ejp-rd/vocabulary#DataService'],
+                               external_links: [FDP::ResourceExternalLink.new(
+                                 propertyuri: 'http://www.w3.org/ns/dcat#endpointURL',
+                                 title: 'endpointURL'
+                               ), FDP::ResourceExternalLink.new(
+                                 propertyuri: 'http://www.w3.org/ns/dcat#endpointDescription',
+                                 title: 'endpointDescription'
+                               ), FDP::ResourceExternalLink.new(
+                                 propertyuri: 'http://www.w3.org/ns/dcat#landingPage',
+                                 title: 'landingPage'
+                               )])
 
-puts "\nTop Level Data Service Payload:"
-puts JSON.pretty_generate(resource.to_api_payload)
+  puts "\nTop Level Data Service Payload:"
+  puts JSON.pretty_generate(resource.to_api_payload)
 
-resource.write_to_fdp(client: fdp)
+  resource.write_to_fdp(client: fdp)
+rescue StandardError
+  warn 'ignoring error'
+end
 
 # 10  Create the second DataService Resource
 # Resource Includes :name, :uuid, :schemas, :description, :prefix, :targeturis, :children, :external_links
 # Child:  :resourceDefinitionUuid, :relationUri, :listViewTitle, :listViewTagsUri, :listViewMetadata
 # External Link:  :title, :propertyuri
-resource = FDP::Resource.new(client: fdp,
-                             name: 'ERDERA Dataset Data Service',
-                             description: 'A data service resource definition for ERDERA FDPs. This is used for services that serve datasets, e.g. registry or biobank data',
-                             prefix: 'dataservice2',
-                             schemas: [uuids['Data Service']['uuid']],
-                             targeturis: ['https://w3id.org/ejp-rd/vocabulary#DataService'],
-                             external_links: [FDP::ResourceExternalLink.new(
-                               propertyuri: 'http://www.w3.org/ns/dcat#endpointURL',
-                               title: 'endpointURL'
-                             ), FDP::ResourceExternalLink.new(
-                               propertyuri: 'http://www.w3.org/ns/dcat#endpointDescription',
-                               title: 'endpointDescription'
-                             ), FDP::ResourceExternalLink.new(
-                               propertyuri: 'http://www.w3.org/ns/dcat#landingPage',
-                               title: 'landingPage'
-                             )])
+begin
+  resource = FDP::Resource.new(client: fdp,
+                               name: 'ERDERA Dataset Data Service',
+                               description: 'A data service resource definition for ERDERA FDPs. This is used for services that serve datasets, e.g. registry or biobank data',
+                               prefix: 'dataservice2',
+                               schemas: [uuids['Data Service']['uuid']],
+                               targeturis: ['https://w3id.org/ejp-rd/vocabulary#DataService'],
+                               external_links: [FDP::ResourceExternalLink.new(
+                                 propertyuri: 'http://www.w3.org/ns/dcat#endpointURL',
+                                 title: 'endpointURL'
+                               ), FDP::ResourceExternalLink.new(
+                                 propertyuri: 'http://www.w3.org/ns/dcat#endpointDescription',
+                                 title: 'endpointDescription'
+                               ), FDP::ResourceExternalLink.new(
+                                 propertyuri: 'http://www.w3.org/ns/dcat#landingPage',
+                                 title: 'landingPage'
+                               )])
 
-puts "\nDataset Data Service Payload:"
-puts JSON.pretty_generate(resource.to_api_payload)
+  puts "\nDataset Data Service Payload:"
+  puts JSON.pretty_generate(resource.to_api_payload)
 
-resource.write_to_fdp(client: fdp)
+  resource.write_to_fdp(client: fdp)
+rescue StandardError
+  warn 'ignoring error'
+end
 
 # refresh
 uuids = fdp.list_current_schemas
 resources = fdp.retrieve_current_resources
 schemaobjs = fdp.retrieve_current_schemas
-
-puts resources
-resources.each do |r|
-  puts r.name
-end
-abort
 
 #   Making Connections....
 
@@ -280,7 +323,7 @@ catalog.children <<
   )
 catalog.children <<
   FDP::ResourceChild.new(
-    resourceDefinitionUuid: resources.find { |r| r.name == 'ERDERA Patient Registries' }.uuid,
+    resourceDefinitionUuid: resources.find { |r| r.name == 'ERDERA Patient Registry' }.uuid,
     relationUri: 'http://purl.org/dc/terms/hasPart',
     listViewTitle: 'ERDERA Patient Registries',
     listViewTagsUri: 'http://www.w3.org/ns/dcat#theme'
@@ -317,15 +360,15 @@ distribution.write_to_fdp(client: fdp)
 
 # Break the connection between FDP and DataService
 # I will do this by causing it to inherit only FDP and Metadata Service schemas
-fdp = resources.find { |r| r.name == 'FAIR Data Point' }
+top = resources.find { |r| r.name == 'FAIR Data Point' }
 # add the new child - ERDERA Dataset Data Service
 # :resourceDefinitionUuid, :relationUri, :listViewTitle, :listViewTagsUri, :listViewMetadata
-fdp.schemas = [
-  resources.find { |r| r.name == 'Metadata Service' }.uuid,
-  resources.find { |r| r.name == 'FAIR Data Point' }.uuid
+top.schemas = [
+  schemaobjs.find { |s| s.name == 'Metadata Service' }.uuid,
+  schemaobjs.find { |s| s.name == 'FAIR Data Point' }.uuid
 ]
 
 puts "\nNew FDP Payload:"
-puts JSON.pretty_generate(fdp.to_api_payload)
+puts JSON.pretty_generate(top.to_api_payload)
 
-fdp.write_to_fdp(client: fdp)
+top.write_to_fdp(client: fdp)

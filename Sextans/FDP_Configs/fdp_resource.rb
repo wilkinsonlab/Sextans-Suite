@@ -21,9 +21,11 @@ module FDP
         end
         @description = res['description'] || 'No description provided'
       else
-        validate_name(name: name) # throws error if it exists
+        @uuid = uuid
+        unless uuid # if we're trying to mint something new
+          validate_name(name: name) # throws error if it exists
+        end
         @name = name
-        @uuid = uuid # this will be rare
         @schemas = schemas
         @description = description
         @prefix = prefix
@@ -37,10 +39,29 @@ module FDP
       return unless @client.list_current_resources[name]
 
       raise ArgumentError,
-            'Your assigned resource name #{name} already exists - you MUST edit the existing record rather than create a new one'
+            "Your assigned resource name #{name} already exists - you MUST edit the existing record rather than create a new one"
     end
 
     def to_api_payload
+      warn "CHILDreN vbefore #{children.inspect}"
+      warn "Links vbefore #{external_links.inspect}"
+
+      if children&.first
+        grouped = children.group_by { |c| c.key } # ← explicit block, proven to work
+        children = grouped.values.map(&:first)
+      end
+
+      # same for external_links
+      if external_links&.first
+        grouped = external_links.group_by { |c| c.key }
+        external_links = grouped.values.map(&:first)
+      end
+
+      children = [] if children.nil?
+      external_links = [] if external_links.nil?
+
+      warn "CHILDreN after #{children.inspect}"
+      warn "Links after #{external_links.inspect}"
       {
         uuid: uuid,
         name: name, # short internal identifier (no spaces/special chars preferred)
@@ -82,7 +103,7 @@ module FDP
     end
 
     def replace_existing_resource(client:)
-      warn "in replace methidod for resource '#{name}' with UUID: #{uuid}"
+      warn "in replace method for resource '#{name}' with UUID: #{uuid}"
       # This method can be used to replace an existing resource definition by its UUID
       # It will use the FDP::Client class internally to handle the API interaction
       payload = to_api_payload
@@ -123,6 +144,10 @@ module FDP
       end
     end
 
+    def key # for filtering duplicates
+      [resourceDefinitionUuid, relationUri]
+    end
+
     def to_api_payload
       {
         resourceDefinitionUuid: resourceDefinitionUuid,
@@ -147,6 +172,10 @@ module FDP
         @title = title
         @propertyuri = propertyuri
       end
+    end
+
+    def key # for filtering duplicates
+      [propertyuri, title]
     end
 
     def to_api_payload
