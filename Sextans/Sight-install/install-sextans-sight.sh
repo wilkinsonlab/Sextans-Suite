@@ -9,12 +9,14 @@ export COMPOSE_DOCKER_CLI_BUILD=0
 
 
 function ctrl_c() {
+        docker stop bootstrap_sight-graphdb-1
         docker compose -f "$CWD/config/docker-compose-${P}.yml" down
         docker compose -f "$CWD/bootstrap_sight/docker-compose-${P}.yml" down
         docker compose rm -f "$CWD/config/docker-compose-${P}.yml" -s
         docker compose rm -f "$CWD/bootstrap_sight/docker-compose-${P}.yml" -s
         docker network rm bootstrap_sight_default bootstrap_sight_graphdb_net
         docker rmi -f bootstrap_sight-graph_db_repo_manager:latest
+        docker rm bootstrap_sight-graphdb-1
 
         rm "${CWD}/config/docker-compose-${P}.yml"
         rm "${CWD}/bootstrap/docker-compose-${P}.yml"
@@ -228,6 +230,8 @@ docker compose -f "${CWD}/bootstrap_sight/docker-compose-${P}.yml" down
 docker compose -f "${CWD}/config/docker-compose-${P}.yml" rm -s -f
 docker compose -f "${CWD}/bootstrap_sight/docker-compose-${P}.yml" rm -s -f
 docker network rm bootstrap_sight_default bootstrap_sight_graphdb_net
+docker stop bootstrap_sight-graphdb-1
+docker rm bootstrap_sight-graphdb-1
 docker rmi -f bootstrap_sight-graph_db_repo_manager:latest
 
 rm "${CWD}/config/docker-compose-${P}.yml"
