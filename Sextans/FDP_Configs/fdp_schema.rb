@@ -1,11 +1,13 @@
 module FDP
   class Schema
     attr_accessor :name, :label, :description, :prefix, :definition, :parents, :children, :uuid, :version,
-                  :targetclasses, :abstractschema
+                  :targetclasses, :abstractschema, :client
 
-    def initialize(name:, label:, description:, definition:, prefix:, version:, targetclasses:, parents: [],
+    def initialize(name:, label:, description:, definition:, prefix:, version:, targetclasses:, client:, parents: [],
                    children: [], uuid: nil, abstractschema: false)
       # required
+      @client = client
+      validate_name(name: name) # throws an error if it exists... this breaks the FDP badly!
       @name = name
       @label = label
       @description = description
@@ -17,7 +19,14 @@ module FDP
       @parents = parents
       @children = children
       @uuid = uuid
-      @targetclasses = ['http://www.w3.org/ns/dcat#Resource'].append(targetclasses)
+      @targetclasses = ['http://www.w3.org/ns/dcat#Resource', *targetclasses].uniq # everythign must be a resource at least
+    end
+
+    def validate_name(name:)
+      return unless @client.list_current_schemas[name]
+
+      raise ArgumentError,
+            'Your assigned schema name #{name} already exists - you MUST edit the existing record rather than create a new one'
     end
 
     def to_api_payload
@@ -39,7 +48,7 @@ module FDP
     end
 
     def write_to_fdp(client:)
-      if uuid
+      if uuid.to_s.strip.empty?
         warn "Schema '#{name}' already has UUID #{uuid}. It will be overwritten with the new definition. If you want to keep the old version, make sure to change the name or remove the uuid before writing."
         overwrite_schema_in_fdp(client: client)
       else
@@ -78,7 +87,8 @@ module FDP
     end
 
     def write_new_schema_to_fdp(client:)
-      payload = to_api_payload.delete('uuid')
+      payload = to_api_payload
+      payload.delete('uuid')
       warn "\n\n\nWriting schema '#{name}' to FDP with payload:\n#{JSON.pretty_generate(payload)}\n\n\n"
       begin
         response = RestClient.post("#{client.base_url}/metadata-schemas", payload.to_json, client.headers)

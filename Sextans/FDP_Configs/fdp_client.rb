@@ -72,18 +72,17 @@ module FDP
       schemas = []
       j.each do |entry|
         # :name, :label, :description, :prefix, :definition, :parents, :children, :uuid, :version,:targetclasses
-        schemas << FDP::Schema.new(
-          name: entry['name'],
-          label: entry['latest']['suggestedResourceName'],
-          description: entry['latest']['description'],
-          definition: entry['latest']['definition'],
-          prefix: entry['latest']['suggestedUrlPrefix'] || nil,
-          parents: entry['latest']['extendsSchemaUuids'] || [],
-          children: entry['latest']['childSchemaUuids'] || [],
-          uuid: entry['uuid'],
-          version: entry['latest']['version'] || '1.0.0',
-          targetclasses: entry['latest']['targetClassUris'] || ['http://www.w3.org/ns/dcat#Resource']
-        )
+        schemas << FDP::Schema.new(client: self,
+                                   name: entry['name'],
+                                   label: entry['latest']['suggestedResourceName'],
+                                   description: entry['latest']['description'],
+                                   definition: entry['latest']['definition'],
+                                   prefix: entry['latest']['suggestedUrlPrefix'] || nil,
+                                   parents: entry['latest']['extendsSchemaUuids'] || [],
+                                   children: entry['latest']['childSchemaUuids'] || [],
+                                   uuid: entry['uuid'],
+                                   version: entry['latest']['version'] || '1.0.0',
+                                   targetclasses: entry['latest']['targetClassUris'] || ['http://www.w3.org/ns/dcat#Resource'])
       end
       schemas
     end
@@ -124,7 +123,7 @@ module FDP
       j = JSON.parse(response.body)
       resources = []
       j.each do |entry|
-        resources << FDP::Resource.new(resourcejson: entry)
+        resources << FDP::Resource.new(resourcejson: entry, client: self)
       end
       resources
     end
