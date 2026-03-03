@@ -1,8 +1,6 @@
 require 'rest-client'
 require 'json'
-require '../fdp_client'
-require '../fdp_schema'
-require '../fdp_resource'
+require 'fdp_client'
 
 base_url = 'http://localhost:8000'
 email    = 'albert.einstein@example.com' # change this
