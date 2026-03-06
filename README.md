@@ -13,7 +13,7 @@ The sextant is an 18th-century navigational tool that uses celestial bodies and 
 
 Sextans Sight creates a Metadata server following the FAIR Data Point specifications that provides automated agents with the ability to determine the utility of the contained resource (database, SKG, catalog, research object). The first step in navigation is deciding where you need to go!
 
-Sextans Fix creates a set of tools for organizing and publishing data to facilitate their navigation by following FAIR and Semantic Web best-practies.  Once the weary traveller has arrived at their destination, try to make their life easier.
+Sextans Fix creates a set of tools for organizing and publishing data to facilitate their interpretation and integration by following FAIR and Semantic Web best-practies.  Once the weary traveller has arrived at their destination, give them nourishment!
 
 ## High-level Architecture
 
