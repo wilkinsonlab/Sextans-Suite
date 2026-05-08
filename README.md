@@ -23,6 +23,8 @@ Sextans Fix is an optional second component that includes software for executing
 
 <center><img src='./docs/images/SextansSuite_architecture.png'/></center>
 
+**Note that Severance is an independent (and completely optional) component that is used to provide highly secure access to pre-approved queries for use in a federated Sextans environment.
+**
 ## CONTENTS
 
 [Installing Sextans Sight](./Sextans/Sight-install/)
