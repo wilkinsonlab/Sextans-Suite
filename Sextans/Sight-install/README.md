@@ -82,7 +82,7 @@ By detault, this port is disabled after installation, so your graphdb cannot be 
 
 ## Installing Sextans Sight
 
-Once you have completed the "Downloading" section of this tutorial, and you have prepared your answers to the questions, cd into the `/Sight-install/` folder and run the instaler.
+Once you have completed the "Downloading" section of this , and you have prepared your answers to the questions, cd into the `/Sight-install/` folder and run the instaler.
 
 ```
 bash ./install-sextans-sight.sh
@@ -170,7 +170,7 @@ The default FAIR Data Point Client Administrator credentials are:
 2.  Create a new Administrator account (if you don't do this immediately, you will be permanently locked-out and will need to start again!)
 3.  You will need to login again
 4.  If you want to create a USER type account, go ahead, but this is optional
-5.  Login to the FDP and begin adding metadata (see tutorial at _______)
+5.  Login to the FDP and begin adding metadata
 
 Note that you need the Administrator credentials to login to the FAIR Data Point API and get a token to do any API-based operation.
 

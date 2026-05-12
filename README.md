@@ -21,7 +21,10 @@ Sextans Sight should be deployed on a publicly-accessible server (e.g. in your D
 
 Sextans Fix is an optional second component that includes software for executing data transformations compatible with the [Clinical and Registry Entries Semantic Model (CARE-SM)](https://github.com/CARE-SM/).  Sextans Fix should be deployed inside of your firewall, and can only be accessed via tightly regulated calls from Sextans Sight (see detailed documentation below).
 
-<center><img src='./docs/images/SextansSuite%20architecture.png'/></center>
+<center><img src='./docs/images/SextansSuite_architecture.png'/></center>
+
+**Note that Severance is an independent (and completely optional) component that is used to provide highly secure access to pre-approved queries for use in a federated Sextans environment.**
+
 
 ## CONTENTS
 
