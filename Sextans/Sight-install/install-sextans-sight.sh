@@ -146,7 +146,7 @@ export FDP_PREFIX=$P
 docker network rm bootstrap_sight_default
 # this next line might throw an error if there was never a previous installation - thats fine!
 docker ps -a | egrep -oh "${P}-Sextans.*" | xargs docker rm
-docker rm -f  bootstrap_sight_graphdb_1 config_fdp_1 config_fdp_client_1
+docker rm -f  bootstrap_sight-graphdb-1 config_fdp_1 config_fdp_client_1
 docker volume remove -f "${P}-graphdb  ${P}-mongo-data ${P}-mongo-init"
 
 docker volume create "${P}-graphdb"
@@ -234,8 +234,8 @@ docker compose -f "${CWD}/bootstrap_sight/docker-compose-${P}.yml" down
 docker compose -f "${CWD}/config/docker-compose-${P}.yml" rm -s -f
 docker compose -f "${CWD}/bootstrap_sight/docker-compose-${P}.yml" rm -s -f
 docker network rm bootstrap_sight_default bootstrap_sight_graphdb_net
-docker stop bootstrap_sight_graphdb_1
-docker rm bootstrap_sight_graphdb_1
+docker stop bootstrap_sight-graphdb-1
+docker rm bootstrap_sight-graphdb-1
 docker rmi -f bootstrap_sight_graph_db_repo_manager:latest
 
 rm "${CWD}/config/docker-compose-${P}.yml"
