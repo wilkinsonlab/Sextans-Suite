@@ -30,7 +30,7 @@ services:
       - {PREFIX}-default
 
   caresm:
-    image: fairdatasystems/care:2026-02-11
+    image: saracuriel/care:1.0.0 #Check latest tag at https://hub.docker.com/repository/docker/saracuriel/care/tags
     hostname: caresm
     volumes:
       - ./data:/data
