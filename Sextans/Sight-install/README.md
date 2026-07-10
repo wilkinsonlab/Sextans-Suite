@@ -166,9 +166,9 @@ The default FAIR Data Point Client Administrator credentials are:
 | ----------------------------- | ---------- |
 | `albert.einstein@example.com` | `password` |
 
-1.  Remove the default Administrator and USER accounts
-2.  Create a new Administrator account (if you don't do this immediately, you will be permanently locked-out and will need to start again!)
-3.  You will need to login again
+1.  Create a new Administrator account (if you don't do this immediately, you will be permanently locked-out and will need to start again!)
+2.  Remove the default Administrator and USER accounts
+3.  You will need to login again as the new administrator (step 1)
 4.  If you want to create a USER type account, go ahead, but this is optional
 5.  Login to the FDP and begin adding metadata
 
