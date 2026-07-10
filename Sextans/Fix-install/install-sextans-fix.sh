@@ -7,10 +7,21 @@ CWD=$PWD
 export DOCKER_BUILDKIT=0
 export COMPOSE_DOCKER_CLI_BUILD=0
 
+# Detect whether this Docker install uses the modern "docker compose" plugin
+# or the legacy standalone "docker-compose" binary, and use whichever works.
+if docker compose version >/dev/null 2>&1; then
+  DOCKER_COMPOSE="docker compose"
+elif command -v docker-compose >/dev/null 2>&1; then
+  DOCKER_COMPOSE="docker-compose"
+else
+  echo -e "${RED}Error: Docker Compose not found. Install either the 'docker compose' plugin or the standalone 'docker-compose' binary.${NC}"
+  exit 1
+fi
+
 
 function ctrl_c() {
-        docker compose -f "$CWD/bootstrap_fix/docker-compose-${P}.yml" down
-        docker compose rm -f "$CWD/bootstrap_fix/docker-compose-${P}.yml" -s
+        $DOCKER_COMPOSE -f "$CWD/bootstrap_fix/docker-compose-${P}.yml" down
+        $DOCKER_COMPOSE rm -f "$CWD/bootstrap_fix/docker-compose-${P}.yml" -s
         docker network rm bootstrap_fix_default bootstrap_graphdb_net
         docker rmi -f bootstrap_fix_graph_db_repo_manager:latest
 
@@ -130,11 +141,12 @@ echo ""
 cd bootstrap_fix
 cp docker-compose-template.yml "docker-compose-${P}.yml"
 sed -i'' -e "s/{PREFIX}/${P}/" "docker-compose-${P}.yml"
+sed -i'' -e "s/{GDB_PORT}/${GDB_PORT}/" "docker-compose-${P}.yml"
 
-docker compose -f "docker-compose-${P}.yml" up --build -d
-#docker compose -f "docker-compose-${P}.yml" up --build
+$DOCKER_COMPOSE -f "docker-compose-${P}.yml" up --build -d
+#$DOCKER_COMPOSE -f "docker-compose-${P}.yml" up --build
 sleep 60
-"docker-compose-${P}.yml"
+rm "docker-compose-${P}.yml"
 
 echo ""
 echo -e "${GREEN}Creating a Sextans Fix Production Server folder in ${NC} ./${P}-Sextans-Fix/"
@@ -158,8 +170,8 @@ echo -e "${GREEN}Installation Complete!"
 
 echo -e "${GREEN}Now doing post-install clean-up..."
 
-docker compose -f "${CWD}/bootstrap_fix/docker-compose-${P}.yml" down
-docker compose -f "${CWD}/bootstrap_fix/docker-compose-${P}.yml" rm -s -f
+$DOCKER_COMPOSE -f "${CWD}/bootstrap_fix/docker-compose-${P}.yml" down
+$DOCKER_COMPOSE -f "${CWD}/bootstrap_fix/docker-compose-${P}.yml" rm -s -f
 docker network rm bootstrap_fix_default bootstrap_fix_graphdb_net
 docker rmi -f bootstrap_fix-graph_db_repo_manager:latest
 
@@ -172,6 +184,6 @@ echo ""
 echo -e "Please now move into the ${NC} ./${P}-Sextans-Fix/ ${GREEN} folder where the full version of the docker-compose-{P}.yml file lives."
 echo ""
 echo -e "${GREEN}To start the SECURE ENVIRONMENT SEXTANS FIX DATA SERVER, cd to that folder (or move it elsewhere) and and type:  "
-echo -e "docker-compose -f docker-compose-${P}.yml up -d ${NC}"
+echo -e "$DOCKER_COMPOSE -f docker-compose-${P}.yml up -d ${NC}"
 echo ""
 

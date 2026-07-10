@@ -116,15 +116,15 @@ Your Sight server is now running at whatever port you selected.
 There is a docker image that will auto-configure your Sight server to be compliant with ERDERA metadata expectations.
 
     1. with the Sight server still running....
-    2. issue the following command (change the port to whatever you set the FDP port to be during installation)
+    2. cd into `FDP_Configs/ERDERA_Base/`
+    3. run the configuration script:
 
 ```
-docker run --rm --network host -it \
-  -e FDP_PORT=8000 \
-  -e FDP_EMAIL=albert.einstein@example.com \
-  -e FDP_PASSWORD=password \
-markw/erdera-fdp-config:0.0.1
+./run-erdera-configuration.sh
 ```
+
+It will ask you for the port you chose for the FDP during installation, then build and run the configuration container for you — no manual `docker` commands needed. (If you'd rather skip the prompt, set `FDP_PORT` in your shell first, e.g. `FDP_PORT=8000 ./run-erdera-configuration.sh`.)
+
 You will see a lot of information flowing on the screen.  You can probably ignore it unless there is a crash.
 
 __Nota Bene: This script can only be run one time!__  Please do not run it again unless you really know what you're doing.

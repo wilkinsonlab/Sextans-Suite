@@ -5,7 +5,7 @@ services:
     restart: always
     hostname: graphdb
     ports:
-      - 7200:7200  
+      - {GDB_PORT}:7200
     volumes:
       - {PREFIX}-graphdb:/opt/graphdb/home
     networks:

@@ -7,13 +7,24 @@ CWD=$PWD
 export DOCKER_BUILDKIT=0
 export COMPOSE_DOCKER_CLI_BUILD=0
 
+# Detect whether this Docker install uses the modern "docker compose" plugin
+# or the legacy standalone "docker-compose" binary, and use whichever works.
+if docker compose version >/dev/null 2>&1; then
+  DOCKER_COMPOSE="docker compose"
+elif command -v docker-compose >/dev/null 2>&1; then
+  DOCKER_COMPOSE="docker-compose"
+else
+  echo -e "${RED}Error: Docker Compose not found. Install either the 'docker compose' plugin or the standalone 'docker-compose' binary.${NC}"
+  exit 1
+fi
+
 
 function ctrl_c() {
         docker stop bootstrap_sight-graphdb-1
-        docker compose -f "$CWD/config/docker-compose-${P}.yml" down
-        docker compose -f "$CWD/bootstrap_sight/docker-compose-${P}.yml" down
-        docker compose rm -f "$CWD/config/docker-compose-${P}.yml" -s
-        docker compose rm -f "$CWD/bootstrap_sight/docker-compose-${P}.yml" -s
+        $DOCKER_COMPOSE -f "$CWD/config/docker-compose-${P}.yml" down
+        $DOCKER_COMPOSE -f "$CWD/bootstrap_sight/docker-compose-${P}.yml" down
+        $DOCKER_COMPOSE rm -f "$CWD/config/docker-compose-${P}.yml" -s
+        $DOCKER_COMPOSE rm -f "$CWD/bootstrap_sight/docker-compose-${P}.yml" -s
         docker network rm bootstrap_sight_default bootstrap_sight_graphdb_net
         docker rmi -f bootstrap_sight-graph_db_repo_manager:latest
         docker rm bootstrap_sight-graphdb-1
@@ -163,10 +174,11 @@ echo ""
 cd bootstrap_sight
 cp docker-compose-template.yml "docker-compose-${P}.yml"
 sed -i'' -e "s/{PREFIX}/${P}/" "docker-compose-${P}.yml"
-docker compose -f "docker-compose-${P}.yml" down
+sed -i'' -e "s/{GDB_PORT}/${GDB_PORT}/" "docker-compose-${P}.yml"
+$DOCKER_COMPOSE -f "docker-compose-${P}.yml" down
 sleep 10
 
-docker compose -f "docker-compose-${P}.yml" up --build -d
+$DOCKER_COMPOSE -f "docker-compose-${P}.yml" up --build -d
 sleep 120
 rm "docker-compose-${P}.yml"
 
@@ -194,8 +206,8 @@ sed -i'' -e "s%{GUID}%$uri%" "./fdp/application-${P}.yml"
 echo "F"
 
 
-docker compose -f "docker-compose-${P}.yml" up --build -d
-#docker compose -f "docker-compose-${P}.yml" up --build 
+$DOCKER_COMPOSE -f "docker-compose-${P}.yml" up --build -d
+#$DOCKER_COMPOSE -f "docker-compose-${P}.yml" up --build
 
 
 sleep 120
@@ -229,10 +241,10 @@ sed -i'' -e 's|{GUID}|'"${uri}"'|g' "./${P}-Sextans-Sight/.env"
 echo -e "${GREEN}Installation Complete!"
 echo -e "${GREEN}Now doing post-install clean-up..."
 
-docker compose -f "${CWD}/config/docker-compose-${P}.yml" down
-docker compose -f "${CWD}/bootstrap_sight/docker-compose-${P}.yml" down
-docker compose -f "${CWD}/config/docker-compose-${P}.yml" rm -s -f
-docker compose -f "${CWD}/bootstrap_sight/docker-compose-${P}.yml" rm -s -f
+$DOCKER_COMPOSE -f "${CWD}/config/docker-compose-${P}.yml" down
+$DOCKER_COMPOSE -f "${CWD}/bootstrap_sight/docker-compose-${P}.yml" down
+$DOCKER_COMPOSE -f "${CWD}/config/docker-compose-${P}.yml" rm -s -f
+$DOCKER_COMPOSE -f "${CWD}/bootstrap_sight/docker-compose-${P}.yml" rm -s -f
 docker network rm bootstrap_sight_default bootstrap_sight_graphdb_net
 docker stop bootstrap_sight-graphdb-1
 docker rm bootstrap_sight-graphdb-1
@@ -248,6 +260,6 @@ echo ""
 echo -e "${GREEN}Please now move into the ${NC} ./${P}-Sextans-Sight/ ${GREEN} folder where the full version of the docker-compose-{P}.yml file lives."
 echo ""
 echo -e "${GREEN}To start your full Sextans Sight server, cd to that folder or move it elsewhere and type:  "
-echo -e "docker-compose -f docker-compose-${P}.yml up -d ${NC}"
+echo -e "$DOCKER_COMPOSE -f docker-compose-${P}.yml up -d ${NC}"
 echo ""
 

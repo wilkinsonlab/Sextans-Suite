@@ -5,6 +5,8 @@
 
 # Sextans Suite
 
+**Version:** 1.0.0 &nbsp;|&nbsp; [Changelog](CHANGELOG.md)
+
 Sextans Suite is software to support FAIR Metadata (Sextans Sight) and FAIR Data (Sextans Fix) authoring and publishing.
 
 The Sextant is an 18th-century navigational tool that uses celestial bodies and the horizon to determine location at sea. The constellation Sextans (latin for Sextant) depicts a large astronomical sextant, and is located on the celestial equator, and therefore visible from anywhere on earth. The analogy of "FAIRness" being like a Sextant fits both with the purpose of the instrument itself (to navigate and find things) as well as the equatorial nature of the Constellation (findable anywhere on earth).

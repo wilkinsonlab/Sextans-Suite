@@ -3,12 +3,13 @@ version: '3.9'
 services:
   fdp-config:
     build: .
-    image: markw/erdera-fdp-config:latest
+    image: markw/erdera-fdp-config:0.0.1
     network_mode: host                    # ← Critical: lets container talk to localhost:PORT
     stdin_open: true                      # ← Enables interactive input
     tty: true                             # ← Enables terminal
     environment:
-      - FDP_EMAIL=albert.einstein@example.com
-      - FDP_PASSWORD=password
+      - FDP_PORT=${FDP_PORT:?Set FDP_PORT to the port you chose for your FDP during Sextans Sight installation, e.g. run ./run-erdera-configuration.sh instead of calling docker compose directly}
+      - FDP_EMAIL=${FDP_EMAIL:-albert.einstein@example.com}
+      - FDP_PASSWORD=${FDP_PASSWORD:-password}
     # volumes:                            # Uncomment if you want to edit schemas without rebuilding
     #   - ./Schemas:/app/Schemas:ro
