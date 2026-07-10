@@ -1,0 +1,15 @@
+# frozen_string_literal: true
+
+source "https://rubygems.org"
+
+gem 'sinatra'
+gem "thin"
+gem "open3"
+gem 'csv'
+gem "fileutils"
+# Sinatra 4's classic-mode auto-boot needs one of these present to pick a
+# handler -- without it, "ruby t.rb" fails with "Sinatra could not start,
+# the required gems weren't found!" even though thin is installed.
+gem 'rackup'
+gem 'puma'
+
