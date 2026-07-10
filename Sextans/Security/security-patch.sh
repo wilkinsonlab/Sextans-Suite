@@ -1,6 +1,10 @@
 timestamp=$(date +"%Y-%m-%d")
 
-rm -rf ./secury_scan_output/*.json
+# Archive the previous run's scan results instead of deleting them -- someone
+# running an older patched image should still be able to look up what
+# vulnerabilities apply to the version they actually have deployed.
+mkdir -p ./security_scan_output/old
+find ./security_scan_output -maxdepth 1 -type f \( -name '*.json' -o -name '*.csv' \) -exec mv {} ./security_scan_output/old/ \;
 
 
 image="ontotext/graphdb:10.8.14"

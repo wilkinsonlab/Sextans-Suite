@@ -1,0 +1,35 @@
+Target,VulnerabilityID,Package,InstalledVersion,FixedVersion,Severity,Title,PrimaryURL
+usr/bin/bsondump,CVE-2025-22874,stdlib,v1.24.0,1.24.4,HIGH,crypto/x509: Usage of ExtKeyUsageAny disables policy validation in crypto/x509,https://avd.aquasec.com/nvd/cve-2025-22874
+usr/bin/bsondump,CVE-2025-47907,stdlib,v1.24.0,"1.23.12, 1.24.6",HIGH,database/sql: Postgres Scan Race Condition,https://avd.aquasec.com/nvd/cve-2025-47907
+usr/bin/bsondump,CVE-2025-58183,stdlib,v1.24.0,"1.24.8, 1.25.2",HIGH,golang: archive/tar: Unbounded allocation when parsing GNU sparse map,https://avd.aquasec.com/nvd/cve-2025-58183
+usr/bin/bsondump,CVE-2025-61729,stdlib,v1.24.0,"1.24.11, 1.25.5",HIGH,crypto/x509: golang: Denial of Service due to excessive resource consumption via crafted certificate,https://avd.aquasec.com/nvd/cve-2025-61729
+usr/bin/mongodump,CVE-2025-22874,stdlib,v1.24.0,1.24.4,HIGH,crypto/x509: Usage of ExtKeyUsageAny disables policy validation in crypto/x509,https://avd.aquasec.com/nvd/cve-2025-22874
+usr/bin/mongodump,CVE-2025-47907,stdlib,v1.24.0,"1.23.12, 1.24.6",HIGH,database/sql: Postgres Scan Race Condition,https://avd.aquasec.com/nvd/cve-2025-47907
+usr/bin/mongodump,CVE-2025-58183,stdlib,v1.24.0,"1.24.8, 1.25.2",HIGH,golang: archive/tar: Unbounded allocation when parsing GNU sparse map,https://avd.aquasec.com/nvd/cve-2025-58183
+usr/bin/mongodump,CVE-2025-61729,stdlib,v1.24.0,"1.24.11, 1.25.5",HIGH,crypto/x509: golang: Denial of Service due to excessive resource consumption via crafted certificate,https://avd.aquasec.com/nvd/cve-2025-61729
+usr/bin/mongoexport,CVE-2025-22874,stdlib,v1.24.0,1.24.4,HIGH,crypto/x509: Usage of ExtKeyUsageAny disables policy validation in crypto/x509,https://avd.aquasec.com/nvd/cve-2025-22874
+usr/bin/mongoexport,CVE-2025-47907,stdlib,v1.24.0,"1.23.12, 1.24.6",HIGH,database/sql: Postgres Scan Race Condition,https://avd.aquasec.com/nvd/cve-2025-47907
+usr/bin/mongoexport,CVE-2025-58183,stdlib,v1.24.0,"1.24.8, 1.25.2",HIGH,golang: archive/tar: Unbounded allocation when parsing GNU sparse map,https://avd.aquasec.com/nvd/cve-2025-58183
+usr/bin/mongoexport,CVE-2025-61729,stdlib,v1.24.0,"1.24.11, 1.25.5",HIGH,crypto/x509: golang: Denial of Service due to excessive resource consumption via crafted certificate,https://avd.aquasec.com/nvd/cve-2025-61729
+usr/bin/mongofiles,CVE-2025-22874,stdlib,v1.24.0,1.24.4,HIGH,crypto/x509: Usage of ExtKeyUsageAny disables policy validation in crypto/x509,https://avd.aquasec.com/nvd/cve-2025-22874
+usr/bin/mongofiles,CVE-2025-47907,stdlib,v1.24.0,"1.23.12, 1.24.6",HIGH,database/sql: Postgres Scan Race Condition,https://avd.aquasec.com/nvd/cve-2025-47907
+usr/bin/mongofiles,CVE-2025-58183,stdlib,v1.24.0,"1.24.8, 1.25.2",HIGH,golang: archive/tar: Unbounded allocation when parsing GNU sparse map,https://avd.aquasec.com/nvd/cve-2025-58183
+usr/bin/mongofiles,CVE-2025-61729,stdlib,v1.24.0,"1.24.11, 1.25.5",HIGH,crypto/x509: golang: Denial of Service due to excessive resource consumption via crafted certificate,https://avd.aquasec.com/nvd/cve-2025-61729
+usr/bin/mongoimport,CVE-2025-22874,stdlib,v1.24.0,1.24.4,HIGH,crypto/x509: Usage of ExtKeyUsageAny disables policy validation in crypto/x509,https://avd.aquasec.com/nvd/cve-2025-22874
+usr/bin/mongoimport,CVE-2025-47907,stdlib,v1.24.0,"1.23.12, 1.24.6",HIGH,database/sql: Postgres Scan Race Condition,https://avd.aquasec.com/nvd/cve-2025-47907
+usr/bin/mongoimport,CVE-2025-58183,stdlib,v1.24.0,"1.24.8, 1.25.2",HIGH,golang: archive/tar: Unbounded allocation when parsing GNU sparse map,https://avd.aquasec.com/nvd/cve-2025-58183
+usr/bin/mongoimport,CVE-2025-61729,stdlib,v1.24.0,"1.24.11, 1.25.5",HIGH,crypto/x509: golang: Denial of Service due to excessive resource consumption via crafted certificate,https://avd.aquasec.com/nvd/cve-2025-61729
+usr/bin/mongorestore,CVE-2025-22874,stdlib,v1.24.0,1.24.4,HIGH,crypto/x509: Usage of ExtKeyUsageAny disables policy validation in crypto/x509,https://avd.aquasec.com/nvd/cve-2025-22874
+usr/bin/mongorestore,CVE-2025-47907,stdlib,v1.24.0,"1.23.12, 1.24.6",HIGH,database/sql: Postgres Scan Race Condition,https://avd.aquasec.com/nvd/cve-2025-47907
+usr/bin/mongorestore,CVE-2025-58183,stdlib,v1.24.0,"1.24.8, 1.25.2",HIGH,golang: archive/tar: Unbounded allocation when parsing GNU sparse map,https://avd.aquasec.com/nvd/cve-2025-58183
+usr/bin/mongorestore,CVE-2025-61729,stdlib,v1.24.0,"1.24.11, 1.25.5",HIGH,crypto/x509: golang: Denial of Service due to excessive resource consumption via crafted certificate,https://avd.aquasec.com/nvd/cve-2025-61729
+usr/bin/mongostat,CVE-2025-22874,stdlib,v1.24.0,1.24.4,HIGH,crypto/x509: Usage of ExtKeyUsageAny disables policy validation in crypto/x509,https://avd.aquasec.com/nvd/cve-2025-22874
+usr/bin/mongostat,CVE-2025-47907,stdlib,v1.24.0,"1.23.12, 1.24.6",HIGH,database/sql: Postgres Scan Race Condition,https://avd.aquasec.com/nvd/cve-2025-47907
+usr/bin/mongostat,CVE-2025-58183,stdlib,v1.24.0,"1.24.8, 1.25.2",HIGH,golang: archive/tar: Unbounded allocation when parsing GNU sparse map,https://avd.aquasec.com/nvd/cve-2025-58183
+usr/bin/mongostat,CVE-2025-61729,stdlib,v1.24.0,"1.24.11, 1.25.5",HIGH,crypto/x509: golang: Denial of Service due to excessive resource consumption via crafted certificate,https://avd.aquasec.com/nvd/cve-2025-61729
+usr/bin/mongotop,CVE-2025-22874,stdlib,v1.24.0,1.24.4,HIGH,crypto/x509: Usage of ExtKeyUsageAny disables policy validation in crypto/x509,https://avd.aquasec.com/nvd/cve-2025-22874
+usr/bin/mongotop,CVE-2025-47907,stdlib,v1.24.0,"1.23.12, 1.24.6",HIGH,database/sql: Postgres Scan Race Condition,https://avd.aquasec.com/nvd/cve-2025-47907
+usr/bin/mongotop,CVE-2025-58183,stdlib,v1.24.0,"1.24.8, 1.25.2",HIGH,golang: archive/tar: Unbounded allocation when parsing GNU sparse map,https://avd.aquasec.com/nvd/cve-2025-58183
+usr/bin/mongotop,CVE-2025-61729,stdlib,v1.24.0,"1.24.11, 1.25.5",HIGH,crypto/x509: golang: Denial of Service due to excessive resource consumption via crafted certificate,https://avd.aquasec.com/nvd/cve-2025-61729
+usr/local/bin/gosu,CVE-2025-58183,stdlib,v1.24.6,"1.24.8, 1.25.2",HIGH,golang: archive/tar: Unbounded allocation when parsing GNU sparse map,https://avd.aquasec.com/nvd/cve-2025-58183
+usr/local/bin/gosu,CVE-2025-61729,stdlib,v1.24.6,"1.24.11, 1.25.5",HIGH,crypto/x509: golang: Denial of Service due to excessive resource consumption via crafted certificate,https://avd.aquasec.com/nvd/cve-2025-61729
