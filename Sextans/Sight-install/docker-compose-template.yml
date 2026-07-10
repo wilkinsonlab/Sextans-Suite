@@ -1,7 +1,7 @@
 services:
 
   fdp:
-    image: fairdatasystems/fdp:2026-02-11
+    image: fairdatasystems/fdpserv:2026-07-10
     restart: always
     hostname: fdp
     volumes:
@@ -15,7 +15,7 @@ services:
 
   # FAIR Data Point client
   fdp_client:
-    image: fairdatasystems/fdpclient:2026-02-11
+    image: fairdatasystems/fdpclient:2026-07-10
     hostname: fdpclient
     restart: always
     environment:
@@ -34,7 +34,7 @@ services:
 
 
   graphdb:
-    image: fairdatasystems/gdb:2026-02-11
+    image: fairdatasystems/gdb:2026-07-10
     restart: always
     hostname: graphdb
     ports:
@@ -47,7 +47,7 @@ services:
       
   # Mongo for FDP server    
   mongo:
-    image: fairdatasystems/mdb:2026-02-11
+    image: fairdatasystems/mdb:2026-07-10
     hostname: mongo
     restart: always
     volumes:
@@ -64,7 +64,8 @@ volumes:
     external: true
   {PREFIX}-mongo-init:
     external: true
-
+  {PREFIX}-fdp-server:
+    external: true
 
 networks:
   {PREFIX}-default:

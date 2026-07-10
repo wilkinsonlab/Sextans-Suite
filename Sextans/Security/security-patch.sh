@@ -3,7 +3,7 @@ timestamp=$(date +"%Y-%m-%d")
 rm -rf ./secury_scan_output/*.json
 
 
-image="ontotext/graphdb:10.8.2"
+image="ontotext/graphdb:10.8.14"
 name="gdb"
 outputfile=("./security_scan_output/scanresults_${name}_${timestamp}.json")
 docker run -d --name ${name} ${image}
@@ -45,7 +45,7 @@ echo ""
 echo ""
 echo "updating ${name}"
 echo "update"
-docker exec -it -u root ${name} apk update && upgrade  --no-cache --force-missing-repositories
+docker exec -it -u root ${name} sh -c "apk update && apk upgrade --no-cache --force-missing-repositories"
 # Commit the patched container, with a new name, overwriting the previous version
 echo "commit"
 docker commit ${name} fairdatasystems/${name}:${timestamp}
@@ -72,7 +72,7 @@ echo ""
 echo "updating ${name}"
 docker run -d --name ${name} ${image} tail -f /dev/null
 # use the appropriate distribution upgrade tool for that container’s operating system
-docker exec -it -u root ${name} update && apk upgrade --no-cache --force-missing-repositories
+docker exec -it -u root ${name} sh -c "apk update && apk upgrade --no-cache --force-missing-repositories"
 # Commit the patched container, with a new name, overwriting the previous version
 docker commit ${name} fairdatasystems/${name}:${timestamp}
 # stop the temporary container
@@ -133,7 +133,7 @@ echo ""
 echo "updating ${name}"
 echo "update"
 # use the appropriate distribution upgrade tool for that container’s operating system
-docker exec -it -u root ${name} apk update && upgrade --no-cache --force-missing-repositories
+docker exec -it -u root ${name} sh -c "apk update && apk upgrade --no-cache --force-missing-repositories"
 # Commit the patched container, with a new name, overwriting the previous version
 echo "commit"
 docker commit ${name} fairdatasystems/${name}:${timestamp}
@@ -160,7 +160,7 @@ echo ""
 echo "updating ${name}"
 docker run -d --name ${name} ${image}
 # use the appropriate distribution upgrade tool for that container’s operating system
-docker exec -it -u root ${name} apk update && upgrade --no-cache --force-missing-repositories
+docker exec -it -u root ${name} sh -c "apk update && apk upgrade --no-cache --force-missing-repositories"
 # Commit the patched container, with a new name, overwriting the previous version
 docker commit ${name} fairdatasystems/${name}:${timestamp}
 # stop the temporary container
@@ -188,7 +188,7 @@ echo ""
 echo "updating ${name}"
 docker run -d --name ${name} ${image}  tail -f /dev/null
 # use the appropriate distribution upgrade tool for that container’s operating system
-docker exec -it -u root ${name} apk update && upgrade --no-cache --force-missing-repositories
+docker exec -it -u root ${name} sh -c "apk update && apk upgrade --no-cache --force-missing-repositories"
 # Commit the patched container, with a new name, overwriting the previous version
 docker commit ${name} fairdatasystems/${name}:${timestamp}
 # stop the temporary container
@@ -212,7 +212,7 @@ echo ""
 echo "updating ${name}"
 docker run -d --name ${name} ${image}
 # use the appropriate distribution upgrade tool for that container’s operating system
-docker exec -it -u root ${name} apk update && upgrade --no-cache --force-missing-repositories
+docker exec -it -u root ${name} sh -c "apk update && apk upgrade --no-cache --force-missing-repositories"
 # Commit the patched container, with a new name, overwriting the previous version
 docker commit ${name} fairdatasystems/${name}:${timestamp}
 # stop the temporary container
