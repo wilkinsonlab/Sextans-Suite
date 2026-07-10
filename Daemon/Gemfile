@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 
 source 'https://rubygems.org'
-ruby "3.2.4"
+ruby "3.4.10"
 
 
 gem 'ffi'
 
 gem 'digest', '~> 3.1'
 
-gem 'puma', '~> 6.5'
+gem 'puma', '>= 8.0.2'
 
 gem 'linkeddata', '~> 3.3'
 
-gem 'addressable', '~> 2.8'
+gem 'addressable', '>= 2.9'
 
 gem 'json', '~> 2.9'
 
@@ -20,4 +20,12 @@ gem 'rest-client', '~> 2.1'
 
 gem "rackup", "~> 2.2"
 
-gem "sinatra", "~> 4.1"
+gem "sinatra", '>= 4.2'
+
+# Pinned floors for transitive deps flagged by Trivy (CRITICAL/HIGH CVEs fixed
+# at or above these versions) -- see Sextans/Security/vulnerability-register.csv
+gem 'rack', '>= 3.2.6'
+gem 'rack-session', '>= 2.1.2'
+gem 'nokogiri', '>= 1.19.3'
+gem 'concurrent-ruby', '>= 1.3.7'
+gem 'rexml', '>= 3.3.9'
