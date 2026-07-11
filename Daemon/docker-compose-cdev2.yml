@@ -31,7 +31,7 @@ services:
       - ./data:/data
 
   yarrrml-rdfizer:
-    image: markw/yarrrml-rml-ejp:0.1.1
+    image: markw/yarrrml-rml-ejp:0.1.3
     container_name: yarrrml-rdfizer
     hostname: yarrrml-rdfizer
     environment:

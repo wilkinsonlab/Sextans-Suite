@@ -183,8 +183,8 @@ echo "END"
 
 
 
-# markw/yarrrml-rml-ejp:0.1.1
-image="markw/yarrrml-rml-ejp:0.1.2"
+# markw/yarrrml-rml-ejp:0.1.2
+image="markw/yarrrml-rml-ejp:0.1.3"
 name="yrml"
 outputfile=("./security_scan_output/scanresults_${name}_${timestamp}.json")
 echo ""
