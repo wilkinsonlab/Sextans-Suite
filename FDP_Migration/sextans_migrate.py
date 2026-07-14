@@ -119,17 +119,33 @@ MONGO_UPDATE_JS = """
 const oldUri = __OLD_PERSISTENT_URL_JSON__;
 const newUri = __NEW_URI_JSON__;
 const re = new RegExp("^" + oldUri.replace(/[.*+?^${}()|[\\]\\\\]/g, "\\\\$&"));
-const aclResult = db.ACL.updateMany(
-  {instanceId: {$regex: re}},
-  [{$set: {instanceId: {$replaceOne: {input: "$instanceId", find: oldUri, replacement: newUri}}}}]
-);
-const metaResult = db.metadata.updateMany(
-  {uri: {$regex: re}},
-  [{$set: {uri: {$replaceOne: {input: "$uri", find: oldUri, replacement: newUri}}}}]
-);
+
+// Deliberately not using a pipeline-style update with $replaceOne here -
+// that aggregation string operator needs MongoDB 4.4+, and these installs
+// have been seen running much older servers. find/forEach/updateOne/$set
+// with the replacement computed client-side in JS works on essentially any
+// MongoDB version, at the cost of one round trip per matched document
+// (fine - these collections are FDP metadata, not bulk data).
+function rewriteCollection(coll, field) {
+  var query = {};
+  query[field] = {$regex: re};
+  var matched = 0;
+  var modified = 0;
+  coll.find(query).forEach(function(doc) {
+    matched++;
+    var setDoc = {};
+    setDoc[field] = doc[field].replace(oldUri, newUri);
+    var res = coll.updateOne({_id: doc._id}, {$set: setDoc});
+    modified += res.modifiedCount;
+  });
+  return {matched: matched, modified: modified};
+}
+
+const aclResult = rewriteCollection(db.ACL, "instanceId");
+const metaResult = rewriteCollection(db.metadata, "uri");
 print(JSON.stringify({
-  acl_matched: aclResult.matchedCount, acl_modified: aclResult.modifiedCount,
-  meta_matched: metaResult.matchedCount, meta_modified: metaResult.modifiedCount
+  acl_matched: aclResult.matched, acl_modified: aclResult.modified,
+  meta_matched: metaResult.matched, meta_modified: metaResult.modified
 }));
 """
 
@@ -162,19 +178,67 @@ def yaml_value(text, key):
     return m.group(1).strip().strip('"').strip("'")
 
 
+# The three named volumes every Sextans Sight install creates. Content
+# rewriting, backup, export and import all key off this same list so a role
+# ("graphdb") always maps to the same volume name ("{prefix}-graphdb").
+VOLUME_ROLES = ("graphdb", "mongo-data", "mongo-init")
+
+
+def prefix_from_compose_text(text):
+    # Installs are usually left as "docker-compose-{PREFIX}.yml", but users
+    # are free to rename that file (e.g. to plain "docker-compose.yml") once
+    # it's in production, so the filename alone can't be trusted. The prefix
+    # is also encoded in the external volume declarations
+    # ("{PREFIX}-graphdb:", "{PREFIX}-mongo-data:") - fall back to those.
+    for role in VOLUME_ROLES:
+        m = re.search(rf'^\s*([A-Za-z0-9_.-]+)-{re.escape(role)}:\s*$', text, re.MULTILINE)
+        if m:
+            return m.group(1)
+    return None
+
+
 def find_compose_file(path: Path):
-    matches = sorted(path.glob("docker-compose-*.yml"))
-    if len(matches) != 1:
-        fatal(f"expected exactly one docker-compose-*.yml in {path}, found {len(matches)}")
-    m = re.match(r"docker-compose-(.+)\.yml$", matches[0].name)
-    return matches[0], m.group(1)
+    matches = sorted(path.glob("docker-compose*.yml"))
+    if len(matches) == 0:
+        fatal(f"no docker-compose*.yml found in {path}")
+    if len(matches) > 1:
+        fatal(f"expected exactly one docker-compose*.yml in {path}, found {len(matches)}: "
+              f"{[m.name for m in matches]}")
+    compose_path = matches[0]
+
+    m = re.match(r"docker-compose-(.+)\.yml$", compose_path.name)
+    if m:
+        return compose_path, m.group(1)
+
+    prefix = prefix_from_compose_text(compose_path.read_text())
+    if not prefix:
+        fatal(
+            f"could not determine the install prefix from {compose_path.name} - expected either "
+            f"a 'docker-compose-{{PREFIX}}.yml' filename or a '{{PREFIX}}-graphdb:' external "
+            f"volume declaration inside it"
+        )
+    return compose_path, prefix
+
+
+def find_application_yml(path: Path, prefix: str):
+    expected = path / "fdp" / f"application-{prefix}.yml"
+    if expected.exists():
+        return expected
+
+    # Same story as the compose file: it may have been renamed since install.
+    # Fall back to whatever single application*.yml lives under fdp/.
+    matches = sorted((path / "fdp").glob("application*.yml")) if (path / "fdp").is_dir() else []
+    if len(matches) == 1:
+        return matches[0]
+    fatal(
+        f"expected {expected} to exist - is this a Sextans Sight install? "
+        f"(found {len(matches)} candidate(s) under fdp/application*.yml)"
+    )
 
 
 def load_install(path: Path):
     compose_path, prefix = find_compose_file(path)
-    app_yml_path = path / "fdp" / f"application-{prefix}.yml"
-    if not app_yml_path.exists():
-        fatal(f"expected {app_yml_path} to exist - is this a Sextans Sight install?")
+    app_yml_path = find_application_yml(path, prefix)
 
     compose_text = compose_path.read_text()
     app_text = app_yml_path.read_text()
@@ -212,12 +276,6 @@ def ensure_down(dc_cmd, path, compose_filename, force):
             f"Run 'docker compose -f {compose_filename} down' first, or pass --force "
             f"if you understand the risk of rewriting content under a live stack."
         )
-
-
-# The three named volumes every Sextans Sight install creates. Content
-# rewriting, backup, export and import all key off this same list so a role
-# ("graphdb") always maps to the same volume name ("{prefix}-graphdb").
-VOLUME_ROLES = ("graphdb", "mongo-data", "mongo-init")
 
 
 def volume_name(prefix, role):
@@ -280,31 +338,65 @@ def backup_volumes(prefix, backup_dir: Path):
         chown_to_current_user(backup_dir / filename)
 
 
-def wait_for_graphdb(base_url, auth, timeout=180):
+def wait_for_graphdb(base_url, auth, timeout=300):
     deadline = time.time() + timeout
     last_err = None
+    attempt = 0
     while time.time() < deadline:
+        attempt += 1
         try:
             r = requests.get(f"{base_url}/rest/repositories", auth=auth, timeout=5)
             if r.status_code == 200:
                 return
-            last_err = f"HTTP {r.status_code}"
+            last_err = f"HTTP {r.status_code}: {r.text[:300]}"
         except requests.RequestException as e:
             last_err = str(e)
+        if attempt % 10 == 0:
+            print(f"  ... still waiting for GraphDB ({int(time.time() - (deadline - timeout))}s elapsed, "
+                  f"last response: {last_err})")
         time.sleep(3)
-    fatal(f"timed out waiting for GraphDB to become ready ({last_err})")
+    fatal(f"timed out waiting for GraphDB to become ready. Last error: {last_err}\n"
+          f"(on a large/real dataset this can legitimately take longer than the {timeout}s default - "
+          f"pass --db-timeout to raise it, e.g. --db-timeout 900)")
 
 
-def wait_for_mongo(dc_cmd, path, compose_filename, timeout=120):
+def detect_mongo_shell(dc_cmd, path, compose_filename, timeout=60):
+    # Older fairdatasystems/mdb tags only ship the legacy "mongo" shell -
+    # "mongosh" was bundled starting later. Try both rather than assuming.
+    # This only needs the container process to be alive, not mongod itself
+    # to be accepting connections yet, so it can run before the readiness wait.
     deadline = time.time() + timeout
+    last = None
     while time.time() < deadline:
-        r = compose(dc_cmd, path, compose_filename, "exec", "-T", "mongo", "mongosh",
+        for candidate in ("mongosh", "mongo"):
+            r = compose(dc_cmd, path, compose_filename, "exec", "-T", "mongo", "which", candidate,
+                        capture_output=True, text=True)
+            if r.returncode == 0:
+                return candidate
+            last = f"exit code {r.returncode}, stderr: {r.stderr.strip()!r}"
+        time.sleep(2)
+    fatal(f"could not find either 'mongosh' or 'mongo' inside the mongo container. Last error: {last}")
+
+
+def wait_for_mongo(dc_cmd, path, compose_filename, mongo_shell, timeout=300):
+    deadline = time.time() + timeout
+    last = None
+    attempt = 0
+    while time.time() < deadline:
+        attempt += 1
+        r = compose(dc_cmd, path, compose_filename, "exec", "-T", "mongo", mongo_shell,
                      "--quiet", "--eval", "db.runCommand({ping:1}).ok",
                      capture_output=True, text=True)
         if r.returncode == 0 and "1" in r.stdout:
             return
+        last = f"exit code {r.returncode}, stdout: {r.stdout.strip()!r}, stderr: {r.stderr.strip()!r}"
+        if attempt % 10 == 0:
+            print(f"  ... still waiting for MongoDB ({int(time.time() - (deadline - timeout))}s elapsed, "
+                  f"last attempt: {last})")
         time.sleep(3)
-    fatal("timed out waiting for MongoDB to become ready")
+    fatal(f"timed out waiting for MongoDB to become ready. Last attempt: {last}\n"
+          f"(on a large/real dataset this can legitimately take longer than the {timeout}s default - "
+          f"pass --db-timeout to raise it, e.g. --db-timeout 900.)")
 
 
 def sparql_query(base_url, repo, auth, query):
@@ -342,15 +434,15 @@ def graphdb_counts(base_url, repo, auth, old_persistent_url):
     return counts
 
 
-def mongo_eval(dc_cmd, path, compose_filename, script, mongo_db):
-    return compose(dc_cmd, path, compose_filename, "exec", "-T", "mongo", "mongosh",
+def mongo_eval(dc_cmd, path, compose_filename, mongo_shell, script, mongo_db):
+    return compose(dc_cmd, path, compose_filename, "exec", "-T", "mongo", mongo_shell,
                     "--quiet", mongo_db, "--eval", script,
                     capture_output=True, text=True)
 
 
-def mongo_counts(dc_cmd, path, compose_filename, old_persistent_url, mongo_db):
+def mongo_counts(dc_cmd, path, compose_filename, mongo_shell, old_persistent_url, mongo_db):
     script = MONGO_COUNT_JS.replace("__OLD_PERSISTENT_URL_JSON__", json.dumps(old_persistent_url))
-    r = mongo_eval(dc_cmd, path, compose_filename, script, mongo_db)
+    r = mongo_eval(dc_cmd, path, compose_filename, mongo_shell, script, mongo_db)
     if r.returncode != 0:
         fatal(f"mongo count query failed:\n{r.stdout}\n{r.stderr}")
     try:
@@ -420,12 +512,14 @@ def cmd_rewrite(args):
 
     print("\nStarting graphdb + mongo ...")
     compose(dc_cmd, path, compose_filename, "up", "-d", "graphdb", "mongo", check=True)
-    wait_for_graphdb(base_url, auth)
-    wait_for_mongo(dc_cmd, path, compose_filename)
+    mongo_shell = detect_mongo_shell(dc_cmd, path, compose_filename)
+    print(f"  using '{mongo_shell}' as the mongo shell")
+    wait_for_graphdb(base_url, auth, timeout=args.db_timeout)
+    wait_for_mongo(dc_cmd, path, compose_filename, mongo_shell, timeout=args.db_timeout)
     print("  both services are up.")
 
     gdb_before = graphdb_counts(base_url, info["gdb_repo"], auth, old_persistent_url)
-    mongo_before = mongo_counts(dc_cmd, path, compose_filename, old_persistent_url, mongo_db)
+    mongo_before = mongo_counts(dc_cmd, path, compose_filename, mongo_shell, old_persistent_url, mongo_db)
     print_counts("Matches found for the old URI (dry run):", gdb_before, mongo_before)
 
     if sum(gdb_before.values()) == 0 and sum(mongo_before.values()) == 0:
@@ -445,7 +539,7 @@ def cmd_rewrite(args):
     print("\nRewriting MongoDB content ...")
     script = MONGO_UPDATE_JS.replace("__OLD_PERSISTENT_URL_JSON__", json.dumps(old_persistent_url)) \
                              .replace("__NEW_URI_JSON__", json.dumps(new_persistent_url))
-    r = mongo_eval(dc_cmd, path, compose_filename, script, mongo_db)
+    r = mongo_eval(dc_cmd, path, compose_filename, mongo_shell, script, mongo_db)
     if r.returncode != 0:
         fatal(f"mongo update failed:\n{r.stdout}\n{r.stderr}")
     try:
@@ -460,7 +554,7 @@ def cmd_rewrite(args):
     info["app_yml_path"].write_text(new_app_text)
 
     gdb_after = graphdb_counts(base_url, info["gdb_repo"], auth, old_persistent_url)
-    mongo_after = mongo_counts(dc_cmd, path, compose_filename, old_persistent_url, mongo_db)
+    mongo_after = mongo_counts(dc_cmd, path, compose_filename, mongo_shell, old_persistent_url, mongo_db)
     print_counts("Remaining matches for the old URI (should be 0):", gdb_after, mongo_after)
     if sum(gdb_after.values()) or sum(mongo_after.values()):
         print("\nWARNING: some old-URI content remains - inspect before going live.")
@@ -595,6 +689,8 @@ def build_parser():
     r.add_argument("--new-persistent-url", required=True, help="New persistentUrl (baked into GraphDB/Mongo content)")
     r.add_argument("--new-client-url", help="New clientUrl (default: same as --new-persistent-url)")
     r.add_argument("--mongo-db", default=MONGO_DB_DEFAULT, help=f"Mongo database name (default: {MONGO_DB_DEFAULT})")
+    r.add_argument("--db-timeout", type=int, default=300,
+                   help="Seconds to wait for graphdb/mongo to become ready before giving up (default: 300)")
     r.add_argument("--skip-backup", action="store_true", help="Skip the pre-migration volume backup")
     r.add_argument("--force", action="store_true", help="Proceed even if containers are already running")
     r.add_argument("--confirm-rewrite", action="store_true",

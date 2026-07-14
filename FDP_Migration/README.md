@@ -73,6 +73,18 @@ accepts.
   `rewrite` or `export` (the tool checks this and refuses to proceed unless
   you pass `--force`). Rewriting GraphDB/Mongo content while FDP is live and
   possibly writing to them is not safe.
+- **GraphDB's port must be exposed on `127.0.0.1` in the compose file**
+  (`- 127.0.0.1:{GDB_PORT}:7200` under the `graphdb` service), because
+  `rewrite` talks to GraphDB's SPARQL endpoint directly over HTTP from the
+  host running the script — it does not go through `docker exec`. Many
+  production installs deliberately lock this port down after go-live (it's
+  reasonable hardening, since GraphDB has no reason to be reachable from
+  outside its own docker network in normal operation). If you've done that,
+  temporarily restore the `127.0.0.1:{GDB_PORT}:7200` port mapping in
+  `docker-compose-{PREFIX}.yml` before running `rewrite`, run it, then remove
+  the mapping again afterward if you want. Without it, the tool can't even
+  determine the port to connect to and will fail immediately with a clear
+  error rather than doing anything partial.
 
 ## Command: `rewrite`
 
@@ -110,7 +122,11 @@ python3 sextans_migrate.py rewrite \
    `{PREFIX}-mongo-init`) to `migration-backup/{PREFIX}-{timestamp}/` inside
    the install folder, via a throwaway `busybox` container (`--skip-backup`
    to skip — not recommended).
-3. Starts only `graphdb` and `mongo`, and waits for both to become healthy.
+3. Starts only `graphdb` and `mongo`, detects whether the mongo image ships
+   `mongosh` or only the legacy `mongo` shell (older `fairdatasystems/mdb`
+   tags don't have `mongosh`) and uses whichever is present, then waits for
+   both services to become healthy (`--db-timeout`, default 300s, if a large
+   real dataset needs longer than that to come up).
 4. Runs a **dry-run count** of how much content matches the old URI (named
    graphs, subjects, predicates, object IRIs, literals in GraphDB; `ACL` and
    `metadata` documents in Mongo) and prints it for you to sanity-check.
