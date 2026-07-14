@@ -1,0 +1,99 @@
+# Pass 1 — rewrite the named graph IRIs
+DELETE { GRAPH ?g { ?s ?p ?o } }
+INSERT { GRAPH ?newg { ?s ?p ?o } }
+WHERE {
+  GRAPH ?g { ?s ?p ?o }
+  FILTER(STRSTARTS(STR(?g), "https://bgusal.bgv.cbgp.upm.es"))
+  BIND(IRI(CONCAT("https://bgusal.linkeddata.systems",
+        STRAFTER(STR(?g), "https://bgusal.bgv.cbgp.upm.es"))) AS ?newg)
+}
+ 
+# Pass 2 — subjects
+DELETE { GRAPH ?g { ?s ?p ?o } }
+INSERT { GRAPH ?g { ?news ?p ?o } }
+WHERE {
+  GRAPH ?g { ?s ?p ?o }
+  FILTER(isIRI(?s) && STRSTARTS(STR(?s), "https://bgusal.bgv.cbgp.upm.es"))
+  BIND(IRI(CONCAT("https://bgusal.linkeddata.systems",
+        STRAFTER(STR(?s), "https://bgusal.bgv.cbgp.upm.es"))) AS ?news)
+}
+ 
+# Pass 3 — predicates (unlikely, but fast so...)
+DELETE { GRAPH ?g { ?s ?p ?o } }
+INSERT { GRAPH ?g { ?s ?newp ?o } }
+WHERE {
+  GRAPH ?g { ?s ?p ?o }
+  FILTER(isIRI(?p) && STRSTARTS(STR(?p), "https://bgusal.bgv.cbgp.upm.es"))
+  BIND(IRI(CONCAT("https://bgusal.linkeddata.systems",
+        STRAFTER(STR(?p), "https://bgusal.bgv.cbgp.upm.es"))) AS ?newp)
+}
+ 
+# Pass 4 — objects, IRI positions only (literals left alone)
+DELETE { GRAPH ?g { ?s ?p ?o } }
+INSERT { GRAPH ?g { ?s ?p ?newo } }
+WHERE {
+  GRAPH ?g { ?s ?p ?o }
+  FILTER(isIRI(?o) && STRSTARTS(STR(?o), "https://bgusal.bgv.cbgp.upm.es"))
+  BIND(IRI(CONCAT("https://bgusal.linkeddata.systems",
+        STRAFTER(STR(?o), "https://bgusal.bgv.cbgp.upm.es"))) AS ?newo)
+}
+ 
+# Pass 5 — literals containing the old baseURI 
+# OPTIONAL!  but...
+# this includes cases like dc:identifier, which might still point to the old base URI
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+DELETE { GRAPH ?g { ?s ?p ?o } }
+INSERT { GRAPH ?g { ?s ?p ?newo } }
+WHERE {
+  GRAPH ?g { ?s ?p ?o }
+  FILTER(isLiteral(?o) && STRSTARTS(STR(?o), "https://bgusal.bgv.cbgp.upm.es"))
+  BIND(CONCAT("https://bgusal.linkeddata.systems",
+        STRAFTER(STR(?o), "https://bgusal.bgv.cbgp.upm.es")) AS ?newstr)
+  BIND(
+    IF(LANG(?o) != "",
+       STRLANG(?newstr, LANG(?o)),
+       IF(DATATYPE(?o) != xsd:string,
+          STRDT(?newstr, DATATYPE(?o)),
+          ?newstr)
+    ) AS ?newo
+  )
+}
+
+
+
+
+The FDP stores its (internal) application data in mongodb.
+
+This includes references to its domain, in URIs in the ACL and metadata collections.
+
+So, these need to be updated too.
+
+Unfortunately, there is no built-in solution for this yet, so we need to update the mongodb content manually.
+
+Here's a quick and dirty way to do this using the mongodb shell (mongosh):
+
+- log in to your host
+- tear down the fdp container, if it is running
+    docker compose down fdp
+- open a mongosh shell in the running mongodb container:
+    docker compose exec mongo mongosh
+- activate the FDP database, typically called fdp (you can list all databases using e.g. show dbs):
+    use fdp
+- [optional] inspect the ACL and metadata collections to verify that the old domain is present:
+     db.ACL.find()
+    db.metadata.find()
+- update the URIs in the ACL collection:
+    db.ACL.updateMany(
+      {instanceId: {$regex: /<old-uri-pattern>/}},
+      [{$set: {instanceId: {$replaceOne: {input: "$instanceId", find: "<old-uri>", replacement: "<new-uri>"}}}}]
+    )
+- update the URIs in the metadata collection:
+    db.metadata.updateMany(
+       {uri: {$regex: /<old-uri-pattern>/}},
+       [{$set: {uri: {$replaceOne: {input: "$uri", find: "<old-uri>", replacement: "<new-uri>"}}}}]
+    )
+- inspect the collections again to verify the changes (see 5.)
+- exit the mongodb shell:
+    .exit
+- set up the fdp container again:
+     docker compose up -d fdp
