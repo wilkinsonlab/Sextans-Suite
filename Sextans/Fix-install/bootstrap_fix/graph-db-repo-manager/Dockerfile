@@ -1,4 +1,4 @@
-FROM python:3.8
+FROM python:3.14.5
 
 WORKDIR /usr/src/script
 COPY ./ /usr/src/script
