@@ -234,6 +234,8 @@ echo "END"
 cp sight-docker-compose-template-template.yml sight-docker-compose-template-tmp.yml
 cp fix-docker-compose-template-template.yml fix-docker-compose-template-tmp.yml
 cp config-docker-compose-template-template.yml config-docker-compose-template-tmp.yml
+cp bootstrap-sight-docker-compose-template-template.yml bootstrap-sight-docker-compose-template-tmp.yml
+cp bootstrap-fix-docker-compose-template-template.yml bootstrap-fix-docker-compose-template-tmp.yml
 sed -i'' -e "s!{FDP}!${FDP}!" "sight-docker-compose-template-tmp.yml"
 sed -i'' -e "s!{FDPC}!${FDPC}!" "sight-docker-compose-template-tmp.yml"
 sed -i'' -e "s!{GDB}!${GDB}!" "sight-docker-compose-template-tmp.yml"
@@ -256,8 +258,13 @@ sed -i'' -e "s!{FDP}!${FDP}!" "config-docker-compose-template-tmp.yml"
 sed -i'' -e "s!{FDPC}!${FDPC}!" "config-docker-compose-template-tmp.yml"
 sed -i'' -e "s!{MDB}!${MDB}!" "config-docker-compose-template-tmp.yml"
 
+sed -i'' -e "s!{GDB}!${GDB}!" "bootstrap-sight-docker-compose-template-tmp.yml"
+sed -i'' -e "s!{GDB}!${GDB}!" "bootstrap-fix-docker-compose-template-tmp.yml"
+
 mv fix-docker-compose-template-tmp.yml ../Fix-install/docker-compose-template.yml
 mv sight-docker-compose-template-tmp.yml ../Sight-install/docker-compose-template.yml
 mv config-docker-compose-template-tmp.yml ../Sight-install/config/docker-compose-template.yml
+mv bootstrap-sight-docker-compose-template-tmp.yml ../Sight-install/bootstrap_sight/docker-compose-template.yml
+mv bootstrap-fix-docker-compose-template-tmp.yml ../Fix-install/bootstrap_fix/docker-compose-template.yml
 
 ruby parse-security-scans.rb ./security_scan_output/*.json

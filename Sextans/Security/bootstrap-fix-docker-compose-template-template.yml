@@ -1,7 +1,7 @@
 
 services:
   graphdb:
-    image: fairdatasystems/gdb:2026-09-08
+    image: {GDB}
     restart: always
     hostname: graphdb
     security_opt:
@@ -15,7 +15,7 @@ services:
     networks:
       - graphdb_net
 
-  #  This service creates  `[prefix]-sextans-sight` repository in graphdb
+  #  This service create's `cde` and `fdp` repositories in graphdb
   graph_db_repo_manager:
     build: ./graph-db-repo-manager
     depends_on:
@@ -29,7 +29,7 @@ services:
       - "GRAPH_DB_ADMIN_USERNAME=admin"
       - "GRAPH_DB_ADMIN_DEFAULT_PASSWORD=root"
       - "GRAPH_DB_ADMIN_PASSWORD={GDB_PASS}"
-      - FDP_PREFIX={PREFIX}
+      - GDB_PREFIX={PREFIX}
     networks:
       - graphdb_net
 

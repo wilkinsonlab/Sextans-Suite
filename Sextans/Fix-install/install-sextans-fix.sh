@@ -172,6 +172,7 @@ echo -e "${GREEN}Creating a Sextans Fix Production Server folder in ${NC} ./${P}
 echo ""
 
 cd ..
+rm -rf ./${P}-Sextans-Fix
 mkdir ./${P}-Sextans-Fix
 cp -r ./Sextans-Fix/data ./${P}-Sextans-Fix/
 # cde-box-daemon and yarrrml-rdfizer run as fixed-UID non-root users inside their

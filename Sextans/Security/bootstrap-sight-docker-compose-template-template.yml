@@ -1,7 +1,7 @@
 
 services:
   graphdb:
-    image: fairdatasystems/gdb:2026-09-08
+    image: {GDB}
     restart: always
     hostname: graphdb
     security_opt:
