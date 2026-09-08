@@ -127,24 +127,18 @@ echo "END"
 
 
 
-image="markw/cde-box-daemon:0.7.2"
 name="cdeb"
 outputfile=("./security_scan_output/scanresults_${name}_${timestamp}.json")
-docker run -d --name ${name} ${image}
-# use the appropriate distribution upgrade tool for that container’s operating system
 echo ""
 echo ""
-echo "updating ${name}"
-echo "update"
-# use the appropriate distribution upgrade tool for that container’s operating system
-docker exec -u root ${name} sh -c "apk update && apk upgrade --no-cache --force-missing-repositories"
-# Commit the patched container, with a new name, overwriting the previous version
-echo "commit"
-docker commit ${name} fairdatasystems/${name}:${timestamp}
-# stop the temporary container
-docker stop ${name}
-# delete the temporary container
-docker rm ${name}
+echo "building ${name}"
+# cdeb is an image we own (built from our own Daemon/Dockerfile) -- build fresh
+# from source rather than pulling a published base tag and OS-patching it.
+# The old approach (docker run markw/cde-box-daemon:0.7.2, apk upgrade, commit)
+# went stale silently: that base tag no longer exists on Docker Hub, and even
+# when it did, a Dockerfile-level fix (e.g. a non-root USER) landing here would
+# never reach the patched image since it was never rebuilt from source.
+docker build -t fairdatasystems/${name}:${timestamp} ../../Daemon
 echo "push"
 docker push fairdatasystems/${name}:${timestamp}
 echo "pushed"
@@ -183,22 +177,18 @@ echo "END"
 
 
 
-# markw/yarrrml-rml-ejp:0.1.2
-image="markw/yarrrml-rml-ejp:0.1.3"
 name="yrml"
 outputfile=("./security_scan_output/scanresults_${name}_${timestamp}.json")
 echo ""
 echo ""
-echo "updating ${name}"
-docker run -d --name ${name} ${image}  tail -f /dev/null
-# use the appropriate distribution upgrade tool for that container’s operating system
-docker exec -u root ${name} sh -c "apk update && apk upgrade --no-cache --force-missing-repositories"
-# Commit the patched container, with a new name, overwriting the previous version
-docker commit ${name} fairdatasystems/${name}:${timestamp}
-# stop the temporary container
-docker stop ${name}
-# delete the temporary container
-docker rm ${name}
+echo "building ${name}"
+# yrml is an image we own (built from our own yarrrml-rml/Dockerfile) -- build
+# fresh from source rather than pulling a published base tag and OS-patching
+# it. The old approach (docker run markw/yarrrml-rml-ejp:0.1.3, apk upgrade,
+# commit) meant Dockerfile-level fixes (pinned upstream versions, the non-root
+# USER, npm/maven CVE overrides) never reached the actually-deployed image --
+# only OS packages on top of whatever was published under that tag.
+docker build -t fairdatasystems/${name}:${timestamp} ../../yarrrml-rml
 echo "push"
 docker push fairdatasystems/${name}:${timestamp}
 echo "pushed"

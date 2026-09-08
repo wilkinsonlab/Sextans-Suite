@@ -40,6 +40,10 @@ services:
   caresm:
     image: {CARE}
     hostname: caresm
+    # The image itself has no non-root user baked in (it's a collaborator's
+    # Dockerfile, not ours), but a plain uid:gid override works cleanly --
+    # verified live, no startup issues.
+    user: "1000:1000"
     security_opt:
       - "no-new-privileges:true"
     cap_drop:
