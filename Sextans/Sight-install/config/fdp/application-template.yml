@@ -9,9 +9,8 @@ instance:
 security:
     jwt:
         token:
-            # (!) Change secret to some random 128 characters string if you are running in production environment (due to security)
             # serviceToken: <fdp-secret>
-            secret-key: dUS3a8sTGgrwZ92kjuxUeKrTzPBG9tj5mwGtwgexEupuXmjw2BQPMJ8jaun32BwQAEh2GWKB6V5W6bZL4FbgL2v5FwyGwbZsA48EfFHqKVvPYrcZBFdVSDM4jEhP9NBY
+            secret-key: {JWT_SECRET}
 
 # repository settings (can be changed to different repository)
 repository:
@@ -20,4 +19,4 @@ repository:
     url: http://graphdb:7200
     repository: "{PREFIX}-sextans-sight"
     username: "admin"
-    password: "root"
+    password: "{GDB_PASS}"

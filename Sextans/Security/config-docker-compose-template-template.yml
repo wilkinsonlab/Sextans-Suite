@@ -1,9 +1,10 @@
-services:
 
+services:
+  # FAIR Data Point server
   fdp:
     image: {FDP}
-    restart: always
     hostname: fdp
+    restart: always
     security_opt:
       - "no-new-privileges:true"
     cap_drop:
@@ -12,13 +13,11 @@ services:
       - ./fdp/application-{PREFIX}.yml:/fdp/application.yml:ro
     depends_on:
       - mongo
-      - graphdb
     networks:
-      - {PREFIX}-frontend
-      - {PREFIX}-backend
+      - default
+      - bootstrap_sight_graphdb_net
 
 
-  # FAIR Data Point client
   fdp_client:
     image: {FDPC}
     hostname: fdpclient
@@ -36,38 +35,23 @@ services:
     environment:
       FDP_HOST: fdp
     volumes:
-      - ./fdp/variables.scss:/src/scss/custom/_variables.scss:ro
-      - ./fdp/assets:/usr/share/nginx/html/assets:ro
-      - ./fdp/favicon.ico:/usr/share/nginx/html/favicon.ico:ro
+      - ./fdp-client/variables.scss:/src/scss/custom/_variables.scss:ro
+      - ./fdp-client/assets:/usr/share/nginx/html/assets:ro
+      - ./fdp-client/favicon.ico:/usr/share/nginx/html/favicon.ico:ro
     depends_on:
       - fdp
     ports:
-      - {FDP_PORT}:80  # You should/must close this port, if you are using hitch
+      - {FDP_PORT}:80
     command: ./start.sh
     networks:
-      - {PREFIX}-frontend
+      - default
+      - bootstrap_sight_graphdb_net
 
-
-  graphdb:
-    image: {GDB}
-    restart: always
-    hostname: graphdb
-    security_opt:
-      - "no-new-privileges:true"
-    cap_drop:
-      - ALL
-    ports:
-      - 127.0.0.1:{GDB_PORT}:7200
-    volumes:
-      - {PREFIX}-graphdb:/opt/graphdb/home
-    networks:
-      - {PREFIX}-backend
-
+  # FAIR Data Point client
 
   # Mongo for FDP server
   mongo:
     image: {MDB}
-    hostname: mongo
     restart: always
     security_opt:
       - "no-new-privileges:true"
@@ -85,24 +69,17 @@ services:
       - {PREFIX}-mongo-data:/data/db
       - {PREFIX}-mongo-init:/docker-entrypoint-initdb.d/
     networks:
-      - {PREFIX}-backend
+      - default
+      - bootstrap_sight_graphdb_net
 
+
+# Define networks here
+networks:
+  bootstrap_sight_graphdb_net:
+    external: true
 
 volumes:
-  {PREFIX}-graphdb:
-    external: true
   {PREFIX}-mongo-data:
     external: true
   {PREFIX}-mongo-init:
     external: true
-  {PREFIX}-fdp-server:
-    external: true
-
-networks:
-  # Note: intentionally NOT `internal: true` on the backend network -- that flag
-  # also blocks Docker from publishing containers' host ports on it (verified:
-  # it silently drops the `ports:` mapping entirely), which would break GraphDB's
-  # troubleshooting port above. The two-network split still provides real value:
-  # fdp_client can only ever reach `fdp`, never graphdb/mongo directly.
-  {PREFIX}-backend:
-  {PREFIX}-frontend:

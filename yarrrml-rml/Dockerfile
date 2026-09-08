@@ -65,5 +65,11 @@ RUN bundle install && apk del alpine-sdk ruby-dev
 
 RUN chmod a+x entrypoint.sh
 
+# Run as a non-root, unprivileged user. The install script opens up the
+# bind-mounted ./data directory (chmod o+rwX) since this fixed UID won't
+# generally match the host user's UID.
+RUN addgroup -g 1000 yrml && adduser -D -u 1000 -G yrml yrml && \
+    chown -R yrml:yrml /usr/app /mnt/data
+USER yrml
 
 ENTRYPOINT ["./entrypoint.sh"]

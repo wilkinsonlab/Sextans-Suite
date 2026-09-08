@@ -212,6 +212,7 @@ GEM
       reline
     reline (0.6.3)
       io-console (~> 0.5)
+    resolv (0.7.2)
     rest-client (2.1.0)
       http-accept (>= 1.7.0, < 2.0)
       http-cookie (>= 1.0.2, < 2.0)
@@ -294,6 +295,7 @@ DEPENDENCIES
   rack (>= 3.2.6)
   rack-session (>= 2.1.2)
   rackup (~> 2.2)
+  resolv (>= 0.7.2)
   rest-client (~> 2.1)
   rexml (>= 3.3.9)
   sinatra (>= 4.2)

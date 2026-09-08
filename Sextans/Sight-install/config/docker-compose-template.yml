@@ -1,23 +1,37 @@
 
-services:  
-  # FAIR Data Point server    
+services:
+  # FAIR Data Point server
   fdp:
-    image: fairdata/fairdatapoint:1.17.6
+    image: fairdatasystems/fdpserv:2026-09-08
     hostname: fdp
     restart: always
+    security_opt:
+      - "no-new-privileges:true"
+    cap_drop:
+      - ALL
     volumes:
       - ./fdp/application-{PREFIX}.yml:/fdp/application.yml:ro
     depends_on:
       - mongo
     networks:
       - default
-      - bootstrap_sight_graphdb_net    
+      - bootstrap_sight_graphdb_net
 
 
   fdp_client:
-    image: fairdata/fairdatapoint-client:1.17.1
+    image: fairdatasystems/fdpclient:2026-09-08
     hostname: fdpclient
     restart: always
+    security_opt:
+      - "no-new-privileges:true"
+    cap_drop:
+      - ALL
+    cap_add:
+      # nginx's master process needs these to chown its cache dirs and drop
+      # worker processes from root to the nginx user at startup.
+      - CHOWN
+      - SETUID
+      - SETGID
     environment:
       FDP_HOST: fdp
     volumes:
@@ -28,24 +42,37 @@ services:
       - fdp
     ports:
       - {FDP_PORT}:80
+    command: ./start.sh
     networks:
       - default
-      - bootstrap_sight_graphdb_net   
-        
-  # FAIR Data Point client	
-      
-  # Mongo for FDP server    
+      - bootstrap_sight_graphdb_net
+
+  # FAIR Data Point client
+
+  # Mongo for FDP server
   mongo:
-    image: mongo:7.0
+    image: fairdatasystems/mdb:2026-09-08
     restart: always
+    security_opt:
+      - "no-new-privileges:true"
+    cap_drop:
+      - ALL
+    cap_add:
+      # mongod's entrypoint chowns /data/db and drops from root to the
+      # mongodb user via gosu at startup -- these are required for that.
+      - CHOWN
+      - SETUID
+      - SETGID
+      - DAC_OVERRIDE
+      - FOWNER
     volumes:
       - {PREFIX}-mongo-data:/data/db
       - {PREFIX}-mongo-init:/docker-entrypoint-initdb.d/
     networks:
       - default
-      - bootstrap_sight_graphdb_net    
+      - bootstrap_sight_graphdb_net
 
-      
+
 # Define networks here
 networks:
   bootstrap_sight_graphdb_net:
@@ -56,4 +83,3 @@ volumes:
     external: true
   {PREFIX}-mongo-init:
     external: true
-

@@ -149,6 +149,27 @@ if is_banned_port "$GDB_PORT"; then
 fi
 
 
+echo ""
+echo ""
+echo ""
+# GraphDB admin password handling
+# GraphDB ships with a well-known default admin password ("root"). This installer changes
+# it for you automatically as part of setup, using whatever you provide here.
+if [ -z "$GRAPHDB_PASSWORD" ]; then
+  echo "Choose a new admin password for your GraphDB instance (replaces the image's default password)."
+  read -s -p "Enter a GraphDB admin password (min 12 characters): " GRAPHDB_PASSWORD
+  echo ""
+fi
+
+if [ -z "$GRAPHDB_PASSWORD" ] || [ "${#GRAPHDB_PASSWORD}" -lt 12 ] || [ "$GRAPHDB_PASSWORD" = "root" ] || [ "$GRAPHDB_PASSWORD" = "admin" ]; then
+  echo "Error: GraphDB admin password must be at least 12 characters and not a common default such as 'root' or 'admin'."
+  exit 1
+fi
+
+# JWT signing secret used by the FDP server -- generated fresh for this install, never a
+# fixed shared value baked into the repo.
+JWT_SECRET=$(openssl rand -hex 64)
+
 mkdir $HOME/tmp
 export TMPDIR=$HOME/tmp
 # PREFIX needed by the main.py script and docker composes
@@ -175,6 +196,7 @@ cd bootstrap_sight
 cp docker-compose-template.yml "docker-compose-${P}.yml"
 sed -i'' -e "s/{PREFIX}/${P}/" "docker-compose-${P}.yml"
 sed -i'' -e "s/{GDB_PORT}/${GDB_PORT}/" "docker-compose-${P}.yml"
+sed -i'' -e "s%{GDB_PASS}%${GRAPHDB_PASSWORD}%" "docker-compose-${P}.yml"
 $DOCKER_COMPOSE -f "docker-compose-${P}.yml" down
 sleep 10
 
@@ -204,6 +226,13 @@ sed -i'' -e "s/{FDP_PORT}/$FDP_PORT/" "./fdp/application-${P}.yml"
 echo "E"
 sed -i'' -e "s%{GUID}%$uri%" "./fdp/application-${P}.yml"
 echo "F"
+sed -i'' -e "s%{GDB_PASS}%${GRAPHDB_PASSWORD}%" "./fdp/application-${P}.yml"
+sed -i'' -e "s%{JWT_SECRET}%${JWT_SECRET}%" "./fdp/application-${P}.yml"
+# NOTE: this file is bind-mounted into the fdp container and read by that
+# container's own user (uid 100, not the host user), so it must stay
+# world-readable -- chmod 600 would make GraphDB startup fail with a
+# "Permission denied" reading application.yml (confirmed by testing).
+chmod 644 "./fdp/application-${P}.yml"
 
 
 $DOCKER_COMPOSE -f "docker-compose-${P}.yml" up --build -d
@@ -237,6 +266,12 @@ echo "6"
 sed -i'' -e 's|{GUID}|'"${uri}"'|g' "./${P}-Sextans-Sight/fdp/application-${P}.yml"
 echo "7"
 sed -i'' -e 's|{GUID}|'"${uri}"'|g' "./${P}-Sextans-Sight/.env"
+sed -i'' -e "s%{GDB_PASS}%${GRAPHDB_PASSWORD}%" "./${P}-Sextans-Sight/fdp/application-${P}.yml"
+sed -i'' -e "s%{JWT_SECRET}%${JWT_SECRET}%" "./${P}-Sextans-Sight/fdp/application-${P}.yml"
+# NOTE: bind-mounted into the fdp container and read by that container's own
+# user (uid 100, not the host user) -- must stay world-readable, see note above.
+chmod 644 "./${P}-Sextans-Sight/fdp/application-${P}.yml"
+chmod 600 "./${P}-Sextans-Sight/.env"
 
 echo -e "${GREEN}Installation Complete!"
 echo -e "${GREEN}Now doing post-install clean-up..."
@@ -261,5 +296,10 @@ echo -e "${GREEN}Please now move into the ${NC} ./${P}-Sextans-Sight/ ${GREEN} f
 echo ""
 echo -e "${GREEN}To start your full Sextans Sight server, cd to that folder or move it elsewhere and type:  "
 echo -e "$DOCKER_COMPOSE -f docker-compose-${P}.yml up -d ${NC}"
+echo ""
+echo -e "${GREEN}Security note:${NC} the GraphDB admin password and the FDP server's JWT signing secret"
+echo -e "have already been randomized/set to what you provided during this install -- both are stored"
+echo -e "(mode 600) in ./${P}-Sextans-Sight/fdp/application-${P}.yml and ./${P}-Sextans-Sight/.env."
+echo -e "There is nothing further you need to change there before going into production."
 echo ""
 

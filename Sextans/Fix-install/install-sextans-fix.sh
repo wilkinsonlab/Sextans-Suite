@@ -108,6 +108,24 @@ if [ -z $RDF_TRIGGER ]; then
 fi
 
 
+echo ""
+echo ""
+echo ""
+# GraphDB admin password handling
+# GraphDB ships with a well-known default admin password ("root"). This installer changes
+# it for you automatically as part of setup, using whatever you provide here.
+if [ -z "$GRAPHDB_PASSWORD" ]; then
+  echo "Choose a new admin password for your GraphDB instance (replaces the image's default password)."
+  read -s -p "Enter a GraphDB admin password (min 12 characters): " GRAPHDB_PASSWORD
+  echo ""
+fi
+
+if [ -z "$GRAPHDB_PASSWORD" ] || [ "${#GRAPHDB_PASSWORD}" -lt 12 ] || [ "$GRAPHDB_PASSWORD" = "root" ] || [ "$GRAPHDB_PASSWORD" = "admin" ]; then
+  echo "Error: GraphDB admin password must be at least 12 characters and not a common default such as 'root' or 'admin'."
+  exit 1
+fi
+
+
 
 
 # if [ -z $BEACON_PORT ]; then
@@ -142,6 +160,7 @@ cd bootstrap_fix
 cp docker-compose-template.yml "docker-compose-${P}.yml"
 sed -i'' -e "s/{PREFIX}/${P}/" "docker-compose-${P}.yml"
 sed -i'' -e "s/{GDB_PORT}/${GDB_PORT}/" "docker-compose-${P}.yml"
+sed -i'' -e "s%{GDB_PASS}%${GRAPHDB_PASSWORD}%" "docker-compose-${P}.yml"
 
 $DOCKER_COMPOSE -f "docker-compose-${P}.yml" up --build -d
 #$DOCKER_COMPOSE -f "docker-compose-${P}.yml" up --build
@@ -155,6 +174,10 @@ echo ""
 cd ..
 mkdir ./${P}-Sextans-Fix
 cp -r ./Sextans-Fix/data ./${P}-Sextans-Fix/
+# cde-box-daemon and yarrrml-rdfizer run as fixed-UID non-root users inside their
+# containers, which won't generally match your host UID -- open this bind-mounted
+# data directory to any user so both containers can read/write it regardless.
+chmod -R o+rwX ./${P}-Sextans-Fix/data
 cp ./Sextans-Fix/.env_template "./${P}-Sextans-Fix/.env"
 
 cp ./docker-compose-template.yml "./${P}-Sextans-Fix/docker-compose-${P}.yml"
@@ -163,7 +186,9 @@ sed -i'' -e "s/{GDB_PORT}/${GDB_PORT}/" "./${P}-Sextans-Fix/docker-compose-${P}.
 # sed -i'' -e "s/{BEACON_PORT}/${BEACON_PORT}/" "./${P}-Sextans-Fix/docker-compose-${P}.yml"
 sed -i'' -e "s/{RDF_TRIGGER}/${RDF_TRIGGER}/" "./${P}-Sextans-Fix/docker-compose-${P}.yml"
 sed -i'' -e "s/{SEXTANS_DB_NAME}/${P}-sextans-fix/" "./${P}-Sextans-Fix/.env"
+sed -i'' -e "s%{GDB_PASS}%${GRAPHDB_PASSWORD}%" "./${P}-Sextans-Fix/.env"
 # sed -i'' -e 's|{GUID}|'"${uri}"'|g' "./${P}-Sextans-Fix/.env"
+chmod 600 "./${P}-Sextans-Fix/.env"
 echo ""
 echo ""
 echo -e "${GREEN}Installation Complete!"
@@ -185,5 +210,9 @@ echo -e "Please now move into the ${NC} ./${P}-Sextans-Fix/ ${GREEN} folder wher
 echo ""
 echo -e "${GREEN}To start the SECURE ENVIRONMENT SEXTANS FIX DATA SERVER, cd to that folder (or move it elsewhere) and and type:  "
 echo -e "$DOCKER_COMPOSE -f docker-compose-${P}.yml up -d ${NC}"
+echo ""
+echo -e "${GREEN}Security note:${NC} the GraphDB admin password has already been set to what you provided"
+echo -e "during this install, stored (mode 600) in ./${P}-Sextans-Fix/.env. There is nothing further"
+echo -e "you need to change there before going into production."
 echo ""
 

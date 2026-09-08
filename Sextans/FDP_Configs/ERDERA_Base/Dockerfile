@@ -38,5 +38,9 @@ COPY Schemas/ ./Schemas/
 
 RUN chmod +x do_erdera_configuration.rb
 
+# Run as a non-root, unprivileged user.
+RUN useradd -u 1000 -m erdera && chown -R erdera:erdera /app
+USER erdera
+
 # Run interactively (needed for port prompt)
 ENTRYPOINT ["ruby", "do_erdera_configuration.rb"]

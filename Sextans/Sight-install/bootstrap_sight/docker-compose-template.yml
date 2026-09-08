@@ -4,22 +4,31 @@ services:
     image: ontotext/graphdb:10.8.14
     restart: always
     hostname: graphdb
+    security_opt:
+      - "no-new-privileges:true"
+    cap_drop:
+      - ALL
     ports:
-      - {GDB_PORT}:7200
+      - 127.0.0.1:{GDB_PORT}:7200
     volumes:
       - {PREFIX}-graphdb:/opt/graphdb/home
     networks:
       - graphdb_net
-    
-  #  This service creates  `[prefix]-sextans-sight` repository in graphdb	
+
+  #  This service creates  `[prefix]-sextans-sight` repository in graphdb
   graph_db_repo_manager:
     build: ./graph-db-repo-manager
     depends_on:
       - graphdb
+    security_opt:
+      - "no-new-privileges:true"
+    cap_drop:
+      - ALL
     environment:
       - "GRAPH_DB_URL=http://graphdb:7200"
       - "GRAPH_DB_ADMIN_USERNAME=admin"
-      - "GRAPH_DB_ADMIN_PASSWORD=root"
+      - "GRAPH_DB_ADMIN_DEFAULT_PASSWORD=root"
+      - "GRAPH_DB_ADMIN_PASSWORD={GDB_PASS}"
       - FDP_PREFIX={PREFIX}
     networks:
       - graphdb_net

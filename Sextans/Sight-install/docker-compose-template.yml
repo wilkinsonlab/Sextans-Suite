@@ -1,23 +1,38 @@
 services:
 
   fdp:
-    image: fairdatasystems/fdpserv:2026-07-10
+    image: fairdatasystems/fdpserv:2026-09-08
     restart: always
     hostname: fdp
+    security_opt:
+      - "no-new-privileges:true"
+    cap_drop:
+      - ALL
     volumes:
       - ./fdp/application-{PREFIX}.yml:/fdp/application.yml:ro
     depends_on:
       - mongo
       - graphdb
     networks:
-      - {PREFIX}-default
+      - {PREFIX}-frontend
+      - {PREFIX}-backend
 
 
   # FAIR Data Point client
   fdp_client:
-    image: fairdatasystems/fdpclient:2026-07-10
+    image: fairdatasystems/fdpclient:2026-09-08
     hostname: fdpclient
     restart: always
+    security_opt:
+      - "no-new-privileges:true"
+    cap_drop:
+      - ALL
+    cap_add:
+      # nginx's master process needs these to chown its cache dirs and drop
+      # worker processes from root to the nginx user at startup.
+      - CHOWN
+      - SETUID
+      - SETGID
     environment:
       FDP_HOST: fdp
     volumes:
@@ -28,33 +43,49 @@ services:
       - fdp
     ports:
       - {FDP_PORT}:80  # You should/must close this port, if you are using hitch
-    command: ./start.sh 
+    command: ./start.sh
     networks:
-      - {PREFIX}-default
+      - {PREFIX}-frontend
 
 
   graphdb:
-    image: fairdatasystems/gdb:2026-07-10
+    image: fairdatasystems/gdb:2026-09-08
     restart: always
     hostname: graphdb
+    security_opt:
+      - "no-new-privileges:true"
+    cap_drop:
+      - ALL
     ports:
       - 127.0.0.1:{GDB_PORT}:7200
     volumes:
       - {PREFIX}-graphdb:/opt/graphdb/home
     networks:
-      - {PREFIX}-default
+      - {PREFIX}-backend
 
-      
-  # Mongo for FDP server    
+
+  # Mongo for FDP server
   mongo:
-    image: fairdatasystems/mdb:2026-07-10
+    image: fairdatasystems/mdb:2026-09-08
     hostname: mongo
     restart: always
+    security_opt:
+      - "no-new-privileges:true"
+    cap_drop:
+      - ALL
+    cap_add:
+      # mongod's entrypoint chowns /data/db and drops from root to the
+      # mongodb user via gosu at startup -- these are required for that.
+      - CHOWN
+      - SETUID
+      - SETGID
+      - DAC_OVERRIDE
+      - FOWNER
     volumes:
       - {PREFIX}-mongo-data:/data/db
       - {PREFIX}-mongo-init:/docker-entrypoint-initdb.d/
     networks:
-      - {PREFIX}-default
+      - {PREFIX}-backend
 
 
 volumes:
@@ -68,4 +99,10 @@ volumes:
     external: true
 
 networks:
-  {PREFIX}-default:
+  # Note: intentionally NOT `internal: true` on the backend network -- that flag
+  # also blocks Docker from publishing containers' host ports on it (verified:
+  # it silently drops the `ports:` mapping entirely), which would break GraphDB's
+  # troubleshooting port above. The two-network split still provides real value:
+  # fdp_client can only ever reach `fdp`, never graphdb/mongo directly.
+  {PREFIX}-backend:
+  {PREFIX}-frontend:

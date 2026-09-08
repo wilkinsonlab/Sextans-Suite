@@ -58,16 +58,23 @@ git clone https://github.com/wilkinsonlab/Sextans-Suite.git
 
 ## Preparing for Installation
 
-At the beginning of the installation process you are asked three questions:
+At the beginning of the installation process you are asked four questions:
 
 ### A Prefix for your installation
 The prefix is used as a "namespace" to isolate indepdent Fix installations from one another.  This allows you to run multiple CARE-SM Data servers on the same machine.  The prefix is used for the docker network, docker volumes, and appears in the configuration files and docker-compose yaml files.  This can be any set of letter/number characters.  Please do not use punctuation characters.  e.g. 'euronmd1'  We will use *'ACME'* for the remainder of this document.
 
 ### Port for your GraphDB
-This is the port that will be used by the GraphDB database.  This is validated against a list of "banned" ports (ports that are likely to be used by other software on your system).  It is a good idea to stay in the range of ~4000-10000.  By detault, this port is disabled after installation, so your graphdb cannot be accessed.  You will need to enable it, at least once, to login to GraphDB's web page and create a secure user for your Sight server (and change the login for the Admin user!).  This port does NOT need to be enabled for the regular operation of Sight, and should be disabled when not needed.
+This is the port that will be used by the GraphDB database.  This is validated against a list of "banned" ports (ports that are likely to be used by other software on your system).  It is a good idea to stay in the range of ~4000-10000.  By detault, this port is disabled after installation, so your graphdb cannot be accessed.  This port does NOT need to be enabled for the regular operation of Sight, and should be disabled when not needed.
 
 ### Port for the transformation daemon
 This is the port that will listen for requests to trigger a data transformation. It responds only to an "empty" HTTP GET request, does not allow any parameters, and does not process the HTTP request in any way.
+
+### GraphDB admin password
+GraphDB ships with a well-known default admin password. The installer asks you to choose a
+replacement password (minimum 12 characters) and configures GraphDB with it automatically during
+installation -- the image's default password is never left active. Keep this password somewhere
+safe; it is also written (file mode 600) into the generated `.env` file in your production server
+folder.
 
 
 ## Installing Sextans Fix
@@ -101,8 +108,8 @@ Your Fix server is now running at whatever port you selected.
 
 ## Securing your Sextans Fix server
 
-In principle, none of these components will have any internet-facing interfaces; nevertheless 
-you should secure GraphDB.
+In principle, none of these components will have any internet-facing interfaces; nevertheless
+GraphDB is secured as part of installation.
 
 These are the default login details and locations:
 
@@ -112,14 +119,17 @@ These are the default login details and locations:
 | ------------ | ----------------------------------------------- | --------------------- |
 | GraphDB      | [http://localhost:7200](http://localhost:7200/) | SHOULD NOT BE VISIBLE |
 
+The installer already does the following for you automatically, using the password you provided
+at the "GraphDB admin password" prompt:
 
-| Username | Password |
-| -------- | -------- |
-| `admin`  | `root`   |
+1.  ~~Change the admin password~~ -- done automatically during installation, replacing GraphDB's
+    default `admin`/`root` login. Your chosen password is stored (file mode 600) in the generated
+    `.env` file.
+2.  Ensure that secured access is switched ON -- done automatically during installation.
 
-1.  Change the admin password
-2.  Create a new user with read/write permissions on the *ACME-sextans-fix* database
-3.  Ensure that secured access is switched ON
+Still manual, if you need it: create an additional user with read/write permissions scoped to
+just the *ACME-sextans-fix* database, if you want to hand out access without sharing the admin
+login.
 
 
 

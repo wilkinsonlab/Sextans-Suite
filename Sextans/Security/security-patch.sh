@@ -16,12 +16,12 @@ echo ""
 # use the appropriate distribution upgrade tool for that container’s operating system
 echo "updating ${name}"
 echo "update"
-docker exec -it ${name} apt-get -y update 
+docker exec ${name} apt-get -y update 
 echo "dist-upgrade"
-docker exec -it ${name} apt-get -y dist-upgrade --fix-missing
+docker exec ${name} apt-get -y dist-upgrade --fix-missing
 echo "autoclean"
 docker start ${name}
-docker exec -it ${name} apt-get -y autoclean
+docker exec ${name} apt-get -y autoclean
 # Commit the patched container, with a new name, overwriting the previous version
 echo "commit"
 docker commit ${name} fairdatasystems/${name}:${timestamp}
@@ -49,7 +49,7 @@ echo ""
 echo ""
 echo "updating ${name}"
 echo "update"
-docker exec -it -u root ${name} sh -c "apk update && apk upgrade --no-cache --force-missing-repositories"
+docker exec -u root ${name} sh -c "apk update && apk upgrade --no-cache --force-missing-repositories"
 # Commit the patched container, with a new name, overwriting the previous version
 echo "commit"
 docker commit ${name} fairdatasystems/${name}:${timestamp}
@@ -76,7 +76,7 @@ echo ""
 echo "updating ${name}"
 docker run -d --name ${name} ${image} tail -f /dev/null
 # use the appropriate distribution upgrade tool for that container’s operating system
-docker exec -it -u root ${name} sh -c "apk update && apk upgrade --no-cache --force-missing-repositories"
+docker exec -u root ${name} sh -c "apk update && apk upgrade --no-cache --force-missing-repositories"
 # Commit the patched container, with a new name, overwriting the previous version
 docker commit ${name} fairdatasystems/${name}:${timestamp}
 # stop the temporary container
@@ -103,12 +103,12 @@ echo ""
 echo ""
 echo "updating ${name}"
 echo "update"
-docker exec -it ${name} apt-get -y update 
+docker exec ${name} apt-get -y update 
 echo "dist-upgrade"
-docker exec -it ${name} apt-get -y dist-upgrade   --fix-missing
+docker exec ${name} apt-get -y dist-upgrade   --fix-missing
 echo "autoclean"
 docker start ${name}
-docker exec -it ${name} apt-get -y autoclean
+docker exec ${name} apt-get -y autoclean
 # Commit the patched container, with a new name, overwriting the previous version
 echo "commit"
 docker commit ${name} fairdatasystems/${name}:${timestamp}
@@ -137,7 +137,7 @@ echo ""
 echo "updating ${name}"
 echo "update"
 # use the appropriate distribution upgrade tool for that container’s operating system
-docker exec -it -u root ${name} sh -c "apk update && apk upgrade --no-cache --force-missing-repositories"
+docker exec -u root ${name} sh -c "apk update && apk upgrade --no-cache --force-missing-repositories"
 # Commit the patched container, with a new name, overwriting the previous version
 echo "commit"
 docker commit ${name} fairdatasystems/${name}:${timestamp}
@@ -164,7 +164,7 @@ echo ""
 echo "updating ${name}"
 docker run -d --name ${name} ${image}
 # use the appropriate distribution upgrade tool for that container’s operating system
-docker exec -it -u root ${name} sh -c "apk update && apk upgrade --no-cache --force-missing-repositories"
+docker exec -u root ${name} sh -c "apk update && apk upgrade --no-cache --force-missing-repositories"
 # Commit the patched container, with a new name, overwriting the previous version
 docker commit ${name} fairdatasystems/${name}:${timestamp}
 # stop the temporary container
@@ -192,7 +192,7 @@ echo ""
 echo "updating ${name}"
 docker run -d --name ${name} ${image}  tail -f /dev/null
 # use the appropriate distribution upgrade tool for that container’s operating system
-docker exec -it -u root ${name} sh -c "apk update && apk upgrade --no-cache --force-missing-repositories"
+docker exec -u root ${name} sh -c "apk update && apk upgrade --no-cache --force-missing-repositories"
 # Commit the patched container, with a new name, overwriting the previous version
 docker commit ${name} fairdatasystems/${name}:${timestamp}
 # stop the temporary container
@@ -216,7 +216,7 @@ echo ""
 echo "updating ${name}"
 docker run -d --name ${name} ${image}
 # use the appropriate distribution upgrade tool for that container’s operating system
-docker exec -it -u root ${name} sh -c "apk update && apk upgrade --no-cache --force-missing-repositories"
+docker exec -u root ${name} sh -c "apk update && apk upgrade --no-cache --force-missing-repositories"
 # Commit the patched container, with a new name, overwriting the previous version
 docker commit ${name} fairdatasystems/${name}:${timestamp}
 # stop the temporary container
@@ -233,6 +233,7 @@ echo "END"
 
 cp sight-docker-compose-template-template.yml sight-docker-compose-template-tmp.yml
 cp fix-docker-compose-template-template.yml fix-docker-compose-template-tmp.yml
+cp config-docker-compose-template-template.yml config-docker-compose-template-tmp.yml
 sed -i'' -e "s!{FDP}!${FDP}!" "sight-docker-compose-template-tmp.yml"
 sed -i'' -e "s!{FDPC}!${FDPC}!" "sight-docker-compose-template-tmp.yml"
 sed -i'' -e "s!{GDB}!${GDB}!" "sight-docker-compose-template-tmp.yml"
@@ -251,7 +252,12 @@ sed -i'' -e "s!{BEACON}!${BEACON}!" "fix-docker-compose-template-tmp.yml"
 sed -i'' -e "s!{CDEB}!${CDEB}!" "fix-docker-compose-template-tmp.yml"
 sed -i'' -e "s!{CARE}!${CARE}!" "fix-docker-compose-template-tmp.yml"
 
+sed -i'' -e "s!{FDP}!${FDP}!" "config-docker-compose-template-tmp.yml"
+sed -i'' -e "s!{FDPC}!${FDPC}!" "config-docker-compose-template-tmp.yml"
+sed -i'' -e "s!{MDB}!${MDB}!" "config-docker-compose-template-tmp.yml"
+
 mv fix-docker-compose-template-tmp.yml ../Fix-install/docker-compose-template.yml
 mv sight-docker-compose-template-tmp.yml ../Sight-install/docker-compose-template.yml
+mv config-docker-compose-template-tmp.yml ../Sight-install/config/docker-compose-template.yml
 
 ruby parse-security-scans.rb ./security_scan_output/*.json

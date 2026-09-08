@@ -4,16 +4,24 @@ services:
     image: {GDB}
     restart: always
     hostname: graphdb
+    security_opt:
+      - "no-new-privileges:true"
+    cap_drop:
+      - ALL
     ports:
       - 127.0.0.1:{GDB_PORT}:7200
     volumes:
       - {PREFIX}-graphdb:/opt/graphdb/home
     networks:
-      - {PREFIX}-default
+      - {PREFIX}-backend
 
-      
+
   cde-box-daemon:
     image:  {CDEB}    # to use the CARE-SM models with teh care-sm-toolkit
+    security_opt:
+      - "no-new-privileges:true"
+    cap_drop:
+      - ALL
     environment:
       GraphDB_User: ${GraphDB_User}
       GraphDB_Pass: ${GraphDB_Pass}
@@ -27,19 +35,27 @@ services:
     volumes:
       - ./data:/data
     networks:
-      - {PREFIX}-default
+      - {PREFIX}-backend
 
   caresm:
     image: {CARE}
     hostname: caresm
+    security_opt:
+      - "no-new-privileges:true"
+    cap_drop:
+      - ALL
     volumes:
       - ./data:/data
     networks:
-      - {PREFIX}-default
+      - {PREFIX}-backend
 
   yarrrml-rdfizer:
     image: {YRDF}
     hostname: yarrrml-rdfizer
+    security_opt:
+      - "no-new-privileges:true"
+    cap_drop:
+      - ALL
     environment:
       # (nquads (default), trig, trix, jsonld, hdt, turtle)
       - SERIALIZATION=nquads
@@ -48,7 +64,7 @@ services:
     volumes:
       - ./data:/mnt/data
     networks:
-      - {PREFIX}-default
+      - {PREFIX}-backend
 
   # beacon_count:
   #   image: {BEACON}
@@ -69,7 +85,7 @@ services:
   #     - FILTER_AGE_DIAGNOSIS=True
   #     - URL_SERVER=http://my.server.org/beaconAPI/  # DO NOT include the path e.g. /individuals
   #   networks:
-  #     - {PREFIX}-default
+  #     - {PREFIX}-backend
 
 
 volumes:
@@ -83,4 +99,10 @@ volumes:
     external: true
 
 networks:
-  {PREFIX}-default:
+  # Note: intentionally NOT `internal: true` -- that flag also blocks Docker from
+  # publishing this network's containers' host ports (verified: it silently drops
+  # the `ports:` mapping entirely), which would break GraphDB's troubleshooting
+  # port and cde-box-daemon's RDF_TRIGGER port above. Segmentation here still
+  # provides real value: services on other networks (none currently, but future
+  # ones) can't reach these containers by hostname.
+  {PREFIX}-backend:
