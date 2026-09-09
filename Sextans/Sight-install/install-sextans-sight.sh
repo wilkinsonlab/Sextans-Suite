@@ -20,14 +20,13 @@ fi
 
 
 function ctrl_c() {
-        docker stop bootstrap_sight-graphdb-1
+        docker stop bootstrap_sight-virtuoso-1
         $DOCKER_COMPOSE -f "$CWD/config/docker-compose-${P}.yml" down
         $DOCKER_COMPOSE -f "$CWD/bootstrap_sight/docker-compose-${P}.yml" down
         $DOCKER_COMPOSE rm -f "$CWD/config/docker-compose-${P}.yml" -s
         $DOCKER_COMPOSE rm -f "$CWD/bootstrap_sight/docker-compose-${P}.yml" -s
-        docker network rm bootstrap_sight_default bootstrap_sight_graphdb_net
-        docker rmi -f bootstrap_sight-graph_db_repo_manager:latest
-        docker rm bootstrap_sight-graphdb-1
+        docker network rm bootstrap_sight_default bootstrap_sight_virtuoso_net
+        docker rm bootstrap_sight-virtuoso-1
 
         rm "${CWD}/config/docker-compose-${P}.yml"
         rm "${CWD}/bootstrap_sight/docker-compose-${P}.yml"
@@ -126,13 +125,13 @@ echo ""
 
 # GDB_PORT handling
 if [ -z "$GDB_PORT" ]; then
-  echo "The next question relates to the GraphDB database that contains your Sight metadata. "
+  echo "The next question relates to the Virtuoso database that contains your Sight metadata. "
   echo "By default, this will NOT be exposed after installation, but we capture the port number here so that it can easily be switched ON for troubleshooting or maintenance. "
-  read -p "Enter the port where your GraphDB will serve (e.g. 7200): " GDB_PORT
+  read -p "Enter the port where your Virtuoso database will serve (e.g. 8890): " GDB_PORT
 fi
 
 if [ -z "$GDB_PORT" ]; then
-  echo "Error: No port specified for GraphDB."
+  echo "Error: No port specified for Virtuoso."
   exit 1
 fi
 
@@ -152,17 +151,18 @@ fi
 echo ""
 echo ""
 echo ""
-# GraphDB admin password handling
-# GraphDB ships with a well-known default admin password ("root"). This installer changes
-# it for you automatically as part of setup, using whatever you provide here.
+# Virtuoso DBA password handling
+# Virtuoso's `dba` superuser password is set directly from this value via the
+# image's own DBA_PASSWORD environment variable at container start -- no
+# separate admin-API call needed (unlike GraphDB's REST-based security model).
 if [ -z "$GRAPHDB_PASSWORD" ]; then
-  echo "Choose a new admin password for your GraphDB instance (replaces the image's default password)."
-  read -s -p "Enter a GraphDB admin password (min 12 characters): " GRAPHDB_PASSWORD
+  echo "Choose a password for Virtuoso's 'dba' superuser account."
+  read -s -p "Enter a Virtuoso dba password (min 12 characters): " GRAPHDB_PASSWORD
   echo ""
 fi
 
-if [ -z "$GRAPHDB_PASSWORD" ] || [ "${#GRAPHDB_PASSWORD}" -lt 12 ] || [ "$GRAPHDB_PASSWORD" = "root" ] || [ "$GRAPHDB_PASSWORD" = "admin" ]; then
-  echo "Error: GraphDB admin password must be at least 12 characters and not a common default such as 'root' or 'admin'."
+if [ -z "$GRAPHDB_PASSWORD" ] || [ "${#GRAPHDB_PASSWORD}" -lt 12 ] || [ "$GRAPHDB_PASSWORD" = "root" ] || [ "$GRAPHDB_PASSWORD" = "admin" ] || [ "$GRAPHDB_PASSWORD" = "dba" ]; then
+  echo "Error: Virtuoso dba password must be at least 12 characters and not a common default such as 'root', 'admin', or 'dba'."
   exit 1
 fi
 
@@ -170,25 +170,28 @@ fi
 # fixed shared value baked into the repo.
 JWT_SECRET=$(openssl rand -hex 64)
 
-mkdir $HOME/tmp
+mkdir -p $HOME/tmp
 export TMPDIR=$HOME/tmp
 # PREFIX needed by the main.py script and docker composes
 export FDP_PREFIX=$P
 
-docker network rm bootstrap_sight_default
-# this next line might throw an error if there was never a previous installation - thats fine!
-docker ps -a | egrep -oh "${P}-Sextans.*" | xargs docker rm
-docker rm -f  bootstrap_sight-graphdb-1 config_fdp_1 config_fdp_client_1
-docker volume rm -f "${P}-graphdb" "${P}-mongo-data" "${P}-mongo-init"
+# The next few lines clean up any previous installation with this prefix. On a
+# fresh, first-ever install there is nothing to clean up, so each of these is
+# expected to be a harmless no-op -- silenced rather than left to print scary
+# but meaningless "not found"/"requires at least 1 argument" errors.
+docker network rm bootstrap_sight_default 2>/dev/null || true
+docker ps -a | egrep -oh "${P}-Sextans.*" | xargs -r docker rm
+docker rm -f bootstrap_sight-virtuoso-1 config_fdp_1 config_fdp_client_1 2>/dev/null || true
+docker volume rm -f "${P}-virtuoso" "${P}-mongo-data" "${P}-mongo-init" 2>/dev/null || true
 
-docker volume create "${P}-graphdb"
+docker volume create "${P}-virtuoso"
 docker volume create "${P}-mongo-data"
 docker volume create "${P}-mongo-init"
 
 
 echo ""
 echo ""
-echo -e "${GREEN}Creating GraphDB and bootstrapping it - this will take about a minute"
+echo -e "${GREEN}Creating Virtuoso and bootstrapping it - this will take about a minute"
 echo -e "${NC}"
 echo ""
 
@@ -202,7 +205,11 @@ sleep 10
 
 $DOCKER_COMPOSE -f "docker-compose-${P}.yml" up --build -d
 sleep 120
-rm "docker-compose-${P}.yml"
+# Do NOT delete docker-compose-${P}.yml here -- the post-install clean-up
+# below still needs it to tear down this bootstrap Virtuoso container/network.
+# Deleting it this early made that teardown silently fail ("no such file or
+# directory"), leaving the bootstrap container and network orphaned on every
+# install (found and fixed in Sextans Fix's own install script first).
 
 echo ""
 echo -e "${GREEN}Setting up Sextans Sight client and server${NC}"
@@ -230,7 +237,7 @@ sed -i'' -e "s%{GDB_PASS}%${GRAPHDB_PASSWORD}%" "./fdp/application-${P}.yml"
 sed -i'' -e "s%{JWT_SECRET}%${JWT_SECRET}%" "./fdp/application-${P}.yml"
 # NOTE: this file is bind-mounted into the fdp container and read by that
 # container's own user (uid 100, not the host user), so it must stay
-# world-readable -- chmod 600 would make GraphDB startup fail with a
+# world-readable -- chmod 600 would make FDP startup fail with a
 # "Permission denied" reading application.yml (confirmed by testing).
 chmod 644 "./fdp/application-${P}.yml"
 
@@ -267,6 +274,7 @@ echo "6"
 sed -i'' -e 's|{GUID}|'"${uri}"'|g' "./${P}-Sextans-Sight/fdp/application-${P}.yml"
 echo "7"
 sed -i'' -e 's|{GUID}|'"${uri}"'|g' "./${P}-Sextans-Sight/.env"
+sed -i'' -e "s%{GDB_PASS}%${GRAPHDB_PASSWORD}%" "./${P}-Sextans-Sight/.env"
 sed -i'' -e "s%{GDB_PASS}%${GRAPHDB_PASSWORD}%" "./${P}-Sextans-Sight/fdp/application-${P}.yml"
 sed -i'' -e "s%{JWT_SECRET}%${JWT_SECRET}%" "./${P}-Sextans-Sight/fdp/application-${P}.yml"
 # NOTE: bind-mounted into the fdp container and read by that container's own
@@ -281,10 +289,14 @@ $DOCKER_COMPOSE -f "${CWD}/config/docker-compose-${P}.yml" down
 $DOCKER_COMPOSE -f "${CWD}/bootstrap_sight/docker-compose-${P}.yml" down
 $DOCKER_COMPOSE -f "${CWD}/config/docker-compose-${P}.yml" rm -s -f
 $DOCKER_COMPOSE -f "${CWD}/bootstrap_sight/docker-compose-${P}.yml" rm -s -f
-docker network rm bootstrap_sight_default bootstrap_sight_graphdb_net
-docker stop bootstrap_sight-graphdb-1
-docker rm bootstrap_sight-graphdb-1
-docker rmi -f bootstrap_sight_graph_db_repo_manager:latest
+# `down` above already removes the bootstrap compose project's own network
+# (bootstrap_sight_virtuoso_net); bootstrap_sight_default never existed for
+# this compose file in the first place. Both are harmless no-ops here --
+# silenced rather than left to print misleading "not found" errors after a
+# clean down.
+docker network rm bootstrap_sight_default bootstrap_sight_virtuoso_net 2>/dev/null || true
+docker stop bootstrap_sight-virtuoso-1 2>/dev/null || true
+docker rm bootstrap_sight-virtuoso-1 2>/dev/null || true
 
 rm "${CWD}/config/docker-compose-${P}.yml"
 rm "${CWD}/bootstrap_sight/docker-compose-${P}.yml"
@@ -298,7 +310,7 @@ echo ""
 echo -e "${GREEN}To start your full Sextans Sight server, cd to that folder or move it elsewhere and type:  "
 echo -e "$DOCKER_COMPOSE -f docker-compose-${P}.yml up -d ${NC}"
 echo ""
-echo -e "${GREEN}Security note:${NC} the GraphDB admin password and the FDP server's JWT signing secret"
+echo -e "${GREEN}Security note:${NC} the Virtuoso dba password and the FDP server's JWT signing secret"
 echo -e "have already been randomized/set to what you provided during this install -- both are stored"
 echo -e "(mode 600) in ./${P}-Sextans-Sight/fdp/application-${P}.yml and ./${P}-Sextans-Sight/.env."
 echo -e "There is nothing further you need to change there before going into production."

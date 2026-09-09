@@ -1,41 +1,43 @@
 
 services:
-  graphdb:
-    image: fairdatasystems/gdb:2026-09-08
+  virtuoso:
+    image: openlink/virtuoso-opensource-7:7.2.17
     restart: always
-    hostname: graphdb
+    hostname: virtuoso
     security_opt:
       - "no-new-privileges:true"
     cap_drop:
       - ALL
-    ports:
-      - 127.0.0.1:{GDB_PORT}:7200
-    volumes:
-      - {PREFIX}-graphdb:/opt/graphdb/home
-    networks:
-      - graphdb_net
-
-  #  This service creates  `[prefix]-sextans-sight` repository in graphdb
-  graph_db_repo_manager:
-    build: ./graph-db-repo-manager
-    depends_on:
-      - graphdb
-    security_opt:
-      - "no-new-privileges:true"
-    cap_drop:
-      - ALL
+    cap_add:
+      # Virtuoso's entrypoint copies/chowns config files and drops from root to
+      # its own `virtuoso` user at startup -- verified live, boots and serves
+      # correctly with exactly this set and nothing more.
+      - CHOWN
+      - DAC_OVERRIDE
+      - FOWNER
+      - SETUID
+      - SETGID
     environment:
-      - "GRAPH_DB_URL=http://graphdb:7200"
-      - "GRAPH_DB_ADMIN_USERNAME=admin"
-      - "GRAPH_DB_ADMIN_DEFAULT_PASSWORD=root"
-      - "GRAPH_DB_ADMIN_PASSWORD={GDB_PASS}"
-      - FDP_PREFIX={PREFIX}
+      - "DBA_PASSWORD={GDB_PASS}"
+      - "SPARQL_UPDATE=true"
+    mem_limit: 2g
+    cpus: 2
+    ports:
+      - 127.0.0.1:{GDB_PORT}:8890
+    volumes:
+      - {PREFIX}-virtuoso:/opt/virtuoso-opensource/database
+      # Runs exactly once, when this bootstrap step creates the brand new
+      # database -- locks down the anonymous "nobody" account's default read
+      # access (see the .sql file itself for why). This is the ONLY point in
+      # the install where it can take effect: initdb.d only ever runs against
+      # a fresh database, and this bootstrap step is what creates it.
+      - ./virtuoso-initdb:/opt/virtuoso-opensource/initdb.d:ro
     networks:
-      - graphdb_net
+      - virtuoso_net
 
 volumes:
-  {PREFIX}-graphdb:
+  {PREFIX}-virtuoso:
     external: true
 
 networks:
-  graphdb_net:
+  virtuoso_net:

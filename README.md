@@ -5,7 +5,7 @@
 
 # Sextans Suite
 
-**Version:** 2.1.0 &nbsp;|&nbsp; [Changelog](CHANGELOG.md)
+**Version:** 3.0.0 &nbsp;|&nbsp; [Changelog](CHANGELOG.md)
 
 Sextans Suite is software to support FAIR Metadata (Sextans Sight) and FAIR Data (Sextans Fix) authoring and publishing.
 

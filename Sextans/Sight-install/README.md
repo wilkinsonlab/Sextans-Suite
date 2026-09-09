@@ -7,7 +7,7 @@ It consists of 4 "dockreized" components, all of them _mandatory_ and all of the
 - FDP Client - Provides the Web front-end
 - FDP Server - Provides the metadata access and talks to front-end
 - MongoDB - holds database schema and user authentication information
-- GraphDB - holds the RDF metadata for the overall service
+- Virtuoso - holds the RDF metadata for the overall service
 
 
 ## CONTENTS
@@ -75,16 +75,16 @@ For test installations, you can use a localhost:PORT address here.  Everything w
 ### Port for your Sight Server
 This is the port that will be used by the FDP Client component.  This is validated against a list of "banned" ports (ports that are likely to be used by other software on your system).  It is a good idea to stay in the range of ~4000-10000.  If you have already set up an SSL proxy, this is the port that your proxy will point to.
 
-### Port for your GraphDB
-This is the port that will be used by the GraphDB metadata database component.  This is validated against a list of "banned" ports (ports that are likely to be used by other software on your system).  It is a good idea to stay in the range of ~4000-10000. 
-By detault, this port is disabled after installation, so your graphdb cannot be accessed.  This port does NOT need to be enabled for the regular operation of Sight, and should be disabled when not needed.
+### Port for your Virtuoso database
+This is the port that will be used by the Virtuoso metadata database component.  This is validated against a list of "banned" ports (ports that are likely to be used by other software on your system).  It is a good idea to stay in the range of ~4000-10000. 
+By default, this port is disabled after installation, so your Virtuoso instance cannot be accessed.  This port does NOT need to be enabled for the regular operation of Sight, and should be disabled when not needed.
 
-### GraphDB admin password
-GraphDB ships with a well-known default admin password. The installer asks you to choose a
-replacement password (minimum 12 characters) and configures GraphDB with it automatically during
-installation -- the image's default password is never left active. Keep this password somewhere
-safe; it is also written (file mode 600) into the generated `application-ACME.yml` file in your
-production server folder.
+### Virtuoso dba password
+Virtuoso ships with no password set for its `dba` superuser until one is configured. The
+installer asks you to choose a password (minimum 12 characters) and configures Virtuoso with it
+automatically during installation, via the container's own `DBA_PASSWORD` startup setting. Keep
+this password somewhere safe; it is also written (file mode 600) into the generated
+`application-ACME.yml` file and `.env` file in your production server folder.
 
 
 ## Installing Sextans Sight
@@ -95,11 +95,11 @@ Once you have completed the "Downloading" section of this , and you have prepare
 bash ./install-sextans-sight.sh
 ```
 
-This script will bootstrap your FAIR Data Point and its associated GraphDB.  It creates a databases in GraphDB called *ACME-sextans-sight*. This is the database that you will need to secure after installation.
+This script will bootstrap your FAIR Data Point and its associated Virtuoso instance, secured with the password you chose. Your metadata is stored in Virtuoso's single database (unlike GraphDB, it has no separate "repositories" to create).
 
 ### If you abort installation before it completes...
 
-This can (and probably will) leave you in a state that needs some careful attention.  In particular, find any graph-db Docker Volumes *_that have your PREFIX_* and remove them `docker volume rm ACME-graph-db`.  If it will not delete, it will be due to the existence of a docker container that uses it.  You can safely delete this docker container also.  `docker rm AJDIRDjdsfhwe83hewfewkw5`.  Again, make sure you are deleting the right things!
+This can (and probably will) leave you in a state that needs some careful attention.  In particular, find any Virtuoso Docker Volumes *_that have your PREFIX_* and remove them `docker volume rm ACME-virtuoso`.  If it will not delete, it will be due to the existence of a docker container that uses it.  You can safely delete this docker container also.  `docker rm AJDIRDjdsfhwe83hewfewkw5`.  Again, make sure you are deleting the right things!
 
 
 ### The folder with your final server configuration
@@ -140,26 +140,29 @@ __Nota Bene: This script can only be run one time!__  Please do not run it again
 
 ## Securing your Sextans Sight server
 
-There are two components that you need to be aware of:  GraphDB and the FAIR Data Point Client.
+There are two components that you need to be aware of:  Virtuoso and the FAIR Data Point Client.
 
-#### GraphDB
+#### Virtuoso
 
 | Service name | Local deployment                                | Production deployment |
 | ------------ | ----------------------------------------------- | --------------------- |
-| GraphDB      | [http://localhost:7200](http://localhost:7200/) | SHOULD NOT BE VISIBLE |
+| Virtuoso     | [http://localhost:8890](http://localhost:8890/) | SHOULD NOT BE VISIBLE |
 
 The installer already does the following for you automatically, using the password you provided
-at the "GraphDB admin password" prompt:
+at the "Virtuoso dba password" prompt:
 
-1.  ~~Change the admin password~~ -- done automatically during installation, replacing GraphDB's
-    default `admin`/`root` login. Your chosen password is stored (file mode 600) in
-    `application-ACME.yml`, alongside a freshly-generated JWT signing secret for the FDP server
-    (also no longer a fixed shared value).
-2.  Ensure that secured access is switched ON -- done automatically during installation.
-
-Still manual, if you need it: create an additional user with read/write permissions scoped to
-just the *ACME-sextans-sight* database, if you want to hand out access without sharing the admin
-login.
+1.  Set the `dba` superuser's password -- done automatically during installation, via Virtuoso's
+    own `DBA_PASSWORD` startup setting. Your chosen password is stored (file mode 600) in
+    `application-ACME.yml` and `.env`, alongside a freshly-generated JWT signing secret for the
+    FDP server (also no longer a fixed shared value). Unlike GraphDB, there's no separate "turn
+    security on" step -- write access to Virtuoso's SPARQL Update endpoint always requires this
+    password.
+2.  Lock down anonymous reads -- by default, Virtuoso's unauthenticated `/sparql` endpoint can
+    read every graph in the store. The installer runs a one-time SQL script
+    (`virtuoso-initdb/lockdown-anonymous-sparql.sql`) when it first creates the database that
+    removes this default. FDP's own REST API remains the intended public-read interface for your
+    metadata, with its own access model -- this only closes the raw triple-store's direct SPARQL
+    endpoint as a separate, unnecessary attack surface.
 
 
 #### FAIR Data Point Client

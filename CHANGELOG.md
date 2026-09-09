@@ -4,6 +4,48 @@ All notable changes to Sextans Suite are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [3.0.0] - 2026-09-09
+
+Sextans Sight moves off GraphDB to Virtuoso, matching Sextans Fix's own move in 2.0.0. GraphDB
+is now retired from the entire suite.
+
+### Changed (breaking)
+
+- **Sextans Sight's triple store is now Virtuoso, not GraphDB.** Same reasoning as Fix's earlier
+  move: GraphDB couldn't be made to run as a non-root user, Virtuoso is actively maintained,
+  vendor-backed, and has real authentication. The bootstrap-phase `graph-db-repo-manager` is gone
+  entirely (Virtuoso needs neither a repository-creation step nor a password-change REST call --
+  its DBA password is set directly via the container's own `DBA_PASSWORD` environment variable).
+  **Existing GraphDB-backed Sight installations have no automated path to preserve their
+  (typically hand-entered) FDP metadata across this change yet** -- a fresh install is required,
+  and anyone with real production metadata should hold off upgrading until a proper
+  dump-and-reload migration path exists (tracked as a follow-up, not yet built).
+- **FAIR Data Point itself required a real code patch** to support Virtuoso as a repository type
+  (RDF4J has no built-in Virtuoso adapter). Built and verified against `markwilkinson/
+  FAIRDataPoint`'s `feature/virtuoso-repository` branch (not yet merged upstream -- `fdpserv2` is
+  built from that branch directly until the PR is accepted, at which point it moves back to
+  tracking an official vendor release). Two real Virtuoso incompatibilities needed working
+  around: RDF4J's `SPARQLRepository` has no Digest-auth support (Virtuoso rejects Basic auth
+  outright), and RDF4J's `SPARQLConnection` appends a trailing `; ` to every SPARQL Update that
+  Virtuoso's stricter compiler rejects. Live-verified, including the specific SPARQL construct
+  FDP's own metadata-delete path uses (`RepositoryConnection#remove(null, null, null, context)`)
+  -- confirmed working correctly, independent of `RepositoryConnection#size(context)`, which
+  turned out to be an unreliable signal against this Virtuoso setup.
+- `care`/`cdeb` images were already renamed to `care2`/`cdeb2` in 2.1.0 for the same reason;
+  `fdpserv` is now `fdpserv2` -- its build source fundamentally changed (vendor image ->
+  our own patched fork), and a same-named image whose source silently changed underneath it
+  would be a worse record than a clean break in the tag history.
+
+### Added
+
+- Per-container CPU/memory limits (`mem_limit`/`cpus`) across all of Sight's services, matching
+  Fix's own resource-limit pass earlier in this release line -- no service in either stack had
+  a resource ceiling before that.
+- Anonymous SPARQL reads are locked down on Sight's Virtuoso instance too (same `initdb.d`
+  mechanism as Fix), closing the raw triple-store's direct SPARQL endpoint as an unnecessary
+  attack surface -- FDP's own REST API remains the intended public-read interface, with its own
+  access model.
+
 ## [2.1.0] - 2026-09-09
 
 ### Added

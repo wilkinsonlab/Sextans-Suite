@@ -1,18 +1,20 @@
 services:
 
   fdp:
-    image: {FDP}
+    image: {FDP2}
     restart: always
     hostname: fdp
     security_opt:
       - "no-new-privileges:true"
     cap_drop:
       - ALL
+    mem_limit: 1g
+    cpus: 1
     volumes:
       - ./fdp/application-{PREFIX}.yml:/fdp/application.yml:ro
     depends_on:
       - mongo
-      - graphdb
+      - virtuoso
     networks:
       - {PREFIX}-frontend
       - {PREFIX}-backend
@@ -33,6 +35,8 @@ services:
       - CHOWN
       - SETUID
       - SETGID
+    mem_limit: 256m
+    cpus: 1
     environment:
       FDP_HOST: fdp
     volumes:
@@ -48,18 +52,37 @@ services:
       - {PREFIX}-frontend
 
 
-  graphdb:
-    image: {GDB}
+  virtuoso:
+    image: {VIRTUOSO}
     restart: always
-    hostname: graphdb
+    hostname: virtuoso
     security_opt:
       - "no-new-privileges:true"
     cap_drop:
       - ALL
+    cap_add:
+      # Virtuoso's entrypoint copies/chowns config files and drops from root to
+      # its own `virtuoso` user at startup -- verified live, boots and serves
+      # correctly with exactly this set and nothing more.
+      - CHOWN
+      - DAC_OVERRIDE
+      - FOWNER
+      - SETUID
+      - SETGID
+    environment:
+      - "DBA_PASSWORD=${GraphDB_Pass}"
+      - "SPARQL_UPDATE=true"
+    mem_limit: 2g
+    cpus: 2
     ports:
-      - 127.0.0.1:{GDB_PORT}:7200
+      - 127.0.0.1:{GDB_PORT}:8890
     volumes:
-      - {PREFIX}-graphdb:/opt/graphdb/home
+      - {PREFIX}-virtuoso:/opt/virtuoso-opensource/database
+      # Only takes effect if this compose file is ever what actually creates
+      # the database (normally the bootstrap step already has, and this
+      # mount is then a no-op against an existing DB) -- see the .sql file
+      # itself and the matching mount in bootstrap-sight-docker-compose-template-template.yml.
+      - ./virtuoso-initdb:/opt/virtuoso-opensource/initdb.d:ro
     networks:
       - {PREFIX}-backend
 
@@ -81,6 +104,8 @@ services:
       - SETGID
       - DAC_OVERRIDE
       - FOWNER
+    mem_limit: 1g
+    cpus: 1
     volumes:
       - {PREFIX}-mongo-data:/data/db
       - {PREFIX}-mongo-init:/docker-entrypoint-initdb.d/
@@ -89,7 +114,7 @@ services:
 
 
 volumes:
-  {PREFIX}-graphdb:
+  {PREFIX}-virtuoso:
     external: true
   {PREFIX}-mongo-data:
     external: true
@@ -101,8 +126,8 @@ volumes:
 networks:
   # Note: intentionally NOT `internal: true` on the backend network -- that flag
   # also blocks Docker from publishing containers' host ports on it (verified:
-  # it silently drops the `ports:` mapping entirely), which would break GraphDB's
+  # it silently drops the `ports:` mapping entirely), which would break Virtuoso's
   # troubleshooting port above. The two-network split still provides real value:
-  # fdp_client can only ever reach `fdp`, never graphdb/mongo directly.
+  # fdp_client can only ever reach `fdp`, never virtuoso/mongo directly.
   {PREFIX}-backend:
   {PREFIX}-frontend:
