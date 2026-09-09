@@ -18,13 +18,24 @@ module HTTPUtils
 	# ECONNRESET mid-write instead of the expected 401 -- confirmed live with a
 	# ~550KB body. A tiny throwaway body sidesteps this entirely.
 	def self.put_digest(url, content_type, payload, user, pass)
+		digest_request(Net::HTTP::Put, url, content_type, payload, user, pass)
+	end
+
+	# Same Digest dance as put_digest, but POST -- needed for the SPARQL 1.1
+	# Protocol's /sparql-auth endpoint (SPARQL Update via a form-encoded POST
+	# body), as opposed to put_digest's Graph Store Protocol PUT.
+	def self.post_digest(url, content_type, payload, user, pass)
+		digest_request(Net::HTTP::Post, url, content_type, payload, user, pass)
+	end
+
+	def self.digest_request(http_method_class, url, content_type, payload, user, pass)
 		uri = URI(url)
 		uri.user = user
 		uri.password = pass
 		digest_auth = Net::HTTP::DigestAuth.new
 		http = Net::HTTP.new(uri.host, uri.port)
 
-		challenge_req = Net::HTTP::Put.new(uri)
+		challenge_req = http_method_class.new(uri)
 		challenge_req['Content-Type'] = content_type
 		challenge_req.body = ''
 		challenge = http.request(challenge_req)
@@ -32,8 +43,9 @@ module HTTPUtils
 			return challenge
 		end
 
-		auth_header = digest_auth.auth_header(uri, challenge['www-authenticate'], 'PUT')
-		req = Net::HTTP::Put.new(uri)
+		method_name = http_method_class.name.split('::').last.upcase
+		auth_header = digest_auth.auth_header(uri, challenge['www-authenticate'], method_name)
+		req = http_method_class.new(uri)
 		req['Authorization'] = auth_header
 		req['Content-Type'] = content_type
 		req.body = payload

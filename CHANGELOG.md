@@ -4,6 +4,40 @@ All notable changes to Sextans Suite are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [2.1.0] - 2026-09-09
+
+### Added
+
+- **Custom datatypes in Sextans Fix.** You can now bring your own CSV and your own YARRRML
+  mapping for data that doesn't fit any CARE-SM-2 model -- drop both into `Sextans-Fix/data/custom/`
+  (matching basenames: `<name>.csv` + `<name>_yarrrml.yaml`) and every transformation picks them
+  up automatically, entirely independent of the CARE-SM-2 Toolkit pipeline. See
+  `Fix-install/README.md` for the exact convention.
+- **The CARE-SM-2 auto-update is now smoke-tested before use.** Every transformation still pulls
+  the latest CARE-SM-2 mapping automatically (unchanged), but a freshly-pulled mapping is now
+  validated against a small known-good fixture before it's trusted -- if that check ever fails
+  (a broken or corrupted upstream pull), the previous, already-verified mapping keeps being used
+  instead, with a warning logged, rather than silently running unverified content against real
+  data.
+
+### Fixed
+
+- **Sextans Fix now replaces data on each transformation instead of accumulating it forever.**
+  The original GraphDB-backed pipeline replaced its entire repository's contents on every run;
+  the Virtuoso migration in 2.0.0 lost that property (every record lands in its own uniquely
+  generated graph, so nothing was ever actually being overwritten). Fixed: graphs under your
+  configured `baseURI` are now cleared before each write, matching the original snapshot
+  behavior. Custom datatypes participate in this too, if their own mapping mints graphs under the
+  same `baseURI`.
+- `yarrrml-rdfizer` previously operated on fixed, shared scratch paths for every transformation
+  type; different jobs running around the same time (the new smoke test, a custom datatype, the
+  real CARE-SM run) could have corrupted each other's output. Each type now works in its own
+  scratch directory.
+- Found and fixed a real bug while making the above change: a `mktemp` incompatibility with this
+  image's `/bin/mktemp` (BusyBox, not GNU coreutils) was silently producing **empty transformation
+  output with no visible error** in some circumstances, since the failure was never surfaced by
+  the calling code. Both are now fixed -- the incompatibility, and the silent failure mode itself.
+
 ## [2.0.0] - 2026-09-09
 
 Two breaking changes to Sextans Fix, bundled into one release: it no longer uses GraphDB, and
