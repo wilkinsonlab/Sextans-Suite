@@ -20,6 +20,8 @@ services:
     environment:
       - "DBA_PASSWORD={GDB_PASS}"
       - "SPARQL_UPDATE=true"
+    mem_limit: 2g
+    cpus: 2
     ports:
       - 127.0.0.1:{GDB_PORT}:8890
     volumes:
