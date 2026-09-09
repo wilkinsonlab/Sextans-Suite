@@ -1,6 +1,44 @@
    
 module HTTPUtils
 	require 'rest-client'
+	require 'net/http'
+	require 'net/http/digest_auth'
+
+	# Virtuoso's write endpoints (SPARQL Update, Graph Store Protocol) require real
+	# HTTP Digest authentication and reject Basic auth outright (401, no retry) --
+	# confirmed live against a Virtuoso 07.20 instance. rest-client (used by the
+	# other methods in this module) has no Digest support, so this method exists
+	# purely for that write path: probe for the WWW-Authenticate challenge, compute
+	# the digest response via net-http-digest_auth, and resend.
+	#
+	# The probe request must NOT carry the real payload: Virtuoso rejects the
+	# unauthenticated request and closes the connection as soon as it reads the
+	# headers, without waiting to read the body. For any payload large enough that
+	# writing it doesn't finish before that rejection arrives, the client gets an
+	# ECONNRESET mid-write instead of the expected 401 -- confirmed live with a
+	# ~550KB body. A tiny throwaway body sidesteps this entirely.
+	def self.put_digest(url, content_type, payload, user, pass)
+		uri = URI(url)
+		uri.user = user
+		uri.password = pass
+		digest_auth = Net::HTTP::DigestAuth.new
+		http = Net::HTTP.new(uri.host, uri.port)
+
+		challenge_req = Net::HTTP::Put.new(uri)
+		challenge_req['Content-Type'] = content_type
+		challenge_req.body = ''
+		challenge = http.request(challenge_req)
+		unless challenge.code == '401'
+			return challenge
+		end
+
+		auth_header = digest_auth.auth_header(uri, challenge['www-authenticate'], 'PUT')
+		req = Net::HTTP::Put.new(uri)
+		req['Authorization'] = auth_header
+		req['Content-Type'] = content_type
+		req.body = payload
+		http.request(req)
+	end
 
 	def self.get(url, headers = {accept: "*/*"}, user = "", pass="")  # username and password go into headers as user: xxx and password: yyy
 		

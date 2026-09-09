@@ -23,7 +23,9 @@ RUN rm -rf /usr/local/lib/ruby/gems/3.4.0/specifications/default/resolv-0.7.1.ge
     /usr/lib/ruby/gems/3.4.0/gems/resolv-0.6.2
 
 # RUN git clone https://github.com/ejp-rd-vp/CARE-SM-Implementation.git
-RUN git clone https://github.com/CARE-SM/CARE-SM-Implementation.git
+# CARE-SM-Implementation (v1) is superseded by CARE-Semantic-Model-Version-2, which
+# consolidates the YARRRML mapping, RDF examples, and Toolkit into one actively-edited repo.
+RUN git clone https://github.com/wilkinsonlab/CARE-Semantic-Model-Version-2.git
 
 # Run as a non-root, unprivileged user. The install script opens up the
 # bind-mounted ./data directory (chmod o+rwX) since this fixed UID won't

@@ -5,6 +5,27 @@ require 'open3'
 require 'csv'
 require 'fileutils'
 
+# This service is only ever called from other containers on the same internal
+# compose network, by container hostname (e.g. "yarrrml-rdfizer:4567") -- never
+# "localhost". Sinatra 4.x/rack-protection 4.x enable Rack::Protection::
+# HostAuthorization by default, which rejects any Host header outside a small
+# built-in allowlist, so container-to-container calls get a 403 "Host not
+# permitted" with zero app-level logic ever running.
+#
+# Sinatra's own config passthrough for this (`set :protection,
+# host_authorization: ...` / `except: :host_authorization`) has proven
+# unreliable across versions in this codebase's sibling projects (see
+# neuromuscular-disease-ontology's nmdo-search memory notes) -- both were tried
+# there and failed to actually disable the check. Monkeypatching accepts?
+# directly is the fix that has actually held. Safe here: this app has no
+# host-derived logic anywhere, so neutralizing the check entirely costs nothing.
+require 'rack/protection/host_authorization'
+class Rack::Protection::HostAuthorization
+  def accepts?(_request)
+    true
+  end
+end
+
 
 get '/:type' do
   begin

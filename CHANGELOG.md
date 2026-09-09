@@ -4,6 +4,58 @@ All notable changes to Sextans Suite are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [2.0.0] - 2026-09-09
+
+Two breaking changes to Sextans Fix, bundled into one release: it no longer uses GraphDB, and
+it no longer uses the original CARE-SM data model. Sextans Sight is unaffected by either change.
+
+### Changed (breaking)
+
+- **Sextans Fix's triple store is now Virtuoso, not GraphDB.** GraphDB was the one remaining
+  service in the whole suite that could not be made to run as a non-root user (its own startup
+  re-creates log files as root regardless of container `--user` settings), so it's been replaced
+  outright rather than patched further. Virtuoso is actively maintained, vendor-backed, and has
+  real authentication built in. Record data now lands in Virtuoso's single database per install
+  rather than a GraphDB "repository"; the bootstrap-phase `graph-db-repo-manager` service is gone
+  entirely (Virtuoso needs neither a repository-creation step nor a password-change REST call --
+  its DBA password is set directly via the container's own `DBA_PASSWORD` environment variable).
+  Existing GraphDB installations are not migrated automatically; a fresh install is required.
+- **Sextans Fix now uses CARE-SM-2** (`wilkinsonlab/CARE-Semantic-Model-Version-2`), superseding
+  the original CARE-SM model, YARRRML mapping, and Toolkit. The public CSV schema changed --
+  e.g. Diagnosis's old `valueIRI` column is gone, replaced by `target`/`value`/`value_datatype`
+  with real `xsd:boolean` support -- so existing CSVs written for the original CARE-SM will not
+  load against the new Toolkit. See the [CARE-SM-2 migration guide](https://care-sm-semantic-model-v2.readthedocs.io/en/latest/migration.html)
+  and `Fix-install/README.md`. The `care` and `cdeb` images are retired in favor of `care2` and
+  `cdeb2` so the two model versions are never ambiguous in the image tag history; `care2` is now
+  built from our own source rather than a collaborator's vendor image.
+
+### Fixed
+
+- `yarrrml-rdfizer` (`yrml`) was silently 403'ing every container-to-container request
+  (`Rack::Protection::HostAuthorization`, on by default in current Sinatra/rack-protection),
+  which broke the entire RDFization trigger -- the whole point of Sextans Fix. Fixed by
+  neutralizing the check for this internal-only service (never exposed to a browser or the
+  public internet, no host-derived logic anywhere in the app).
+- `cde-box-daemon`'s Virtuoso write path (`Daemon/http_utils.rb#put_digest`) sent the full RDF
+  payload on the initial, unauthenticated probe request; Virtuoso rejects that request and
+  closes the connection as soon as it reads the headers, without waiting for the body, so any
+  payload large enough to still be mid-transfer when the rejection arrived produced a client-side
+  `ECONNRESET` instead of the expected 401 challenge. Fixed by probing with an empty body.
+- `install-sextans-fix.sh`'s pre- and post-install clean-up steps threw several harmless-but-
+  alarming errors on a normal run (`mkdir` on an existing directory, removing a network/container
+  that doesn't exist yet, `docker rm` with no arguments when nothing matched). Also found and
+  fixed a real bug in the same area: the bootstrap compose file was deleted immediately after
+  bootstrapping, before the post-install clean-up step that still needed it to tear down the
+  bootstrap Virtuoso container -- every install was silently leaving that container and its
+  network orphaned.
+
+### Removed
+
+- `Fix-install/Sextans-Fix/data/CARE_yarrrml.yaml` and `CARE_yarrrml_template.yaml` -- these were
+  never actually read by the running pipeline (`cde-box-daemon` fetches the mapping live from the
+  CARE-SM git repo on every request and overwrites them), so keeping stale committed copies
+  around was actively misleading rather than just unused.
+
 ## [1.0.0] - 2026-07-10
 
 ### Added

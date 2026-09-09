@@ -18,6 +18,12 @@ gem 'json', '~> 2.9'
 
 gem 'rest-client', '~> 2.1'
 
+# Virtuoso's SPARQL-Update/Graph Store write endpoints require real HTTP Digest
+# auth and reject Basic auth outright -- rest-client has no Digest support, so
+# this is needed purely for the write path to Virtuoso (reads stay on rest-client
+# via HTTPUtils, since Virtuoso's plain read endpoint needs no auth).
+gem 'net-http-digest_auth', '~> 1.4'
+
 gem "rackup", "~> 2.2"
 
 gem "sinatra", '>= 4.2'

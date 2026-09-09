@@ -1,23 +1,35 @@
 services:
 
-  graphdb:
-    image: fairdatasystems/gdb:2026-09-08
+  virtuoso:
+    image: openlink/virtuoso-opensource-7:7.2.17
     restart: always
-    hostname: graphdb
+    hostname: virtuoso
     security_opt:
       - "no-new-privileges:true"
     cap_drop:
       - ALL
+    cap_add:
+      # Virtuoso's entrypoint copies/chowns config files and drops from root to
+      # its own `virtuoso` user at startup -- verified live, boots and serves
+      # correctly with exactly this set and nothing more.
+      - CHOWN
+      - DAC_OVERRIDE
+      - FOWNER
+      - SETUID
+      - SETGID
+    environment:
+      - "DBA_PASSWORD=${GraphDB_Pass}"
+      - "SPARQL_UPDATE=true"
     ports:
-      - 127.0.0.1:{GDB_PORT}:7200
+      - 127.0.0.1:{GDB_PORT}:8890
     volumes:
-      - {PREFIX}-graphdb:/opt/graphdb/home
+      - {PREFIX}-virtuoso:/opt/virtuoso-opensource/database
     networks:
       - {PREFIX}-backend
 
 
   cde-box-daemon:
-    image:  fairdatasystems/cdeb:2026-09-08    # to use the CARE-SM models with teh care-sm-toolkit
+    image:  fairdatasystems/cdeb2:2026-09-08    # to use the CARE-SM-2 models with the care-sm-2 toolkit
     security_opt:
       - "no-new-privileges:true"
     cap_drop:
@@ -38,11 +50,10 @@ services:
       - {PREFIX}-backend
 
   caresm:
-    image: fairdatasystems/care:2026-09-08
+    image: fairdatasystems/care2:2026-09-08
     hostname: caresm
-    # The image itself has no non-root user baked in (it's a collaborator's
-    # Dockerfile, not ours), but a plain uid:gid override works cleanly --
-    # verified live, no startup issues.
+    # The image itself has no non-root user baked in, but a plain uid:gid
+    # override works cleanly -- verified live, no startup issues.
     user: "1000:1000"
     security_opt:
       - "no-new-privileges:true"
@@ -93,7 +104,7 @@ services:
 
 
 volumes:
-  {PREFIX}-graphdb:
+  {PREFIX}-virtuoso:
     external: true
   {PREFIX}-mongo-data:
     external: true
@@ -105,7 +116,7 @@ volumes:
 networks:
   # Note: intentionally NOT `internal: true` -- that flag also blocks Docker from
   # publishing this network's containers' host ports (verified: it silently drops
-  # the `ports:` mapping entirely), which would break GraphDB's troubleshooting
+  # the `ports:` mapping entirely), which would break Virtuoso's troubleshooting
   # port and cde-box-daemon's RDF_TRIGGER port above. Segmentation here still
   # provides real value: services on other networks (none currently, but future
   # ones) can't reach these containers by hostname.

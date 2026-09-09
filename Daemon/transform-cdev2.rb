@@ -4,6 +4,7 @@ require 'sinatra'
 require 'rest-client'
 require './http_utils'
 require 'open3'
+require 'cgi'
 
 include HTTPUtils
 
@@ -20,9 +21,9 @@ end
 
 def update
   warn 'first open3 git pull'
-  o, e, _s = Open3.capture3('cd CARE-SM-Implementation && git pull')
+  o, e, _s = Open3.capture3('cd CARE-Semantic-Model-Version-2 && git pull')
   warn "second open3 copy yarrrml #{o}  #{e}"
-  o, e, _s = Open3.capture3('cp -rf ./CARE-SM-Implementation/YARRRML/CARE_Fiab_yarrrml.yaml  /data') # CDE V2
+  o, e, _s = Open3.capture3('cp -rf ./CARE-Semantic-Model-Version-2/implementation/YARRRML/CARE_Fiab_yarrrml.yaml  /data') # CARE-SM-2
   warn "second open3 complete #{o} #{e}"
 end
 
@@ -76,19 +77,25 @@ def load_cde
   end
   File.write('/tmp/check.nq', concatenated)
 
-  write_to_graphdb(concatenated)
+  write_to_virtuoso(concatenated)
 end
 
-def write_to_graphdb(concatenated)
+def write_to_virtuoso(concatenated)
   user = ENV.fetch('GraphDB_User', nil)
   pass = ENV.fetch('GraphDB_Pass', nil)
-  network = ENV['networkname'] || 'graphdb'
-  reponame = ENV.fetch('GRAPHDB_REPONAME')
-  url = "http://#{network}:7200/repositories/#{reponame}/statements"
-  #  headers = { content_type: 'application/n-triples' }
-  headers = { content_type: 'application/n-quads' }
+  network = ENV['networkname'] || 'virtuoso'
+  # A graph URI (e.g. urn:{prefix}:sextans-fix), not a bare repository name --
+  # Virtuoso is one-instance-one-database with no separate "repository" concept;
+  # isolation between different prefix installs is via named graph instead.
+  graph = ENV.fetch('GRAPHDB_REPONAME')
+  url = "http://#{network}:8890/sparql-graph-crud-auth?graph=#{CGI.escape(graph)}"
 
-  HTTPUtils.put(url, headers, concatenated, user, pass)
+  # Virtuoso's Graph Store Protocol write endpoint requires real HTTP Digest auth
+  # and rejects Basic auth outright (401, no retry) -- HTTPUtils.put (rest-client)
+  # only ever sends Basic, so it can't authenticate here. See HTTPUtils.put_digest.
+  response = HTTPUtils.put_digest(url, 'application/n-quads', concatenated, user, pass)
+  warn "Virtuoso write response: #{response.code} #{response.message}"
+  response
 end
 
 def purge_nt

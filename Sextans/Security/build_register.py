@@ -48,14 +48,27 @@ IMAGE_INFO = {
                             "target at all. Every flagged CVE sits on bundled Go CLI "
                             "utilities (mongodump/mongoexport/bsondump/etc.) or gosu, none "
                             "of which our deployment invokes or exposes."},
+    # "cdeb"/"care" retired in favor of "cdeb2"/"care2" when Sextans Fix moved to
+    # CARE-SM-2 -- kept here (not removed) so archived scans under the old names
+    # still parse correctly.
     "cdeb":      {"exposure": 2, "control": "owned",
-                   "note": "cde-box-daemon. Ours to build. Port bound to 127.0.0.1 only "
-                            "(host-local), also reachable from caresm/yarrrml-rdfizer over "
-                            "the internal network."},
+                   "note": "cde-box-daemon (CARE-SM v1, retired). Ours to build. Port bound "
+                            "to 127.0.0.1 only (host-local), also reachable from "
+                            "caresm/yarrrml-rdfizer over the internal network."},
     "care":      {"exposure": 2, "control": "collaborator",
-                   "note": "caresm (care-sm-toolkit). Built under a CARE-SM collaborator's "
-                            "namespace (pabloalarconm) -- PR-able, not a cold fork. No "
-                            "published port; internal network only."},
+                   "note": "caresm (care-sm-toolkit, CARE-SM v1, retired). Built under a "
+                            "CARE-SM collaborator's namespace (pabloalarconm) -- PR-able, "
+                            "not a cold fork. No published port; internal network only."},
+    "cdeb2":     {"exposure": 2, "control": "owned",
+                   "note": "cde-box-daemon (CARE-SM-2). Ours to build. Port bound to "
+                            "127.0.0.1 only (host-local), also reachable from "
+                            "caresm/yarrrml-rdfizer over the internal network."},
+    "care2":     {"exposure": 2, "control": "owned",
+                   "note": "caresm (CARE-SM-2 Toolkit). Built from our own source "
+                            "(wilkinsonlab/CARE-Semantic-Model-Version-2), not a vendor "
+                            "image -- previously a collaborator's pabloalarconm image under "
+                            "the retired \"care\" name. No published port; internal network "
+                            "only."},
     "yrml":      {"exposure": 2, "control": "wrapper",
                    "note": "yarrrml-rdfizer. We build the Docker wrapper but the app logic "
                             "inside is a third-party project -- we can only fix the base "
