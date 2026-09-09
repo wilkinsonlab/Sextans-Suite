@@ -104,6 +104,9 @@ services:
       - SETGID
       - DAC_OVERRIDE
       - FOWNER
+    environment:
+      - "MONGO_INITDB_ROOT_USERNAME=fdpadmin"
+      - "MONGO_INITDB_ROOT_PASSWORD=${Mongo_Pass}"
     mem_limit: 1g
     cpus: 1
     volumes:

@@ -4,6 +4,18 @@ All notable changes to Sextans Suite are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [3.1.0] - 2026-09-09
+
+### Added
+
+- **MongoDB authentication is now enabled by default in Sextans Sight.** `install-sextans-sight.sh`
+  generates a random Mongo root password (same convention as the JWT signing secret -- no new
+  prompt) and wires it into both Mongo's own `MONGO_INITDB_ROOT_USERNAME`/`_PASSWORD` and FDP's
+  new `mongo-auth` Spring profile (built from `markwilkinson/FAIRDataPoint`'s
+  `feature/virtuoso-repository` branch, same as `fdpserv2`'s existing Virtuoso patch). Verified
+  live end-to-end: a real install's admin login returns a valid JWT through the newly
+  authenticated connection, with no change to any other part of the install flow.
+
 ## [3.0.0] - 2026-09-09
 
 Sextans Sight moves off GraphDB to Virtuoso, matching Sextans Fix's own move in 2.0.0. GraphDB

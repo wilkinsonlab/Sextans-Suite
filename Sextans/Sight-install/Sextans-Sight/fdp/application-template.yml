@@ -19,3 +19,15 @@ repository:
     url: http://virtuoso:8890
     username: "dba"
     password: "{GDB_PASS}"
+
+# Enable MongoDB authentication -- see the `mongo-auth` Spring profile in FDP's own
+# application.yml (fairdatasystems/fdpserv2) for why this needs its own profile rather
+# than plain properties. The mongo service's own root credentials (set via
+# MONGO_INITDB_ROOT_USERNAME/PASSWORD in the docker-compose file) must match this exactly.
+spring:
+  profiles:
+    active: production,mongo-auth
+  mongodb:
+    username: fdpadmin
+    password: "{MONGO_PASS}"
+    authentication-database: admin

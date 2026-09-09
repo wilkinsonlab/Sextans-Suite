@@ -83,8 +83,16 @@ By default, this port is disabled after installation, so your Virtuoso instance 
 Virtuoso ships with no password set for its `dba` superuser until one is configured. The
 installer asks you to choose a password (minimum 12 characters) and configures Virtuoso with it
 automatically during installation, via the container's own `DBA_PASSWORD` startup setting. Keep
-this password somewhere safe; it is also written (file mode 600) into the generated
-`application-ACME.yml` file and `.env` file in your production server folder.
+this password somewhere safe; it is also written into the generated `application-ACME.yml` file
+(mode 644 -- the `fdp` container needs to read it as its own user, not yours) and `.env` file
+(mode 600) in your production server folder.
+
+### MongoDB root password
+You are not asked for this one -- a random password is generated automatically during
+installation (same convention as the FDP server's JWT signing secret) and configures MongoDB's
+root user via the container's own `MONGO_INITDB_ROOT_USERNAME`/`_PASSWORD` startup settings. As
+with the Virtuoso password above, this is written into `application-ACME.yml` (mode 644) and
+`.env` (mode 600); there is nothing you need to do to enable it.
 
 
 ## Installing Sextans Sight

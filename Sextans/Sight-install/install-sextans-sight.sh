@@ -170,6 +170,10 @@ fi
 # fixed shared value baked into the repo.
 JWT_SECRET=$(openssl rand -hex 64)
 
+# MongoDB root password -- generated fresh for this install, same reasoning as JWT_SECRET
+# above.
+MONGO_PASSWORD=$(openssl rand -hex 32)
+
 mkdir -p $HOME/tmp
 export TMPDIR=$HOME/tmp
 # PREFIX needed by the main.py script and docker composes
@@ -235,6 +239,8 @@ sed -i'' -e "s%{GUID}%$uri%" "./fdp/application-${P}.yml"
 echo "F"
 sed -i'' -e "s%{GDB_PASS}%${GRAPHDB_PASSWORD}%" "./fdp/application-${P}.yml"
 sed -i'' -e "s%{JWT_SECRET}%${JWT_SECRET}%" "./fdp/application-${P}.yml"
+sed -i'' -e "s%{MONGO_PASS}%${MONGO_PASSWORD}%" "docker-compose-${P}.yml"
+sed -i'' -e "s%{MONGO_PASS}%${MONGO_PASSWORD}%" "./fdp/application-${P}.yml"
 # NOTE: this file is bind-mounted into the fdp container and read by that
 # container's own user (uid 100, not the host user), so it must stay
 # world-readable -- chmod 600 would make FDP startup fail with a
@@ -277,6 +283,8 @@ sed -i'' -e 's|{GUID}|'"${uri}"'|g' "./${P}-Sextans-Sight/.env"
 sed -i'' -e "s%{GDB_PASS}%${GRAPHDB_PASSWORD}%" "./${P}-Sextans-Sight/.env"
 sed -i'' -e "s%{GDB_PASS}%${GRAPHDB_PASSWORD}%" "./${P}-Sextans-Sight/fdp/application-${P}.yml"
 sed -i'' -e "s%{JWT_SECRET}%${JWT_SECRET}%" "./${P}-Sextans-Sight/fdp/application-${P}.yml"
+sed -i'' -e "s%{MONGO_PASS}%${MONGO_PASSWORD}%" "./${P}-Sextans-Sight/.env"
+sed -i'' -e "s%{MONGO_PASS}%${MONGO_PASSWORD}%" "./${P}-Sextans-Sight/fdp/application-${P}.yml"
 # NOTE: bind-mounted into the fdp container and read by that container's own
 # user (uid 100, not the host user) -- must stay world-readable, see note above.
 chmod 644 "./${P}-Sextans-Sight/fdp/application-${P}.yml"
@@ -310,9 +318,11 @@ echo ""
 echo -e "${GREEN}To start your full Sextans Sight server, cd to that folder or move it elsewhere and type:  "
 echo -e "$DOCKER_COMPOSE -f docker-compose-${P}.yml up -d ${NC}"
 echo ""
-echo -e "${GREEN}Security note:${NC} the Virtuoso dba password and the FDP server's JWT signing secret"
-echo -e "have already been randomized/set to what you provided during this install -- both are stored"
-echo -e "(mode 600) in ./${P}-Sextans-Sight/fdp/application-${P}.yml and ./${P}-Sextans-Sight/.env."
-echo -e "There is nothing further you need to change there before going into production."
+echo -e "${GREEN}Security note:${NC} the Virtuoso dba password, the FDP server's JWT signing secret,"
+echo -e "and a freshly generated MongoDB root password have already been set for this install --"
+echo -e "all are stored in ./${P}-Sextans-Sight/fdp/application-${P}.yml (mode 644, world-readable"
+echo -e "on purpose -- the fdp container reads it as its own uid, not yours) and"
+echo -e "./${P}-Sextans-Sight/.env (mode 600). There is nothing further you need to change there"
+echo -e "before going into production."
 echo ""
 
