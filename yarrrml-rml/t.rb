@@ -9,16 +9,24 @@ require 'fileutils'
 # compose network, by container hostname (e.g. "yarrrml-rdfizer:4567") -- never
 # "localhost". Sinatra 4.x/rack-protection 4.x enable Rack::Protection::
 # HostAuthorization by default, which rejects any Host header outside a small
-# built-in allowlist, so container-to-container calls get a 403 "Host not
+# built-in allowlist, so container-to-container calls got a 403 "Host not
 # permitted" with zero app-level logic ever running.
+#
+# HostAuthorization exists to defend against DNS-rebinding attacks, where a
+# *browser* is tricked into sending a request with an attacker-chosen Host
+# header. There is no browser anywhere in this call path -- every caller is
+# another container's own HTTP client, which fully controls its own Host
+# header regardless of what this check requires. So it provides no real
+# protection for a server-to-server-only service like this one; disabling it
+# here costs nothing real (kept consistently disabled on cde-box-daemon too,
+# for the same reason).
 #
 # Sinatra's own config passthrough for this (`set :protection,
 # host_authorization: ...` / `except: :host_authorization`) has proven
 # unreliable across versions in this codebase's sibling projects (see
 # neuromuscular-disease-ontology's nmdo-search memory notes) -- both were tried
 # there and failed to actually disable the check. Monkeypatching accepts?
-# directly is the fix that has actually held. Safe here: this app has no
-# host-derived logic anywhere, so neutralizing the check entirely costs nothing.
+# directly is the fix that has actually held.
 require 'rack/protection/host_authorization'
 class Rack::Protection::HostAuthorization
   def accepts?(_request)
@@ -28,6 +36,14 @@ end
 
 
 get '/:type' do
+  type = params[:type]
+  # `type` reaches this point straight from the URL. It's used below to build a
+  # filename and, further down, an argument to Open3.capture3 -- whitelist the
+  # allowed shape up front rather than trusting arbitrary input to flow into
+  # either. Open3.capture3 is also called in its array form (never touches a
+  # shell regardless of content) as defense in depth on top of this check.
+  halt 400, "invalid type\n" unless type =~ /\A[a-zA-Z0-9_-]+\z/
+
   begin
     FileUtils.mkdir_p('/mnt/data/triples')
   rescue StandardError
@@ -38,10 +54,9 @@ get '/:type' do
   rescue StandardError
     warn "tmp folder coiuldn't be created.  Might already exist"
   end
-  `rm -rf /mnt/data/tmp/*`
-  `rm -rf /mnt/data/triples/*`
+  FileUtils.rm_rf(Dir.glob('/mnt/data/tmp/*'))
+  FileUtils.rm_rf(Dir.glob('/mnt/data/triples/*'))
 
-  type = params[:type]
   # note that this routine will now ONLY work with nquads
   serialization = ENV['SERIALIZATION'] || 'nquads'
   abort "MUST USE NQUADS" unless serialization == 'nquads'
@@ -75,16 +90,21 @@ get '/:type' do
     destination_file = File.join('/mnt/data/', "CARE.csv")  # this will overwrite - necessary because the yarrrml is set to CARE.csv as the source
     FileUtils.cp(file, destination_file)   # this will overwrite - necessary because the yarrrml is set to CARE.csv as the source
   
-    # Execute the transformation on the copied file (uses CARE_yarrrml.yaml and CARE.csv)
-    _a, _b,_c = Open3.capture3("bash map.sh #{yarrrml} --outputfile /mnt/data/tmp/#{File.basename(file)}.#{extension} --serialization #{serialization}")
-  
+    # Execute the transformation on the copied file (uses CARE_yarrrml.yaml and CARE.csv).
+    # Array form (not a single interpolated string) so this never goes through a
+    # shell, regardless of what any of these values contain.
+    _a, _b, _c = Open3.capture3('bash', 'map.sh', yarrrml, '--outputfile',
+                                 "/mnt/data/tmp/#{File.basename(file)}.#{extension}",
+                                 '--serialization', serialization)
+
     puts "Copied and processed #{File.basename(file)}"
   end
 
   # now we should have a bunch of e.g. /mnt/data/tmp/CARE_part_5.nq
   # for each of them, concatenate it to /mnt/data/triples/CARE.nq
+  triples_file = '/mnt/data/triples/CARE.nq'
   Dir.glob(File.join('/mnt/data/tmp', "*.#{extension}")) do |file|
-    `cat #{file} >> /mnt/data/triples/CARE.nq`
+    File.open(triples_file, 'a') { |out| out.write(File.read(file)) }
   end
 
   # reset the original csv file

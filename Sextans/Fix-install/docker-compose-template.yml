@@ -24,6 +24,11 @@ services:
       - 127.0.0.1:{GDB_PORT}:8890
     volumes:
       - {PREFIX}-virtuoso:/opt/virtuoso-opensource/database
+      # Only takes effect if this compose file is ever what actually creates
+      # the database (normally the bootstrap step already has, and this
+      # mount is then a no-op against an existing DB) -- see the .sql file
+      # itself and the matching mount in bootstrap_fix/docker-compose-template.yml.
+      - ./virtuoso-initdb:/opt/virtuoso-opensource/initdb.d:ro
     networks:
       - {PREFIX}-backend
 

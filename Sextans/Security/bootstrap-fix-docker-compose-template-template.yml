@@ -23,6 +23,12 @@ services:
       - 127.0.0.1:{GDB_PORT}:8890
     volumes:
       - {PREFIX}-virtuoso:/opt/virtuoso-opensource/database
+      # Runs exactly once, when this bootstrap step creates the brand new
+      # database -- locks down the anonymous "nobody" account's default read
+      # access (see the .sql file itself for why). This is the ONLY point in
+      # the install where it can take effect: initdb.d only ever runs against
+      # a fresh database, and this bootstrap step is what creates it.
+      - ./virtuoso-initdb:/opt/virtuoso-opensource/initdb.d:ro
     networks:
       - virtuoso_net
 

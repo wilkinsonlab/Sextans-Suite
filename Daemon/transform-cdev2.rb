@@ -6,6 +6,28 @@ require './http_utils'
 require 'open3'
 require 'cgi'
 
+# This service is only ever called from other containers on the same internal
+# compose network (by hostname, e.g. "cde-box-daemon:4567") or via its
+# loopback-only published port -- never by a browser. Sinatra 4.x/
+# rack-protection 4.x enable Rack::Protection::HostAuthorization by default,
+# which rejects any Host header outside a small built-in allowlist.
+#
+# HostAuthorization defends against DNS-rebinding attacks, where a *browser*
+# is tricked into sending a request with an attacker-chosen Host header.
+# There is no browser in this call path -- any caller fully controls its own
+# Host header regardless of what this check requires, so it provides no real
+# protection here. Matches the same fix already applied to yarrrml-rdfizer's
+# t.rb, kept consistent for the same reason: Sinatra's own config passthrough
+# for this has proven unreliable across versions in this codebase's sibling
+# projects (see neuromuscular-disease-ontology's nmdo-search memory notes),
+# so monkeypatching accepts? directly is the fix that has actually held.
+require 'rack/protection/host_authorization'
+class Rack::Protection::HostAuthorization
+  def accepts?(_request)
+    true
+  end
+end
+
 include HTTPUtils
 
 get '/' do

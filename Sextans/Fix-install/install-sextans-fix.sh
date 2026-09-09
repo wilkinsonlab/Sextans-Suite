@@ -185,6 +185,11 @@ cp -r ./Sextans-Fix/data ./${P}-Sextans-Fix/
 # containers, which won't generally match your host UID -- open this bind-mounted
 # data directory to any user so both containers can read/write it regardless.
 chmod -R o+rwX ./${P}-Sextans-Fix/data
+# Only takes effect if the bootstrap step above didn't already create the
+# database (see docker-compose-template.yml's own comment on this mount) --
+# copied here too so the final compose file is self-contained if this folder
+# is later moved elsewhere, per this script's own instructions below.
+cp -r ./virtuoso-initdb ./${P}-Sextans-Fix/
 cp ./Sextans-Fix/.env_template "./${P}-Sextans-Fix/.env"
 
 cp ./docker-compose-template.yml "./${P}-Sextans-Fix/docker-compose-${P}.yml"

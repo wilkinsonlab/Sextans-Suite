@@ -126,10 +126,26 @@ at the "Virtuoso dba password" prompt:
     own `DBA_PASSWORD` startup setting. Your chosen password is stored (file mode 600) in the
     generated `.env` file. Unlike GraphDB, there's no separate "turn security on" step -- write
     access to Virtuoso's SPARQL Update endpoint always requires this password.
+2.  Lock down anonymous reads. Virtuoso's unauthenticated `/sparql` endpoint can, by default, read
+    every graph in the store. The installer runs a one-time SQL script
+    (`virtuoso-initdb/lockdown-anonymous-sparql.sql`) when it first creates the database that
+    removes this default, so all data access -- read or write -- now requires the same
+    Digest-authenticated `dba` credentials.
 
 Record data is written into per-record named graphs produced by the CARE-SM transformation
 itself, in a single Virtuoso database rather than a separate "repository" per install (Virtuoso
 has no such concept -- GraphDB did).
+
+### Delete processed data files once they're safely loaded
+
+`Sextans-Fix/data` is bind-mounted into `cde-box-daemon` and `yarrrml-rdfizer`, both of which run
+as fixed-UID non-root users that generally won't match your host user -- so the install script
+opens this folder to any local user (`chmod -R o+rwX`) so those containers can read and write it.
+That means your source CSV and the generated RDF in `data/triples/` sit on disk, readable by any
+local user on the host, for as long as you leave them there. Once you've confirmed a transformation
+loaded successfully into Virtuoso, delete the CSV and `data/triples/*.nq` files rather than leaving
+them in place -- they're not needed after a successful load, since the data of record from that
+point on is what's in Virtuoso.
 
 
 
