@@ -1,0 +1,4 @@
+Target,VulnerabilityID,Package,InstalledVersion,FixedVersion,Severity,Title,PrimaryURL
+Java,CVE-2025-59250,com.microsoft.sqlserver:mssql-jdbc,13.2.1,"10.2.4.jre11, 11.2.4.jre11, 12.2.1.jre11, 12.6.5.jre11, 12.8.2.jre11, 12.10.2.jre11, 13.2.1.jre11",HIGH,JDBC Driver for SQL Server has improper input validation issue,https://avd.aquasec.com/nvd/cve-2025-59250
+Java,CVE-2026-54399,org.apache.httpcomponents.core5:httpcore5,5.2.4,"5.4.3, 5.5-beta2",HIGH,org.apache.httpcomponents.core5/httpcore5: Apache HttpComponents Core: Denial of Service via excessive HTTP headers,https://avd.aquasec.com/nvd/cve-2026-54399
+Java,CVE-2026-54428,org.apache.httpcomponents.core5:httpcore5-h2,5.2.4,"5.4.3, 5.5-beta2",HIGH,org.apache.httpcomponents.core5/httpcore5-h2: Apache HttpComponents Core: Denial of Service via oversized HTTP/2 HPACK header blocks,https://avd.aquasec.com/nvd/cve-2026-54428

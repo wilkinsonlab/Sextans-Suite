@@ -39,6 +39,22 @@ IMAGE_INFO = {
                    "note": "FAIR Data Point server. Has no published port of its own, but "
                             "fdp_client (nginx) proxies to it, so its full REST API surface "
                             "is reachable from the public internet via that proxy hop."},
+    "fdpserv2":  {"exposure": 1, "control": "owned",
+                   "note": "FAIR Data Point server, patched for Virtuoso support. Same exposure "
+                            "as the retired 'fdpserv' (fdp_client proxies its full REST API to "
+                            "the public internet). Control is 'owned' TEMPORARILY ONLY: this is "
+                            "built from our own fork branch (markwilkinson/FAIRDataPoint, "
+                            "feature/virtuoso-repository) pending upstream PR acceptance into "
+                            "FAIRDataTeam/FAIRDataPoint, not a permanent ownership decision -- "
+                            "move this back to 'vendor' once an official FDP release includes "
+                            "Virtuoso support and fdpserv2 goes back to vendor-pull-and-patch. "
+                            "See the dedicated note in VULNERABILITY_TRIAGE.md."},
+    "virtuoso":  {"exposure": 2, "control": "vendor",
+                   "note": "Virtuoso triple store, shared by Sextans Fix and Sextans Sight. "
+                            "No published port to the internet directly; reachable only from "
+                            "fdp/fdp_client (Sight) or cde-box-daemon (Fix) over the internal "
+                            "network. Pure vendor image (openlink/virtuoso-opensource-7) -- "
+                            "only lever is tracking upstream releases."},
     "fdpclient": {"exposure": 1, "control": "vendor",
                    "note": "FDP web client (nginx/Alpine). Directly publishes {FDP_PORT} to "
                             "the internet."},
@@ -164,6 +180,16 @@ DEFAULT_DECISIONS = {
     (1, "vendor"): ("TRACK", "Network-exposed, third-party image. No fork by default "
                               "(see project policy) -- bump the pinned tag as soon as "
                               "upstream ships a release containing FixedVersion."),
+    (1, "owned"): ("PATCH", "Network-exposed, and we build this image directly -- patch "
+                             "immediately, higher urgency than internal-only 'owned' findings "
+                             "given real exposure. Currently only applies to fdpserv2, whose "
+                             "'owned' classification is itself temporary (see the dedicated "
+                             "note in VULNERABILITY_TRIAGE.md) -- revisit this default if it "
+                             "moves back to 'vendor'."),
+    (2, "vendor"): ("TRACK", "Internal-only, third-party image. No fork by default -- bump "
+                              "the pinned tag as soon as upstream ships a release containing "
+                              "FixedVersion. Lower urgency than (1, vendor) given no direct "
+                              "network exposure."),
     (2, "owned"): ("PATCH", "Internal-only, and we build this image -- bump the "
                              "dependency directly next time this Dockerfile is touched."),
     (2, "collaborator"): ("FLAG-UPSTREAM", "Internal-only, built by a CARE-SM "

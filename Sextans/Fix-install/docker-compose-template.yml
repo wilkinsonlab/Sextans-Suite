@@ -1,7 +1,7 @@
 services:
 
   virtuoso:
-    image: openlink/virtuoso-opensource-7:7.2.17
+    image: fairdatasystems/virtuoso:2026-09-10
     restart: always
     hostname: virtuoso
     security_opt:
@@ -33,14 +33,14 @@ services:
       # Only takes effect if this compose file is ever what actually creates
       # the database (normally the bootstrap step already has, and this
       # mount is then a no-op against an existing DB) -- see the .sql file
-      # itself and the matching mount in bootstrap_fix/docker-compose-template.yml.
+      # itself and the matching mount in bootstrap-fix-docker-compose-template-template.yml.
       - ./virtuoso-initdb:/opt/virtuoso-opensource/initdb.d:ro
     networks:
       - {PREFIX}-backend
 
 
   cde-box-daemon:
-    image:  fairdatasystems/cdeb2:2026-09-08    # to use the CARE-SM-2 models with the care-sm-2 toolkit
+    image:  fairdatasystems/cdeb2:2026-09-10    # to use the CARE-SM-2 models with the care-sm-2 toolkit
     security_opt:
       - "no-new-privileges:true"
     cap_drop:
@@ -63,7 +63,7 @@ services:
       - {PREFIX}-backend
 
   caresm:
-    image: fairdatasystems/care2:2026-09-08
+    image: fairdatasystems/care2:2026-09-10
     hostname: caresm
     # The image itself has no non-root user baked in, but a plain uid:gid
     # override works cleanly -- verified live, no startup issues.
@@ -80,7 +80,7 @@ services:
       - {PREFIX}-backend
 
   yarrrml-rdfizer:
-    image: fairdatasystems/yrml:2026-09-08
+    image: fairdatasystems/yrml:2026-09-10
     hostname: yarrrml-rdfizer
     security_opt:
       - "no-new-privileges:true"
@@ -101,7 +101,7 @@ services:
       - {PREFIX}-backend
 
   # beacon_count:
-  #   image: fairdatasystems/beacon:2026-09-08
+  #   image: fairdatasystems/beacon:2026-09-10
   #   hostname: beacon_count
   #   restart: always
   #   ports:

@@ -2,7 +2,7 @@
 services:
   # FAIR Data Point server
   fdp:
-    image: fairdatasystems/fdpserv2:2026-09-09
+    image: fairdatasystems/fdpserv2:2026-09-10
     hostname: fdp
     restart: always
     security_opt:
@@ -21,7 +21,7 @@ services:
 
 
   fdp_client:
-    image: fairdatasystems/fdpclient:2026-09-08
+    image: fairdatasystems/fdpclient:2026-09-10
     hostname: fdpclient
     restart: always
     security_opt:
@@ -55,7 +55,7 @@ services:
 
   # Mongo for FDP server
   mongo:
-    image: fairdatasystems/mdb:2026-09-08
+    image: fairdatasystems/mdb:2026-09-10
     restart: always
     security_opt:
       - "no-new-privileges:true"
