@@ -1,0 +1,18 @@
+-- Runs exactly once, when Virtuoso's docker-entrypoint.sh creates a brand new
+-- database (mounted at /opt/virtuoso-opensource/initdb.d -- Virtuoso's own
+-- equivalent of the docker-entrypoint-initdb.d/ convention used by other
+-- database images).
+--
+-- By default, Virtuoso's anonymous "nobody" account (which is what serves
+-- every request to the unauthenticated /sparql endpoint) can read every
+-- graph in the store -- this is Virtuoso's documented out-of-the-box
+-- behavior, not something specific to this deployment. Writes are already
+-- correctly rejected for that account, so this closes the matching read-side
+-- gap: all data access now requires the Digest-authenticated /sparql-auth
+-- endpoint, matching how writes already worked.
+--
+-- This sets the *default* permission for every graph (present and future),
+-- not a per-graph grant, since this pipeline mints a new named graph on
+-- every record processed (see CARE-SM's YARRRML `graph: this:$(uniqid)_Record`)
+-- -- a per-graph ACL would need updating on every single write.
+DB.DBA.RDF_DEFAULT_USER_PERMS_SET ('nobody', 0);

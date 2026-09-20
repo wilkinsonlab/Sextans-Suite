@@ -37,7 +37,21 @@ done
 
 MAPPERJAR=$(readlink -f /rmlmapper-java/target/rmlmapper-*all.jar)
 
+# Per-invocation, not a fixed shared name -- two concurrent calls to this
+# script (e.g. a real transform and a smoke-test run of a freshly-pulled
+# mapping) used to race on the same /tmp/rmlmappingfile.ttl regardless of any
+# isolation on the /mnt/data side.
+# BusyBox's mktemp (this image's /bin/mktemp) doesn't support a suffix after
+# the X's -- a trailing ".ttl" here silently made it fail and return an empty
+# path (confirmed live: parser.js and rmlmapper both ran "successfully"
+# against that empty path, producing empty output with no error surfaced,
+# since the Ruby caller discards this script's own stdout/stderr). The
+# mapping file's extension isn't actually load-bearing -- it's always passed
+# explicitly via --mappingfile, never inferred -- so just drop it.
+MAPPINGFILE=$(mktemp /tmp/rmlmappingfile.XXXXXX)
+trap 'rm -f "$MAPPINGFILE"' EXIT
+
 echo "mapper arguments: ${POSITIONAL_ARGS[@]}"
 cd /mnt/data
-/yarrrml-parser/bin/parser.js -i $rulesfile -o /tmp/rmlmappingfile.ttl -p && \
-java --class-path $MAPPERJAR${CLASSPATHSTR} be.ugent.rml.cli.Main --mappingfile /tmp/rmlmappingfile.ttl ${POSITIONAL_ARGS[@]}
+/yarrrml-parser/bin/parser.js -i $rulesfile -o "$MAPPINGFILE" -p && \
+java --class-path $MAPPERJAR${CLASSPATHSTR} be.ugent.rml.cli.Main --mappingfile "$MAPPINGFILE" ${POSITIONAL_ARGS[@]}
