@@ -4,7 +4,14 @@ All notable changes to Sextans Suite are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [Unreleased]
+## [3.2.0] - 2026-09-21
+
+### Documentation
+
+- Fix and Sight READMEs now explain that Virtuoso Conductor's SPARQL box (Linked Data > SPARQL)
+  returns no rows -- even when logged in as `dba` -- because of the anonymous-read lockdown, list the
+  authenticated ways to query (`/sparql-auth`, ISQL, `curl --digest`), and warn against restoring
+  anonymous read access to make it "work".
 
 ### Changed
 

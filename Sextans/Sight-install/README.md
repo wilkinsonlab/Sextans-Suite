@@ -173,6 +173,42 @@ at the "Virtuoso dba password" prompt:
     endpoint as a separate, unnecessary attack surface.
 
 
+
+#### Querying your data: why Conductor's SPARQL box shows nothing
+
+The natural way to check what is in the triple store is to open Virtuoso Conductor
+(`http://localhost:<your Virtuoso port>/conductor`, log in as `dba`), go to **Linked Data > SPARQL**,
+and run something like `select distinct ?t where {?s a ?t}`. **This will return no rows, even though
+your metadata is there and you are logged in as `dba`.** It does not mean the store is empty.
+
+This is a side-effect of the anonymous-read lockdown described above, not a bug. Virtuoso's plain
+`/sparql` endpoint serves unauthenticated requests as its built-in anonymous `nobody` user, and the
+installer has removed that user's read access to every graph -- so it (correctly) sees an empty
+store. Being logged in to Conductor doesn't help: as far as we can tell the SPARQL box there queries
+that same anonymous endpoint, and returns an empty result (just the column header) instead of an
+error. Your data is only visible through a Digest-authenticated request. Any of these work:
+
+*   **The authenticated SPARQL form:** open `http://localhost:<your Virtuoso port>/sparql-auth` and,
+    when the browser prompts, log in as `dba` with the password from your `.env`
+    (`TRIPLESTORE_PASS`). This is the same query editor, but runs as `dba`.
+*   **Conductor's Interactive SQL (ISQL)**, in Conductor's left-hand menu. Prefix the query with
+    `SPARQL` and end it with a semicolon: `SPARQL select distinct ?t where {?s a ?t};`
+*   **The command line:**
+    ```
+    curl --digest -u dba:$TRIPLESTORE_PASS http://localhost:<your Virtuoso port>/sparql-auth \
+      -H 'Accept: text/csv' --data-urlencode 'query=select distinct ?t where {?s a ?t}'
+    ```
+
+Queries run as `dba` also return Virtuoso's own system types and graphs mixed in with yours. To hide
+them, filter e.g. `FILTER(!STRSTARTS(STR(?t), "http://www.openlinksw.com"))`, or restrict the query to
+your FDP's own graphs.
+
+**Please don't "fix" this by giving the anonymous user read access back**
+(`DB.DBA.RDF_DEFAULT_USER_PERMS_SET('nobody', 1)` or similar). That would make every graph in the
+store readable by anyone who can reach the Virtuoso port, which is exactly the exposure the
+lockdown exists to prevent (FDP's own REST API is the intended public-read interface). A convenient Conductor SPARQL box is not worth it;
+use one of the authenticated routes above.
+
 #### FAIR Data Point Client
 
 | Service name    | Local deployment                               | Production deployment |

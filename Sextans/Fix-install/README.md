@@ -136,6 +136,42 @@ Record data is written into per-record named graphs produced by the CARE-SM tran
 itself, in a single Virtuoso database rather than a separate "repository" per install (Virtuoso
 has no such concept -- GraphDB did).
 
+
+### Querying your data: why Conductor's SPARQL box shows nothing
+
+The natural way to check that a transformation worked is to open Virtuoso Conductor
+(`http://localhost:<your Virtuoso port>/conductor`, log in as `dba`), go to **Linked Data > SPARQL**,
+and run something like `select distinct ?t where {?s a ?t}`. **This will return no rows, even though
+your data is there and you are logged in as `dba`.** It does not mean the load failed.
+
+This is a side-effect of the anonymous-read lockdown described above, not a bug. Virtuoso's plain
+`/sparql` endpoint serves unauthenticated requests as its built-in anonymous `nobody` user, and the
+installer has removed that user's read access to every graph -- so it (correctly) sees an empty
+store. Being logged in to Conductor doesn't help: as far as we can tell the SPARQL box there queries
+that same anonymous endpoint, and returns an empty result (just the column header) instead of an
+error. Your data is only visible through a Digest-authenticated request. Any of these work:
+
+*   **The authenticated SPARQL form:** open `http://localhost:<your Virtuoso port>/sparql-auth` and,
+    when the browser prompts, log in as `dba` with the password from your `.env`
+    (`TRIPLESTORE_PASS`). This is the same query editor, but runs as `dba`.
+*   **Conductor's Interactive SQL (ISQL)**, in Conductor's left-hand menu. Prefix the query with
+    `SPARQL` and end it with a semicolon: `SPARQL select distinct ?t where {?s a ?t};`
+*   **The command line:**
+    ```
+    curl --digest -u dba:$TRIPLESTORE_PASS http://localhost:<your Virtuoso port>/sparql-auth \
+      -H 'Accept: text/csv' --data-urlencode 'query=select distinct ?t where {?s a ?t}'
+    ```
+
+Queries run as `dba` also return Virtuoso's own system types and graphs mixed in with yours. To hide
+them, filter e.g. `FILTER(!STRSTARTS(STR(?t), "http://www.openlinksw.com"))`, or restrict the query to
+your record graphs (which live under your `baseURI`).
+
+**Please don't "fix" this by giving the anonymous user read access back**
+(`DB.DBA.RDF_DEFAULT_USER_PERMS_SET('nobody', 1)` or similar). That would make every record in the
+store readable by anyone who can reach the Virtuoso port -- which, for patient-level data, is
+exactly the exposure the lockdown exists to prevent. A convenient Conductor SPARQL box is not worth it;
+use one of the authenticated routes above.
+
 ### Delete processed data files once they're safely loaded
 
 `Sextans-Fix/data` is bind-mounted into `cde-box-daemon` and `yarrrml-rdfizer`, both of which run

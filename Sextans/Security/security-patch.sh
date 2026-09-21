@@ -2,7 +2,46 @@
 # committed, pushed and scanned as if it had.
 set -e
 
+# Refuse to build from a working tree that differs from what is committed. The
+# images we own (cdeb2, yrml) are built from these directories with `COPY . /app`,
+# so an uncommitted edit either gets baked into a pushed image that no commit
+# describes, or -- if made after the build -- silently misses it. Either way the
+# deployed image and the repo disagree. (Only the build contexts are checked:
+# the generated compose templates and scan output are expected to be dirty.)
+dirty=$(git status --porcelain -- ../../Daemon ../../yarrrml-rml)
+if [ -n "${dirty}" ]; then
+  echo "ABORTING: uncommitted changes in the image build contexts (Daemon/, yarrrml-rml/):" >&2
+  echo "${dirty}" >&2
+  echo "Commit or stash them, then re-run, so the pushed images match the repo." >&2
+  exit 1
+fi
+
 timestamp=$(date +"%Y-%m-%d")
+
+# Record which Trivy produced this run's scan results (the scanner is maintained
+# by hand on this machine, so it can differ between runs).
+echo "Trivy version:"
+trivy --version
+
+# Fetch the vulnerability DB and the Java DB up front, as their own retried step.
+# Both are large downloads; when Trivy fetched them lazily inside a scan, a slow
+# download used up that scan's --timeout and killed the whole run. The scans
+# below pass --skip-db-update/--skip-java-db-update and just use this cache.
+# (The Java DB is what lets Trivy identify the JARs in fdpserv2 and yrml.)
+# Aborts before anything is built or pushed if the download never succeeds.
+trivy_db_ok=false
+for attempt in 1 2 3; do
+  if trivy image --download-db-only && trivy image --download-java-db-only; then
+    trivy_db_ok=true
+    break
+  fi
+  echo "Trivy DB download failed (attempt ${attempt}/3)" >&2
+  sleep 30
+done
+if [ "${trivy_db_ok}" != true ]; then
+  echo "ABORTING: could not download the Trivy vulnerability/Java databases." >&2
+  exit 1
+fi
 
 # Archive the previous run's scan results instead of deleting them -- someone
 # running an older patched image should still be able to look up what
@@ -44,7 +83,7 @@ docker push fairdatasystems/${name}:${timestamp}
 echo "pushed"
 VIRTUOSO="fairdatasystems/${name}:${timestamp}"
 echo "trivy"
-trivy image --scanners vuln --format json --severity CRITICAL,HIGH  --timeout 1800s fairdatasystems/${name}:${timestamp}  > ${outputfile}
+trivy image --skip-db-update --skip-java-db-update --scanners vuln --format json --severity CRITICAL,HIGH  --timeout 1800s fairdatasystems/${name}:${timestamp}  > ${outputfile}
 echo "END"
 
 
@@ -73,7 +112,7 @@ echo "pushed"
 FDP2="fairdatasystems/${name}:${timestamp}"
 # run a scan to determine success
 echo "trivy"
-trivy image --scanners vuln  --format json  --severity CRITICAL,HIGH --timeout 1800s fairdatasystems/${name}:${timestamp}  > ${outputfile}
+trivy image --skip-db-update --skip-java-db-update --scanners vuln  --format json  --severity CRITICAL,HIGH --timeout 1800s fairdatasystems/${name}:${timestamp}  > ${outputfile}
 echo "END"
 
 
@@ -98,7 +137,7 @@ docker push fairdatasystems/${name}:${timestamp}
 echo "pushed"
 FDPC="fairdatasystems/${name}:${timestamp}"
 # run a scan to determine success
-trivy image --scanners vuln  --format json  --severity CRITICAL,HIGH --timeout 1800s fairdatasystems/${name}:${timestamp} > ${outputfile}
+trivy image --skip-db-update --skip-java-db-update --scanners vuln  --format json  --severity CRITICAL,HIGH --timeout 1800s fairdatasystems/${name}:${timestamp} > ${outputfile}
 echo "END"
 
 
@@ -132,7 +171,7 @@ echo "pushed"
 MDB="fairdatasystems/${name}:${timestamp}"
 # run a scan to determine success
 echo "trivy"
-trivy image --scanners vuln  --format json  --severity CRITICAL,HIGH  --timeout 1800s fairdatasystems/${name}:${timestamp}  > ${outputfile}
+trivy image --skip-db-update --skip-java-db-update --scanners vuln  --format json  --severity CRITICAL,HIGH  --timeout 1800s fairdatasystems/${name}:${timestamp}  > ${outputfile}
 echo "END"
 
 
@@ -159,7 +198,7 @@ echo "pushed"
 CDEB2="fairdatasystems/${name}:${timestamp}"
 # run a scan to determine success
 echo "trivy"
-trivy image --scanners vuln  --format json  --severity CRITICAL,HIGH --timeout 1800s fairdatasystems/${name}:${timestamp}  > ${outputfile}
+trivy image --skip-db-update --skip-java-db-update --scanners vuln  --format json  --severity CRITICAL,HIGH --timeout 1800s fairdatasystems/${name}:${timestamp}  > ${outputfile}
 echo "END"
 
 
@@ -185,7 +224,7 @@ echo "pushed"
 CARE2="fairdatasystems/${name}:${timestamp}"
 # run a scan to determine success
 echo "trivy"
-trivy image --scanners vuln  --format json  --severity CRITICAL,HIGH  --timeout 1800s fairdatasystems/${name}:${timestamp}  > ${outputfile}
+trivy image --skip-db-update --skip-java-db-update --scanners vuln  --format json  --severity CRITICAL,HIGH  --timeout 1800s fairdatasystems/${name}:${timestamp}  > ${outputfile}
 echo "END"
 
 
@@ -208,7 +247,7 @@ docker push fairdatasystems/${name}:${timestamp}
 echo "pushed"
 YRDF="fairdatasystems/${name}:${timestamp}"
 # run a scan to determine success
-trivy image --scanners vuln  --format json  --severity CRITICAL,HIGH  --timeout 1800s fairdatasystems/${name}:${timestamp} > ${outputfile}
+trivy image --skip-db-update --skip-java-db-update --scanners vuln  --format json  --severity CRITICAL,HIGH  --timeout 1800s fairdatasystems/${name}:${timestamp} > ${outputfile}
 echo "END"
 
 cp sight-docker-compose-template-template.yml sight-docker-compose-template-tmp.yml

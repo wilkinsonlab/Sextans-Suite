@@ -3,18 +3,18 @@
   "Trivy": {
     "Version": "0.69.1"
   },
-  "ReportID": "01a0c44f-6f0a-7480-beaf-74d291ec914b",
-  "CreatedAt": "2026-09-21T16:12:15.242300441+02:00",
-  "ArtifactID": "sha256:86a68af4588edf1fbd4459963b99df176539a7208058495ca02bf70587b8e84c",
+  "ReportID": "01a0c3ba-c3c9-7f1c-9203-ff7d1fdd930f",
+  "CreatedAt": "2026-09-21T13:29:52.074500024+02:00",
+  "ArtifactID": "sha256:962ddfbf480c75ca3f0324d06daec216550858bfeb52eb32cb1fce796aedbdf4",
   "ArtifactName": "fairdatasystems/mdb:2026-09-21",
   "ArtifactType": "container_image",
   "Metadata": {
-    "Size": 1616973312,
+    "Size": 1617031680,
     "OS": {
       "Family": "ubuntu",
       "Name": "22.04"
     },
-    "ImageID": "sha256:3e119c7e5fda6ababfb491a75d72e7350ad042ba05f04a9dce409e2be6fbaca0",
+    "ImageID": "sha256:245b3d86da6ea97f48400ecea7ffd6f3e37d4eb92e9c21e0283fc30eb8f276aa",
     "DiffIDs": [
       "sha256:c0359c5b6ede84d4a083d06d35ee77f0b338dfb17423771854d007d89953fb3e",
       "sha256:2f16e8101752f639f49c0003bc77f81947c74e7c615082da236fe8dd697ed4ef",
@@ -24,18 +24,18 @@
       "sha256:ddafc89e856ec478178f9c69d45b02bd5e96a5ab07116403d9fc62629e4e2469",
       "sha256:f1452557deed3878892c91b9a9a031757031a58a108745f5eabc9d1fd4b6806b",
       "sha256:1b04500e2ae32d6cfbbb76a759f4d2849f01a53b88dfab1ff647db8e2351c816",
-      "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+      "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
     ],
     "RepoTags": [
       "fairdatasystems/mdb:2026-09-21"
     ],
     "RepoDigests": [
-      "fairdatasystems/mdb@sha256:f17f593b83f288843434e4c18df4810302c128db3cbc9170cc06bb7a51316eb3"
+      "fairdatasystems/mdb@sha256:ea55ff972b22de99b7b59e211312efce323eac3b8a63e7188962be3e848467f4"
     ],
     "Reference": "fairdatasystems/mdb:2026-09-21",
     "ImageConfig": {
       "architecture": "amd64",
-      "created": "2026-09-21T14:02:21.206075152Z",
+      "created": "2026-09-21T11:28:12.271515543Z",
       "docker_version": "28.2.2",
       "history": [
         {
@@ -176,7 +176,7 @@
           "empty_layer": true
         },
         {
-          "created": "2026-09-21T14:02:21Z",
+          "created": "2026-09-21T11:28:12Z",
           "created_by": "mongod"
         }
       ],
@@ -192,7 +192,7 @@
           "sha256:ddafc89e856ec478178f9c69d45b02bd5e96a5ab07116403d9fc62629e4e2469",
           "sha256:f1452557deed3878892c91b9a9a031757031a58a108745f5eabc9d1fd4b6806b",
           "sha256:1b04500e2ae32d6cfbbb76a759f4d2849f01a53b88dfab1ff647db8e2351c816",
-          "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+          "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
         ]
       },
       "config": {
@@ -259,8 +259,8 @@
         "DiffID": "sha256:1b04500e2ae32d6cfbbb76a759f4d2849f01a53b88dfab1ff647db8e2351c816"
       },
       {
-        "Size": 747363328,
-        "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+        "Size": 747421696,
+        "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
       }
     ]
   },
@@ -775,7 +775,7 @@
             "Class": "official"
           },
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "InstalledFiles": [
             "/usr/bin/logger",
@@ -992,7 +992,7 @@
             "Class": "official"
           },
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "InstalledFiles": [
             "/bin/cat",
@@ -1545,7 +1545,7 @@
             "Class": "official"
           },
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "InstalledFiles": [
             "/usr/bin/cmp",
@@ -2327,7 +2327,7 @@
             "libc6@2.35-0ubuntu3.15"
           ],
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "InstalledFiles": [
             "/usr/lib/x86_64-linux-gnu/libattr.so.1.1.2501",
@@ -2447,7 +2447,7 @@
             "libc6@2.35-0ubuntu3.15"
           ],
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "InstalledFiles": [
             "/usr/lib/x86_64-linux-gnu/libblkid.so.1.1.0",
@@ -2517,7 +2517,7 @@
             "libc6@2.35-0ubuntu3.15"
           ],
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "InstalledFiles": [
             "/lib/x86_64-linux-gnu/libbz2.so.1.0.4",
@@ -2552,7 +2552,7 @@
             "libc6@2.35-0ubuntu3.15"
           ],
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "InstalledFiles": [
             "/sbin/ldconfig",
@@ -2615,7 +2615,7 @@
             "libgcc-s1@12.3.0-1ubuntu1~22.04.3"
           ],
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "InstalledFiles": [
             "/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
@@ -3079,7 +3079,7 @@
             "zlib1g@1:1.2.11.dfsg-2ubuntu9.2"
           ],
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "InstalledFiles": [
             "/usr/lib/x86_64-linux-gnu/libcurl.so.4.7.0",
@@ -3273,7 +3273,7 @@
             "libgpg-error0@1.43-3"
           ],
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "InstalledFiles": [
             "/usr/lib/x86_64-linux-gnu/libgcrypt.so.20.3.4",
@@ -3449,7 +3449,7 @@
             "libkrb5support0@1.19.2-2ubuntu0.10"
           ],
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "InstalledFiles": [
             "/usr/lib/x86_64-linux-gnu/libgssapi_krb5.so.2.2",
@@ -3607,7 +3607,7 @@
             "libkrb5support0@1.19.2-2ubuntu0.10"
           ],
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "InstalledFiles": [
             "/usr/lib/x86_64-linux-gnu/libk5crypto.so.3.1",
@@ -3680,7 +3680,7 @@
             "libssl3@3.0.2-0ubuntu1.29"
           ],
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "InstalledFiles": [
             "/usr/lib/x86_64-linux-gnu/krb5/plugins/preauth/spake.so",
@@ -3716,7 +3716,7 @@
             "libc6@2.35-0ubuntu3.15"
           ],
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "InstalledFiles": [
             "/usr/lib/x86_64-linux-gnu/libkrb5support.so.0.1",
@@ -3912,7 +3912,7 @@
             "libselinux1@3.3-1build2"
           ],
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "InstalledFiles": [
             "/usr/lib/x86_64-linux-gnu/libmount.so.1.1.0",
@@ -3942,7 +3942,7 @@
             "libtinfo6@6.3-2ubuntu0.3"
           ],
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "InstalledFiles": [
             "/lib/x86_64-linux-gnu/libncurses.so.6.3",
@@ -3974,7 +3974,7 @@
             "libtinfo6@6.3-2ubuntu0.3"
           ],
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "InstalledFiles": [
             "/lib/x86_64-linux-gnu/libncursesw.so.6.3",
@@ -4216,7 +4216,7 @@
             "libffi8@3.4.2-4"
           ],
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "InstalledFiles": [
             "/usr/lib/x86_64-linux-gnu/libp11-kit.so.0.3.0",
@@ -4247,7 +4247,7 @@
             "Class": "official"
           },
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "InstalledFiles": [
             "/lib/x86_64-linux-gnu/security/pam_access.so",
@@ -4384,7 +4384,7 @@
             "libselinux1@3.3-1build2"
           ],
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "InstalledFiles": [
             "/sbin/mkhomedir_helper",
@@ -4429,7 +4429,7 @@
             "libpam-modules@1.4.0-11ubuntu2.8"
           ],
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "InstalledFiles": [
             "/usr/sbin/pam-auth-update",
@@ -4480,7 +4480,7 @@
             "libc6@2.35-0ubuntu3.15"
           ],
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "InstalledFiles": [
             "/lib/x86_64-linux-gnu/libpam.so.0.85.1",
@@ -5060,7 +5060,7 @@
             "libc6@2.35-0ubuntu3.15"
           ],
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "InstalledFiles": [
             "/usr/lib/x86_64-linux-gnu/libsmartcols.so.1.1.0",
@@ -5130,7 +5130,7 @@
             "zlib1g@1:1.2.11.dfsg-2ubuntu9.2"
           ],
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "InstalledFiles": [
             "/usr/lib/x86_64-linux-gnu/libssh.so.4.8.7",
@@ -5169,7 +5169,7 @@
             "libc6@2.35-0ubuntu3.15"
           ],
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "InstalledFiles": [
             "/usr/lib/x86_64-linux-gnu/engines-3/afalg.so",
@@ -5320,7 +5320,7 @@
             "libc6@2.35-0ubuntu3.15"
           ],
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "InstalledFiles": [
             "/lib/x86_64-linux-gnu/libtinfo.so.6.3",
@@ -5533,7 +5533,7 @@
             "libc6@2.35-0ubuntu3.15"
           ],
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "InstalledFiles": [
             "/usr/lib/x86_64-linux-gnu/libuuid.so.1.3.0",
@@ -5895,7 +5895,7 @@
             "libc6@2.35-0ubuntu3.15"
           ],
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "AnalyzedBy": "dpkg"
         },
@@ -5920,7 +5920,7 @@
             "mongodb-org-tools@7.0.43"
           ],
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "AnalyzedBy": "dpkg"
         },
@@ -5946,7 +5946,7 @@
             "mongodb-org-shell@7.0.43"
           ],
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "AnalyzedBy": "dpkg"
         },
@@ -5966,7 +5966,7 @@
             "Class": "third-party"
           },
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "AnalyzedBy": "dpkg"
         },
@@ -5993,7 +5993,7 @@
             "tzdata@2026c-0ubuntu0.22.04.1"
           ],
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "AnalyzedBy": "dpkg"
         },
@@ -6021,7 +6021,7 @@
             "tzdata@2026c-0ubuntu0.22.04.1"
           ],
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "AnalyzedBy": "dpkg"
         },
@@ -6041,7 +6041,7 @@
             "Class": "third-party"
           },
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "AnalyzedBy": "dpkg"
         },
@@ -6065,7 +6065,7 @@
             "mongodb-org-database-tools-extra@7.0.43"
           ],
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "AnalyzedBy": "dpkg"
         },
@@ -6104,7 +6104,7 @@
             "Class": "official"
           },
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "InstalledFiles": [
             "/bin/mount",
@@ -6155,7 +6155,7 @@
             "Class": "official"
           },
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "InstalledFiles": [
             "/lib/terminfo/E/Eterm",
@@ -6234,7 +6234,7 @@
             "Class": "official"
           },
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "InstalledFiles": [
             "/usr/bin/clear",
@@ -6328,7 +6328,7 @@
             "libssl3@3.0.2-0ubuntu1.29"
           ],
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "InstalledFiles": [
             "/usr/bin/c_rehash",
@@ -6892,7 +6892,7 @@
             "Class": "official"
           },
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "InstalledFiles": [
             "/usr/bin/perl",
@@ -9372,7 +9372,7 @@
             "Class": "official"
           },
           "Layer": {
-            "DiffID": "sha256:e877c979831f846e725c2a4aca3b7776577fc12f329f19850bca923e78a90af2"
+            "DiffID": "sha256:8e463e7a32bdafb018e51c166c09f1f4ea17cbb85c5e02a4e5a31266b8e513b3"
           },
           "InstalledFiles": [
             "/bin/dmesg",
@@ -9748,7 +9748,7 @@
             "Name": "GitHub Security Advisory npm",
             "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Anpm"
           },
-          "Fingerprint": "sha256:1898c8d5a069c1bbf77c72948222382c1c206ef7430756d3fd89dd94bb90c388",
+          "Fingerprint": "sha256:d14945802d9a2233078b12e72db4da5aa5edac5aa0efa617ed9479185c3eaf38",
           "Title": "js-yaml: js-yaml: Denial of Service via crafted YAML documents",
           "Description": "js-yaml is a JavaScript YAML parser and dumper. From 3.0.0 before 3.15.0 and from 4.0.0 before 4.3.0, js-yaml can spend quadratic CPU time parsing a document whose size grows only linearly when a chain of mappings uses merge keys where each mapping merges the previous one. This issue is fixed in versions 3.15.0 and 4.3.0.",
           "Severity": "HIGH",
@@ -9808,7 +9808,7 @@
             "Name": "GitHub Security Advisory npm",
             "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Anpm"
           },
-          "Fingerprint": "sha256:bc826ea86daf6293d4106d8d6c454238244a1fda1e56b7ccad383849f2fb1c81",
+          "Fingerprint": "sha256:76453e536698aa4fdb1f5ffe8be88ed79f1e0ac39c8792f4fac869dc5edfe6d3",
           "Title": "js-yaml: js-yaml: Denial of Service vulnerability in YAML parsing",
           "Description": "js-yaml is a JavaScript YAML parser and dumper. From 3.0.0 until 3.15.2 and 4.3.2, maxTotalMergeKeys in lib/js-yaml/loader.js and lib/loader.js does not count empty mapping sources while processing the merge key \u003c\u003c. An attacker can alias a large sequence of empty mappings into many merge targets, causing O(N * K) processing while totalMergeKeys remains unchanged and the configured resource limit is never reached. A relatively small YAML document can therefore cause prolonged CPU consumption in applications that parse untrusted YAML, and merge processing is enabled by default on these release lines. This issue is fixed in versions 3.15.2 and 4.3.2.",
           "Severity": "HIGH",
@@ -9868,7 +9868,7 @@
             "Name": "GitHub Security Advisory npm",
             "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Anpm"
           },
-          "Fingerprint": "sha256:2cf1aa6a8852120e6a0af2a39e22c1b3162dd934f6e803f7e5c9a30023000f6e",
+          "Fingerprint": "sha256:053614937065f02f2dd16d6e283f42916c1b409cffd99a9853d55bfbf5e762db",
           "Title": "JS-YAML: Quadratic CPU consumption in !!omap resolution (3.x and 4.x) — CVE-2026-59870 fix not backported",
           "Description": "# Quadratic CPU consumption in `!!omap` resolution (js-yaml 3.x and 4.x)\n\n## Summary\n\n`resolveYamlOmap()` enforces key uniqueness for `!!omap` sequences with a linear\nscan (`objectKeys.indexOf(...)`) inside the per-element loop, making resolution\n**O(n²)** in the number of entries. A modestly sized YAML document therefore\nconsumes disproportionate CPU inside `yaml.load()`, giving a denial of service\nagainst any consumer that parses untrusted YAML.\n\n`!!omap` is registered in the **default schema**\n(`lib/schema/default.js` → `require('../type/omap')`), so a plain\n`yaml.load(untrustedInput)` with no options is affected — no custom schema or\nnon-default configuration is required.\n\n**This is the same weakness as CVE-2026-59870 / GHSA-724g-mxrg-4qvm**, which was\nfixed in the 5.x line in 5.2.1. That fix was never backported: both currently\nmaintained legacy lines still carry the original implementation.\n\n## Affected versions\n\n| Line | Latest tested | Status |\n|---|---|---|\n| 3.x | **3.15.0** | Affected — `objectKeys.indexOf(pairKey)` at `lib/type/omap.js:29` |\n| 4.x | **4.3.0** | Affected — `objectKeys.indexOf(pairKey)` at `lib/type/omap.js:30` |\n| 5.x | 5.2.2 | **Not affected** — fixed in 5.2.1 (uses a `Set`) |\n\nBoth figures are the newest release of each line at the time of writing, so\nthis is not a \"you are on an old version\" issue.\n\n## Details\n\n`lib/type/omap.js` (js-yaml 4.3.0):\n\n```js\nif (objectKeys.indexOf(pairKey) === -1) objectKeys.push(pairKey)\nelse return false\n```\n\n`objectKeys` grows by one element per entry, and `Array.prototype.indexOf` is a\nlinear scan, so resolving an `n`-entry `!!omap` performs roughly\n`1 + 2 + … + n` comparisons — quadratic in `n`. The work happens synchronously\ninside `yaml.load()`, blocking the event loop for its whole duration.\n\nThe 5.x line already solves exactly this by tracking seen keys in a `Set`\n(`src/tag/sequence/omap.ts`):\n\n```ts\nif (carrier.seen.has(key)) return 'duplicate key in ordered map'\ncarrier.seen.add(key)\n```\n\n## Proof of concept\n\n```js\n// poc.js  —  node poc.js\nconst yaml = require('js-yaml');\nconst doc = n =\u003e '!!omap\\n' + Array.from({length: n}, (_, i) =\u003e `- k${i}: ${i}`).join('\\n') + '\\n';\n\nfor (const n of [10000, 20000, 40000, 80000]) {\n  const d = doc(n), t = Date.now();\n  yaml.load(d);                      // default schema, no options\n  console.log(`n=${n} bytes=${d.length} load=${Date.now() - t}ms`);\n}\n```\n\n### Measured (node v20.20.2, default heap, no flags)\n\n**js-yaml 4.3.0**\n\n```\nn=10000  bytes=137787   load=54ms\nn=20000  bytes=297787   load=169ms\nn=40000  bytes=617787   load=646ms\nn=80000  bytes=1257787  load=2607ms\n```\n\n**js-yaml 3.15.0**\n\n```\nn=10000  bytes=137787   load=53ms\nn=20000  bytes=297787   load=166ms\nn=40000  bytes=617787   load=641ms\nn=80000  bytes=1257787  load=2567ms\n```\n\nRuntime grows by a factor of ~4 for each doubling of `n`, which is the\nsignature of O(n²) (linear growth would be ~2×).\n\nScaling further: a **2.48 MB** document with 150,000 entries blocked\n`yaml.load()` for **10.8 seconds**.\n\n## Impact\n\nAny service that parses attacker-influenced YAML with js-yaml 3.x or 4.x can be\nstalled with a small input. Because the loop is synchronous, a single request\nblocks the Node.js event loop and stalls every other request in the process —\nso the amplification is per-process, not just per-request.\n\nSuggested severity: consistent with **CVE-2026-59870** (the same weakness in\n5.x), i.e. Availability-only impact, network attack vector, no privileges or\nuser interaction required.\n\n## Suggested fix\n\nMirror the 5.x fix — replace the linear scan with a `Set`:\n\n```js\n// lib/type/omap.js\nconst seen = new Set()\n// ...\nif (seen.has(pairKey)) return false\nseen.add(pairKey)\n```\n\nThis preserves the existing duplicate-key rejection semantics exactly while\nmaking resolution O(n). A `maxOmapLength`-style cap would also work, but the\n`Set` matches what 5.x already ships and requires no new option.\n\n## References\n\n- CVE-2026-59870 / GHSA-724g-mxrg-4qvm — same weakness in 5.0.0–5.2.0, fixed in 5.2.1\n- `lib/type/omap.js` (3.x, 4.x) — the affected resolver\n- `lib/schema/default.js` — registers `!!omap` in the default schema\n\n## Discovery\n\nFound by an automated static-analysis and executed-proof-of-concept scanner run\nagainst js-yaml 4.2.0, then manually verified against 3.15.0 and 4.3.0 by\nexecuting the proof of concept above. All timings in this report were measured\non the **current** releases of each line, not on the version originally scanned.",
           "Severity": "HIGH",
@@ -10297,7 +10297,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:179d0924287b68f01f28a084d34314948dad3445b1d692087a9d93a7dd924bde",
+          "Fingerprint": "sha256:99ef5ed9eca2a27016ace2eb33f3c43331000051df3ded9b218ab1fc8b98b9bc",
           "Title": "golang.org/x/crypto/ssh: golang.org/x/crypto/ssh: Authentication bypass due to unenforced source-address restrictions",
           "Description": "The source-address critical option in the Permissions returned by an authentication callback was only enforced for the PublicKeyCallback and VerifiedPublicKeyCallback paths, extending the fix for CVE-2026-46595. Permissions returned by the PasswordCallback, KeyboardInteractiveCallback, NoClientAuthCallback, and GSSAPIWithMICConfig.AllowLogin callbacks were not validated against the client's remote address, so a source-address restriction set by those callbacks was silently ignored. The check is now applied to the Permissions returned by any authentication callback.",
           "Severity": "HIGH",
@@ -10347,7 +10347,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:ddde39c99a71ccc310805d4818a78cdca960fd698f3aeb9d9fee52607d145b08",
+          "Fingerprint": "sha256:b30582447b8a291a11f3abaa9c3626290b00571d7d2d9b3947ec4624e8f8524a",
           "Title": "encoding/asn1: golang: Go encoding/asn1: Denial of Service via excessive recursion in Unmarshal",
           "Description": "Enforce a recursion limit in Unmarshal to prevent stack exhaustion when parsing deeply-nested, recursive structures.",
           "Severity": "HIGH",
@@ -10424,7 +10424,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:3bde9f8f310e8c99d65a7e104a573b8b0ee1e787601eeb5f839a23d0aa15377e",
+          "Fingerprint": "sha256:418dab4adf4378697b3778ff04bd5bdff6e9e74086907a3c84198b283b516af9",
           "Title": "golang.org/x/net/idna: golang: net/http: golang.org/x/net/idna: Privilege escalation via incorrect Punycode label processing",
           "Description": "The ToASCII and ToUnicode functions incorrectly accept Punycode-encoded labels that decode to an ASCII-only label. For example, ToUnicode(\"xn--example-.com\") incorrectly returns the name \"example.com\" rather than an error. This behavior can lead to privilege escalation in programs using the idna package. For example, a program which performs privilege checks on the ASCII hostname may reject \"example.com\" but permit \"xn--example-.com\". If that program subsequently converts the ASCII hostname to Unicode, it will inadvertently permits access to the Unicode name \"example.com\".",
           "Severity": "HIGH",
@@ -10677,7 +10677,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:dcec6be47eb840f0e1bb74eba47a7664b83156b20e79ebe4cc0be4afef5fed45",
+          "Fingerprint": "sha256:e93f3f46026e69b0cad471d35a66ac2584e9cebf95caaa9b0956f7cb8ab1dcdd",
           "Title": "golang.org/x/net/dns/dnsmessage: golang.org/x/net/dns/dnsmessage: Denial of Service via invalid DNS record parsing",
           "Description": "Parsing an invalid SVCB or HTTPS RR can panic when the size of a parameter value overflows the message buffer.",
           "Severity": "HIGH",
@@ -10734,7 +10734,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:5ab2a1f8d1f33fee89e2c06969879d47d4a5a2ca320241407989b9ab155589a0",
+          "Fingerprint": "sha256:2b69bfe8e6ff5fa7aea3ad453337b7e2e72f197bd6e13e02f0f4e065c8f71a37",
           "Title": "net/http: golang: Go net/http: Unencrypted HTTP/2 connections vulnerable to Denial of Service",
           "Description": "When a server is configured to support unencrypted HTTP/2, it reads a few bytes from each new connection to see if they contain the HTTP/2 client preface. ReadHeaderTimeout is unexpectedly not being applied when doing this.",
           "Severity": "HIGH",
@@ -10838,7 +10838,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:1336ac3698b9245d7ee9a01f7b467e9d78467dc300afcba5a38166eb9e616227",
+          "Fingerprint": "sha256:fbbbf3cca0719e9cf9f9763958a5065fe4dd0de6ac57a71f8d45f5c89da8ac84",
           "Title": "html/template: golang: Go html/template: Cross-Site Scripting via pathological input",
           "Description": "Previously, pathological inputs could close an unescaped '/' early, allowing for attack-controlled data to inject arbitrary content, potentially leading to XSS.",
           "Severity": "HIGH",
@@ -10942,7 +10942,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:7b7d83c7b9e64a03c2eeeec714b977c807cd490c9e6429bee70410f218c5d537",
+          "Fingerprint": "sha256:a7a6068773bc769d560559c8a072adf353573dea40ae163c21dac14f0416f1d6",
           "Title": "encoding/xml: golang: Go: Denial of Service via XML decoding recursion depth issue",
           "Description": "Previously, DecodeElement would reset the depth counter causing it to never fire; this could lead to stack exhaustion.",
           "Severity": "HIGH",
@@ -11046,7 +11046,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:8c86c4bdfc45ec9faa2bcfd7d9e5317f7d11d621ab367488bd254fffc3496f33",
+          "Fingerprint": "sha256:add622fd68df95c31fb5b1a4e83b08bdb7cc4662b48abcf9d0365e852529cc3b",
           "Title": "net/url: golang: golang net/url: Denial of Service from quadratic complexity in path resolution",
           "Description": "Previously, resolving relative paths containing parent directory ('..') segments performed string conversions and buffer rewrites on each step, resulting in quadratic time complexity and high memory allocation overhead. Now, path resolution operates on a byte buffer using index-based backtracking for '..' segments, eliminating the quadratic time complexity and significantly reducing memory allocations.",
           "Severity": "HIGH",
@@ -11123,7 +11123,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:eec7a2994e8cc84487bf2e88734fe2052030cf48e3b4e8da479a097c5eb5400b",
+          "Fingerprint": "sha256:5c132637117570bebe6d0ab44fa512268f31def811f340e068db15b591bb9711",
           "Title": "crypto/tls: golang: Golang crypto/tls: Denial of Service via indefinite KeyUpdate messages",
           "Description": "Handshake messages, such as KeyUpdate, are always considered as state-advancing, regardless of whether a handshake has been completed or not. As a result, a malicious client can keep sending KeyUpdate messages to force the server to keep performing key derivation operations indefinitely.",
           "Severity": "HIGH",
@@ -11586,7 +11586,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:a5286d796809e1028303a4dbe19d175b72e2aaadf9a2262564a37c14c32e7003",
+          "Fingerprint": "sha256:40c753122f61c2b4094743a56ac3ee79faadbc99f2751141a5e1b88f0b5ce982",
           "Title": "golang.org/x/crypto/ssh: golang.org/x/crypto/ssh: Authentication bypass due to unenforced source-address restrictions",
           "Description": "The source-address critical option in the Permissions returned by an authentication callback was only enforced for the PublicKeyCallback and VerifiedPublicKeyCallback paths, extending the fix for CVE-2026-46595. Permissions returned by the PasswordCallback, KeyboardInteractiveCallback, NoClientAuthCallback, and GSSAPIWithMICConfig.AllowLogin callbacks were not validated against the client's remote address, so a source-address restriction set by those callbacks was silently ignored. The check is now applied to the Permissions returned by any authentication callback.",
           "Severity": "HIGH",
@@ -11636,7 +11636,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:90ea1375768ed2ab461075b97efdc588dfab0f50945fb86e85fdc16370d34f8a",
+          "Fingerprint": "sha256:0546d579e4bef1c2f02dd4e6eb30809f1d06d8359fa6d3fc1d1ff5c29b661f80",
           "Title": "encoding/asn1: golang: Go encoding/asn1: Denial of Service via excessive recursion in Unmarshal",
           "Description": "Enforce a recursion limit in Unmarshal to prevent stack exhaustion when parsing deeply-nested, recursive structures.",
           "Severity": "HIGH",
@@ -11713,7 +11713,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:790193ff9fbe9fea17b64db7ae3f40d842fdd69460fafb3dcdd7ee8fa2aefd97",
+          "Fingerprint": "sha256:7012c01512128d1317729a1e3850bb5bc1e3c1c9a890aee3e4a37b12af4eefe9",
           "Title": "golang.org/x/net/idna: golang: net/http: golang.org/x/net/idna: Privilege escalation via incorrect Punycode label processing",
           "Description": "The ToASCII and ToUnicode functions incorrectly accept Punycode-encoded labels that decode to an ASCII-only label. For example, ToUnicode(\"xn--example-.com\") incorrectly returns the name \"example.com\" rather than an error. This behavior can lead to privilege escalation in programs using the idna package. For example, a program which performs privilege checks on the ASCII hostname may reject \"example.com\" but permit \"xn--example-.com\". If that program subsequently converts the ASCII hostname to Unicode, it will inadvertently permits access to the Unicode name \"example.com\".",
           "Severity": "HIGH",
@@ -11966,7 +11966,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:751e7b8585fb20513c44dad9c14eb0c8a7dd92407523db5f34eea458931e15d6",
+          "Fingerprint": "sha256:a16730a0b75ce8fa472dc2f209193585ebe5388b79178cdc584472d62929e883",
           "Title": "golang.org/x/net/dns/dnsmessage: golang.org/x/net/dns/dnsmessage: Denial of Service via invalid DNS record parsing",
           "Description": "Parsing an invalid SVCB or HTTPS RR can panic when the size of a parameter value overflows the message buffer.",
           "Severity": "HIGH",
@@ -12023,7 +12023,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:efaf84296e8e8e0ade917f08376b7f0bd39897693fe4e421a3af8a8e216fea7a",
+          "Fingerprint": "sha256:12f443771ff72eb36f93bafb6ff435ba383f903d18c8c1a381cedd40c00b1bea",
           "Title": "net/http: golang: Go net/http: Unencrypted HTTP/2 connections vulnerable to Denial of Service",
           "Description": "When a server is configured to support unencrypted HTTP/2, it reads a few bytes from each new connection to see if they contain the HTTP/2 client preface. ReadHeaderTimeout is unexpectedly not being applied when doing this.",
           "Severity": "HIGH",
@@ -12127,7 +12127,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:3d633e81c87d80d8f7e30ef7261af381d3429050e1af194ef875770acf2cad4d",
+          "Fingerprint": "sha256:d36aa363deffe6f3a8965f64970897e77883d875ead3192219afb8dc9027aed1",
           "Title": "html/template: golang: Go html/template: Cross-Site Scripting via pathological input",
           "Description": "Previously, pathological inputs could close an unescaped '/' early, allowing for attack-controlled data to inject arbitrary content, potentially leading to XSS.",
           "Severity": "HIGH",
@@ -12231,7 +12231,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:29724f994bd13dcc69e6852ad2ee3161871df340ca025112148fcdfa8c0a37f8",
+          "Fingerprint": "sha256:74c9bcc28ec775b25739646455b778f5887059b9d41a2d115a89e16614b0b60e",
           "Title": "encoding/xml: golang: Go: Denial of Service via XML decoding recursion depth issue",
           "Description": "Previously, DecodeElement would reset the depth counter causing it to never fire; this could lead to stack exhaustion.",
           "Severity": "HIGH",
@@ -12335,7 +12335,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:5327a4f02c2cfc974cf5797a37ee4bb9e1d6001a2568bebca0c6a7f3948e3a24",
+          "Fingerprint": "sha256:fd6053effd547d810204fbc518cccdcff419707c0d6fead72ec3b34213024e98",
           "Title": "net/url: golang: golang net/url: Denial of Service from quadratic complexity in path resolution",
           "Description": "Previously, resolving relative paths containing parent directory ('..') segments performed string conversions and buffer rewrites on each step, resulting in quadratic time complexity and high memory allocation overhead. Now, path resolution operates on a byte buffer using index-based backtracking for '..' segments, eliminating the quadratic time complexity and significantly reducing memory allocations.",
           "Severity": "HIGH",
@@ -12412,7 +12412,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:81804336e499badb5e736ebfc55791a3b4e669fa700366c7e904d7966e9b4bcd",
+          "Fingerprint": "sha256:0f76156ab381be1ff493945c5287523d39fad85d8d4b363be51237733f0ece3e",
           "Title": "crypto/tls: golang: Golang crypto/tls: Denial of Service via indefinite KeyUpdate messages",
           "Description": "Handshake messages, such as KeyUpdate, are always considered as state-advancing, regardless of whether a handshake has been completed or not. As a result, a malicious client can keep sending KeyUpdate messages to force the server to keep performing key derivation operations indefinitely.",
           "Severity": "HIGH",
@@ -12875,7 +12875,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:9ca47ec9e68586e1062b60f28cc219f93e8d01b1095906a0c98704a99a4d952c",
+          "Fingerprint": "sha256:2be16314ec473fdb995201d6cdea5c90ef051b7e1bdae210b4ea86462f78c964",
           "Title": "golang.org/x/crypto/ssh: golang.org/x/crypto/ssh: Authentication bypass due to unenforced source-address restrictions",
           "Description": "The source-address critical option in the Permissions returned by an authentication callback was only enforced for the PublicKeyCallback and VerifiedPublicKeyCallback paths, extending the fix for CVE-2026-46595. Permissions returned by the PasswordCallback, KeyboardInteractiveCallback, NoClientAuthCallback, and GSSAPIWithMICConfig.AllowLogin callbacks were not validated against the client's remote address, so a source-address restriction set by those callbacks was silently ignored. The check is now applied to the Permissions returned by any authentication callback.",
           "Severity": "HIGH",
@@ -12925,7 +12925,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:52a09c18928c01ce2caf3b17a0d78a35c633d1e318261cb3221cb7e447aae20d",
+          "Fingerprint": "sha256:c2f0e6ecd794c9a11a86ab979bacb3411c64e3374aa54aed53e30527b4fba86c",
           "Title": "encoding/asn1: golang: Go encoding/asn1: Denial of Service via excessive recursion in Unmarshal",
           "Description": "Enforce a recursion limit in Unmarshal to prevent stack exhaustion when parsing deeply-nested, recursive structures.",
           "Severity": "HIGH",
@@ -13002,7 +13002,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:f48cc42c85227a34314318b473c98cf67145caa4ac35640114c3acba6c7ebcd9",
+          "Fingerprint": "sha256:949bdfbb3efe8b6278b8434dff94a747a3204670fcaead95d41d4b4ea56fefc5",
           "Title": "golang.org/x/net/idna: golang: net/http: golang.org/x/net/idna: Privilege escalation via incorrect Punycode label processing",
           "Description": "The ToASCII and ToUnicode functions incorrectly accept Punycode-encoded labels that decode to an ASCII-only label. For example, ToUnicode(\"xn--example-.com\") incorrectly returns the name \"example.com\" rather than an error. This behavior can lead to privilege escalation in programs using the idna package. For example, a program which performs privilege checks on the ASCII hostname may reject \"example.com\" but permit \"xn--example-.com\". If that program subsequently converts the ASCII hostname to Unicode, it will inadvertently permits access to the Unicode name \"example.com\".",
           "Severity": "HIGH",
@@ -13255,7 +13255,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:b2d2f10169b47ded52cc6eb67051eaa044e04fb295c37746058a43dc2dac263d",
+          "Fingerprint": "sha256:7abb36b43c4e087f76203fb91bc7a1c4085cc2c2554061e6a5b187a0fb8f3f38",
           "Title": "golang.org/x/net/dns/dnsmessage: golang.org/x/net/dns/dnsmessage: Denial of Service via invalid DNS record parsing",
           "Description": "Parsing an invalid SVCB or HTTPS RR can panic when the size of a parameter value overflows the message buffer.",
           "Severity": "HIGH",
@@ -13312,7 +13312,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:3806765ac3cd61ecba7569e5dbe05e322619488167cab6f5576c8400618f7d16",
+          "Fingerprint": "sha256:4176176eef59ede7b2f197755101293927a4425645765ed05a04add87bbe89a5",
           "Title": "net/http: golang: Go net/http: Unencrypted HTTP/2 connections vulnerable to Denial of Service",
           "Description": "When a server is configured to support unencrypted HTTP/2, it reads a few bytes from each new connection to see if they contain the HTTP/2 client preface. ReadHeaderTimeout is unexpectedly not being applied when doing this.",
           "Severity": "HIGH",
@@ -13416,7 +13416,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:c2e5e10caf777f5233c74d94400763f425041891d3cef422d92c36a202a36efa",
+          "Fingerprint": "sha256:c3d6185375beac590cab21712919d9dae0aee5079f2b0083ad2a2156f7feacea",
           "Title": "html/template: golang: Go html/template: Cross-Site Scripting via pathological input",
           "Description": "Previously, pathological inputs could close an unescaped '/' early, allowing for attack-controlled data to inject arbitrary content, potentially leading to XSS.",
           "Severity": "HIGH",
@@ -13520,7 +13520,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:a5dcb793978c2815f39c088e81fe070e410b7cfcb1a270f04c919af06d154e68",
+          "Fingerprint": "sha256:3d05e9cb79def5832520f669e0dcfdd0f162737f2e80133fe76ade6b87abf9eb",
           "Title": "encoding/xml: golang: Go: Denial of Service via XML decoding recursion depth issue",
           "Description": "Previously, DecodeElement would reset the depth counter causing it to never fire; this could lead to stack exhaustion.",
           "Severity": "HIGH",
@@ -13624,7 +13624,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:8e6292cb66caeb04a688bd7d94dddc05c35fb21c6f7e0eb7d2193f6b7e2b9b92",
+          "Fingerprint": "sha256:c0a174c0a28ea2a5edd15f73029aa64cc88305987624720c69a08d7de26e0ce0",
           "Title": "net/url: golang: golang net/url: Denial of Service from quadratic complexity in path resolution",
           "Description": "Previously, resolving relative paths containing parent directory ('..') segments performed string conversions and buffer rewrites on each step, resulting in quadratic time complexity and high memory allocation overhead. Now, path resolution operates on a byte buffer using index-based backtracking for '..' segments, eliminating the quadratic time complexity and significantly reducing memory allocations.",
           "Severity": "HIGH",
@@ -13701,7 +13701,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:47a1c8b6f4cff594bd254c946da054c747f6f1687e7a2b84bac344de172a7ea2",
+          "Fingerprint": "sha256:a0cf1d7f99eed625640ecdae6ee999464b6edbde51f36f7dc1bd90ef6ba976e4",
           "Title": "crypto/tls: golang: Golang crypto/tls: Denial of Service via indefinite KeyUpdate messages",
           "Description": "Handshake messages, such as KeyUpdate, are always considered as state-advancing, regardless of whether a handshake has been completed or not. As a result, a malicious client can keep sending KeyUpdate messages to force the server to keep performing key derivation operations indefinitely.",
           "Severity": "HIGH",
@@ -14164,7 +14164,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:833486dcc8ab7e11fceff26b7fd77f5e22e6a561bc588d614ddd2b2e88634f5e",
+          "Fingerprint": "sha256:c18a2c7d4da16c9a11a20b17243b8927ae058fea5c920d5a08bab867924cfec9",
           "Title": "golang.org/x/crypto/ssh: golang.org/x/crypto/ssh: Authentication bypass due to unenforced source-address restrictions",
           "Description": "The source-address critical option in the Permissions returned by an authentication callback was only enforced for the PublicKeyCallback and VerifiedPublicKeyCallback paths, extending the fix for CVE-2026-46595. Permissions returned by the PasswordCallback, KeyboardInteractiveCallback, NoClientAuthCallback, and GSSAPIWithMICConfig.AllowLogin callbacks were not validated against the client's remote address, so a source-address restriction set by those callbacks was silently ignored. The check is now applied to the Permissions returned by any authentication callback.",
           "Severity": "HIGH",
@@ -14214,7 +14214,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:d41c50ff1106c7448ef43872b509c00d071c123652197e7659a0f51dd9dd48f6",
+          "Fingerprint": "sha256:cb0ed994414f953cb5ef8549773000b664127219c1b6e55bbad5cd2b5bfb9963",
           "Title": "encoding/asn1: golang: Go encoding/asn1: Denial of Service via excessive recursion in Unmarshal",
           "Description": "Enforce a recursion limit in Unmarshal to prevent stack exhaustion when parsing deeply-nested, recursive structures.",
           "Severity": "HIGH",
@@ -14291,7 +14291,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:e5f32167de94a4cca64a59c67394cf9a2aa3ceef7f050de68c016a36ce6fb289",
+          "Fingerprint": "sha256:97fe8995067b4515957b82800f7146a79bc72f0bc3f166b3627c0a274334c323",
           "Title": "golang.org/x/net/idna: golang: net/http: golang.org/x/net/idna: Privilege escalation via incorrect Punycode label processing",
           "Description": "The ToASCII and ToUnicode functions incorrectly accept Punycode-encoded labels that decode to an ASCII-only label. For example, ToUnicode(\"xn--example-.com\") incorrectly returns the name \"example.com\" rather than an error. This behavior can lead to privilege escalation in programs using the idna package. For example, a program which performs privilege checks on the ASCII hostname may reject \"example.com\" but permit \"xn--example-.com\". If that program subsequently converts the ASCII hostname to Unicode, it will inadvertently permits access to the Unicode name \"example.com\".",
           "Severity": "HIGH",
@@ -14544,7 +14544,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:b345a94ce82e8308601c73e0f4f644c2549b501217a2b11031d3e899cda73528",
+          "Fingerprint": "sha256:edd35801465a7ed3a592dbd4f4b2c5992f5cfb80b63ff6d8685e79de8ca5f811",
           "Title": "golang.org/x/net/dns/dnsmessage: golang.org/x/net/dns/dnsmessage: Denial of Service via invalid DNS record parsing",
           "Description": "Parsing an invalid SVCB or HTTPS RR can panic when the size of a parameter value overflows the message buffer.",
           "Severity": "HIGH",
@@ -14601,7 +14601,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:9ea29e3952847a3f9d7e12792bb976c338865b079dff02be8059ccfd7a27144c",
+          "Fingerprint": "sha256:045d04a88de9b641aed67928d460080a1db3674a28d6aaa19ac5d27dcf6fe4df",
           "Title": "net/http: golang: Go net/http: Unencrypted HTTP/2 connections vulnerable to Denial of Service",
           "Description": "When a server is configured to support unencrypted HTTP/2, it reads a few bytes from each new connection to see if they contain the HTTP/2 client preface. ReadHeaderTimeout is unexpectedly not being applied when doing this.",
           "Severity": "HIGH",
@@ -14705,7 +14705,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:9054a06ed10ef40b8cd8b8296ea0880c13e3cbd598a540aa391a1da1b41e836b",
+          "Fingerprint": "sha256:eba4561d0349f52835061f0b9ccdc7fadc12cb8a253843434ee41524c51d3b67",
           "Title": "html/template: golang: Go html/template: Cross-Site Scripting via pathological input",
           "Description": "Previously, pathological inputs could close an unescaped '/' early, allowing for attack-controlled data to inject arbitrary content, potentially leading to XSS.",
           "Severity": "HIGH",
@@ -14809,7 +14809,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:061e176add1a62a62c9b094f61d94f85b3acbb90a3dd3537826d70cfb038555b",
+          "Fingerprint": "sha256:f89336756d788c1b08be08454e1931b749c4d3291a7017e5183dc8217f165f33",
           "Title": "encoding/xml: golang: Go: Denial of Service via XML decoding recursion depth issue",
           "Description": "Previously, DecodeElement would reset the depth counter causing it to never fire; this could lead to stack exhaustion.",
           "Severity": "HIGH",
@@ -14913,7 +14913,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:a1763c8677b1e88d35d431e53410ab94af6ecf151e50877ebe8ef5026534b19d",
+          "Fingerprint": "sha256:c0f345859bbef56b739a82a0b50c6ece00abac771765bd0dddc983c20e7318e5",
           "Title": "net/url: golang: golang net/url: Denial of Service from quadratic complexity in path resolution",
           "Description": "Previously, resolving relative paths containing parent directory ('..') segments performed string conversions and buffer rewrites on each step, resulting in quadratic time complexity and high memory allocation overhead. Now, path resolution operates on a byte buffer using index-based backtracking for '..' segments, eliminating the quadratic time complexity and significantly reducing memory allocations.",
           "Severity": "HIGH",
@@ -14990,7 +14990,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:f5f5287fc675138ea4119b88ed526a2ed4471ac80d45dcabc52a8ae10fb8333e",
+          "Fingerprint": "sha256:361daef700e4bb7b4fa6aa75065dc97821467b27ed560180ef4a75d5ac01e31a",
           "Title": "crypto/tls: golang: Golang crypto/tls: Denial of Service via indefinite KeyUpdate messages",
           "Description": "Handshake messages, such as KeyUpdate, are always considered as state-advancing, regardless of whether a handshake has been completed or not. As a result, a malicious client can keep sending KeyUpdate messages to force the server to keep performing key derivation operations indefinitely.",
           "Severity": "HIGH",
@@ -15453,7 +15453,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:fff86bada1a6cdaa7f7d436105c8353c933deb550b81cd9ecae89eebac4f985f",
+          "Fingerprint": "sha256:d6abde2af808d75a0e7f8738db8a11ffef104f18d3927f1308a22c291756b43e",
           "Title": "golang.org/x/crypto/ssh: golang.org/x/crypto/ssh: Authentication bypass due to unenforced source-address restrictions",
           "Description": "The source-address critical option in the Permissions returned by an authentication callback was only enforced for the PublicKeyCallback and VerifiedPublicKeyCallback paths, extending the fix for CVE-2026-46595. Permissions returned by the PasswordCallback, KeyboardInteractiveCallback, NoClientAuthCallback, and GSSAPIWithMICConfig.AllowLogin callbacks were not validated against the client's remote address, so a source-address restriction set by those callbacks was silently ignored. The check is now applied to the Permissions returned by any authentication callback.",
           "Severity": "HIGH",
@@ -15503,7 +15503,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:1d3c108bee31063aea3c179a5a0cc89f2f3065c2d715c184fa60650b739f5564",
+          "Fingerprint": "sha256:87c6ca8a34d344606bb1c915f395ab4b6149b4746d752a131ffb204e8796607d",
           "Title": "encoding/asn1: golang: Go encoding/asn1: Denial of Service via excessive recursion in Unmarshal",
           "Description": "Enforce a recursion limit in Unmarshal to prevent stack exhaustion when parsing deeply-nested, recursive structures.",
           "Severity": "HIGH",
@@ -15580,7 +15580,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:8df71e8d1ecf766715309a42df75e45792848877d2d86b15200b51b845005dae",
+          "Fingerprint": "sha256:95e416db443e502a2faf7890620a42d1e912cd194a850e5f9d1f02406ea34c6c",
           "Title": "golang.org/x/net/idna: golang: net/http: golang.org/x/net/idna: Privilege escalation via incorrect Punycode label processing",
           "Description": "The ToASCII and ToUnicode functions incorrectly accept Punycode-encoded labels that decode to an ASCII-only label. For example, ToUnicode(\"xn--example-.com\") incorrectly returns the name \"example.com\" rather than an error. This behavior can lead to privilege escalation in programs using the idna package. For example, a program which performs privilege checks on the ASCII hostname may reject \"example.com\" but permit \"xn--example-.com\". If that program subsequently converts the ASCII hostname to Unicode, it will inadvertently permits access to the Unicode name \"example.com\".",
           "Severity": "HIGH",
@@ -15833,7 +15833,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:b9984e31749124ec2f8fadf5049bbe30c1a8048e4a8162a4743effe3e757c0c5",
+          "Fingerprint": "sha256:10beb9735fd7d5b0ead3e3deaef44db5d04eb1d0ba2313872af24eaa982bb15b",
           "Title": "golang.org/x/net/dns/dnsmessage: golang.org/x/net/dns/dnsmessage: Denial of Service via invalid DNS record parsing",
           "Description": "Parsing an invalid SVCB or HTTPS RR can panic when the size of a parameter value overflows the message buffer.",
           "Severity": "HIGH",
@@ -15890,7 +15890,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:e23eda35432e8b101787ee50df4a5c842b0ed91680304f9f6628938dc1584008",
+          "Fingerprint": "sha256:9906d0b450e6500415177feff2671a3efbf4d53783eeea5da23bd32e575b97c2",
           "Title": "net/http: golang: Go net/http: Unencrypted HTTP/2 connections vulnerable to Denial of Service",
           "Description": "When a server is configured to support unencrypted HTTP/2, it reads a few bytes from each new connection to see if they contain the HTTP/2 client preface. ReadHeaderTimeout is unexpectedly not being applied when doing this.",
           "Severity": "HIGH",
@@ -15994,7 +15994,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:69507a511c3c641d7924aeffaeebd15f75cb1dd8154a54301850670af5402bb0",
+          "Fingerprint": "sha256:0a42889a420455e00246ae4afae06b09c6e593f53f7f3a34eaa5596d9a97e28b",
           "Title": "html/template: golang: Go html/template: Cross-Site Scripting via pathological input",
           "Description": "Previously, pathological inputs could close an unescaped '/' early, allowing for attack-controlled data to inject arbitrary content, potentially leading to XSS.",
           "Severity": "HIGH",
@@ -16098,7 +16098,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:7fe07c293b7455164b5612221550499c7dcf2fe5b02831ab879a0accbdf30047",
+          "Fingerprint": "sha256:088cdb57d1105bfcc030000f32d356b3391ca1998f6afd99d4631e94fad66881",
           "Title": "encoding/xml: golang: Go: Denial of Service via XML decoding recursion depth issue",
           "Description": "Previously, DecodeElement would reset the depth counter causing it to never fire; this could lead to stack exhaustion.",
           "Severity": "HIGH",
@@ -16202,7 +16202,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:64fcc392b6e64f062641c4e2074a6eb690e49d7f734b8643f605d4b942e0ee43",
+          "Fingerprint": "sha256:51676d90d4588fee8c377c39df7eb3f7e4569e07efb8a1f322ca7d5f8e1d0c47",
           "Title": "net/url: golang: golang net/url: Denial of Service from quadratic complexity in path resolution",
           "Description": "Previously, resolving relative paths containing parent directory ('..') segments performed string conversions and buffer rewrites on each step, resulting in quadratic time complexity and high memory allocation overhead. Now, path resolution operates on a byte buffer using index-based backtracking for '..' segments, eliminating the quadratic time complexity and significantly reducing memory allocations.",
           "Severity": "HIGH",
@@ -16279,7 +16279,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:04b83a04b2c79b2ff9318c5f74836b52b7c44bcb7165df389d8cd8a094f6696a",
+          "Fingerprint": "sha256:61c958ee0255342e1735b0c7d4fed0b21ab343a1eb5b0062095b8eb8e5463cc0",
           "Title": "crypto/tls: golang: Golang crypto/tls: Denial of Service via indefinite KeyUpdate messages",
           "Description": "Handshake messages, such as KeyUpdate, are always considered as state-advancing, regardless of whether a handshake has been completed or not. As a result, a malicious client can keep sending KeyUpdate messages to force the server to keep performing key derivation operations indefinitely.",
           "Severity": "HIGH",
@@ -16742,7 +16742,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:7d97309c89789cb8ca12bb602da0715bd569b41cf88e1a7b0425c234e4f0e6cd",
+          "Fingerprint": "sha256:cf0f588c77f66be8cd63965efd8104a54336439128180109e2ddeedaed1625e9",
           "Title": "golang.org/x/crypto/ssh: golang.org/x/crypto/ssh: Authentication bypass due to unenforced source-address restrictions",
           "Description": "The source-address critical option in the Permissions returned by an authentication callback was only enforced for the PublicKeyCallback and VerifiedPublicKeyCallback paths, extending the fix for CVE-2026-46595. Permissions returned by the PasswordCallback, KeyboardInteractiveCallback, NoClientAuthCallback, and GSSAPIWithMICConfig.AllowLogin callbacks were not validated against the client's remote address, so a source-address restriction set by those callbacks was silently ignored. The check is now applied to the Permissions returned by any authentication callback.",
           "Severity": "HIGH",
@@ -16792,7 +16792,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:3280803d1086b41c63715da561b7164c394fa11ac5de9b6354c307b03aba8960",
+          "Fingerprint": "sha256:30c4309af052334d10a9a1e68290c93538412a4c7ae28577406414fa64d1ae87",
           "Title": "encoding/asn1: golang: Go encoding/asn1: Denial of Service via excessive recursion in Unmarshal",
           "Description": "Enforce a recursion limit in Unmarshal to prevent stack exhaustion when parsing deeply-nested, recursive structures.",
           "Severity": "HIGH",
@@ -16869,7 +16869,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:7dbd218a9672755d423b05dc31d4136c1f3860c49a815cc7a8080d4657b8f940",
+          "Fingerprint": "sha256:bb2600a04c56f2b8d116fc6bdef546870957258a2f88d11273f85462019f3c78",
           "Title": "golang.org/x/net/idna: golang: net/http: golang.org/x/net/idna: Privilege escalation via incorrect Punycode label processing",
           "Description": "The ToASCII and ToUnicode functions incorrectly accept Punycode-encoded labels that decode to an ASCII-only label. For example, ToUnicode(\"xn--example-.com\") incorrectly returns the name \"example.com\" rather than an error. This behavior can lead to privilege escalation in programs using the idna package. For example, a program which performs privilege checks on the ASCII hostname may reject \"example.com\" but permit \"xn--example-.com\". If that program subsequently converts the ASCII hostname to Unicode, it will inadvertently permits access to the Unicode name \"example.com\".",
           "Severity": "HIGH",
@@ -17122,7 +17122,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:b220652073eb2139f5b07e84fabc9290de2a61c446d43c4f6530a23050a99858",
+          "Fingerprint": "sha256:96ec573215a1e5dea994a6f62320c8390e36bf4bce654e26169f5b746114903c",
           "Title": "golang.org/x/net/dns/dnsmessage: golang.org/x/net/dns/dnsmessage: Denial of Service via invalid DNS record parsing",
           "Description": "Parsing an invalid SVCB or HTTPS RR can panic when the size of a parameter value overflows the message buffer.",
           "Severity": "HIGH",
@@ -17179,7 +17179,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:26868d598e7651d8754c8ce32a8aeb4af41958ab43f4b2b088db282158833779",
+          "Fingerprint": "sha256:15dcc94357461bd03c20c4b5359d6541f8c1f8e366406a7aa1f786b741234a6b",
           "Title": "net/http: golang: Go net/http: Unencrypted HTTP/2 connections vulnerable to Denial of Service",
           "Description": "When a server is configured to support unencrypted HTTP/2, it reads a few bytes from each new connection to see if they contain the HTTP/2 client preface. ReadHeaderTimeout is unexpectedly not being applied when doing this.",
           "Severity": "HIGH",
@@ -17283,7 +17283,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:bc417ace7b904d4a771680e464ab0ecb56b614882869ab37964483fd958be1ff",
+          "Fingerprint": "sha256:a31f93c89d2743eb8575652673c665d55ea7eada8bd10bcf2a3d7a314795db7c",
           "Title": "html/template: golang: Go html/template: Cross-Site Scripting via pathological input",
           "Description": "Previously, pathological inputs could close an unescaped '/' early, allowing for attack-controlled data to inject arbitrary content, potentially leading to XSS.",
           "Severity": "HIGH",
@@ -17387,7 +17387,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:a26e40d6d90f822ef9ed325bc7bf43f3e8b2f6a87e579c402ebbbe44e4f92223",
+          "Fingerprint": "sha256:e620e419e45b6a0a796686287bf5247d2e5e41c65de0f9bb2ebe646081557d88",
           "Title": "encoding/xml: golang: Go: Denial of Service via XML decoding recursion depth issue",
           "Description": "Previously, DecodeElement would reset the depth counter causing it to never fire; this could lead to stack exhaustion.",
           "Severity": "HIGH",
@@ -17491,7 +17491,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:33a32721a0215fcf4a17449bbd48ff191997718c46b5ba0a3a52ffbff2825e4d",
+          "Fingerprint": "sha256:d0dc086b28cc77ee08327fc01b589e8ffb749433af03c65110891523d19bb26b",
           "Title": "net/url: golang: golang net/url: Denial of Service from quadratic complexity in path resolution",
           "Description": "Previously, resolving relative paths containing parent directory ('..') segments performed string conversions and buffer rewrites on each step, resulting in quadratic time complexity and high memory allocation overhead. Now, path resolution operates on a byte buffer using index-based backtracking for '..' segments, eliminating the quadratic time complexity and significantly reducing memory allocations.",
           "Severity": "HIGH",
@@ -17568,7 +17568,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:e9035ecbe7f1d0e97e2268ec3c3cadcfbb0e5622b022a574efe8e1ac08bd0a54",
+          "Fingerprint": "sha256:f8532036ef9d120fb94b7a667254e33ea6a13b3e7e4a59cbf7355b3eaaa454cb",
           "Title": "crypto/tls: golang: Golang crypto/tls: Denial of Service via indefinite KeyUpdate messages",
           "Description": "Handshake messages, such as KeyUpdate, are always considered as state-advancing, regardless of whether a handshake has been completed or not. As a result, a malicious client can keep sending KeyUpdate messages to force the server to keep performing key derivation operations indefinitely.",
           "Severity": "HIGH",
@@ -18070,7 +18070,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:e44617fad1bb4cc698bbd97e92b62c6989a63dd9d373997dc2ee769ded832953",
+          "Fingerprint": "sha256:9931a33fa848072dbc607c3111325c41c33e5e9d8d25dd149c6bcdfc45c0f4b4",
           "Title": "golang.org/x/crypto/ssh: golang.org/x/crypto/ssh: Authentication bypass due to unenforced source-address restrictions",
           "Description": "The source-address critical option in the Permissions returned by an authentication callback was only enforced for the PublicKeyCallback and VerifiedPublicKeyCallback paths, extending the fix for CVE-2026-46595. Permissions returned by the PasswordCallback, KeyboardInteractiveCallback, NoClientAuthCallback, and GSSAPIWithMICConfig.AllowLogin callbacks were not validated against the client's remote address, so a source-address restriction set by those callbacks was silently ignored. The check is now applied to the Permissions returned by any authentication callback.",
           "Severity": "HIGH",
@@ -18120,7 +18120,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:adea00f9818b9f929793aafb52f1c9ba6198cd71783e5446cc56aeb396040569",
+          "Fingerprint": "sha256:026dc1e2cf9885d9fb63c48d6ad030f13e9f3f5be01521f26b2365737247afab",
           "Title": "encoding/asn1: golang: Go encoding/asn1: Denial of Service via excessive recursion in Unmarshal",
           "Description": "Enforce a recursion limit in Unmarshal to prevent stack exhaustion when parsing deeply-nested, recursive structures.",
           "Severity": "HIGH",
@@ -18197,7 +18197,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:c526166f39a63252d7c43ebb24c2f9aa1b3235419ea965a3c31f96aeab91b869",
+          "Fingerprint": "sha256:7e18abf5a759865f0045d0fb5c622ef8172bd373cd808e86df5186aa16aee96b",
           "Title": "golang.org/x/net/idna: golang: net/http: golang.org/x/net/idna: Privilege escalation via incorrect Punycode label processing",
           "Description": "The ToASCII and ToUnicode functions incorrectly accept Punycode-encoded labels that decode to an ASCII-only label. For example, ToUnicode(\"xn--example-.com\") incorrectly returns the name \"example.com\" rather than an error. This behavior can lead to privilege escalation in programs using the idna package. For example, a program which performs privilege checks on the ASCII hostname may reject \"example.com\" but permit \"xn--example-.com\". If that program subsequently converts the ASCII hostname to Unicode, it will inadvertently permits access to the Unicode name \"example.com\".",
           "Severity": "HIGH",
@@ -18450,7 +18450,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:d8e8b0d57ee2c1f6ae7e04e5f7fd315d139766bbcc6d0899ecc51f56104affa7",
+          "Fingerprint": "sha256:0a30941bd519146f481b11b9e9c097f597d60aae2004a16561830c72a8756ee5",
           "Title": "golang.org/x/net/dns/dnsmessage: golang.org/x/net/dns/dnsmessage: Denial of Service via invalid DNS record parsing",
           "Description": "Parsing an invalid SVCB or HTTPS RR can panic when the size of a parameter value overflows the message buffer.",
           "Severity": "HIGH",
@@ -18507,7 +18507,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:1288d68ae032c917b19e3deaa4d3db1c51c3c82fd0b47ee014036c8cc22d9a86",
+          "Fingerprint": "sha256:33f34a5ce6828ef7644b80ea3f832e2efe82c5a9d789855cb9fa3cc01b49567f",
           "Title": "net/http: golang: Go net/http: Unencrypted HTTP/2 connections vulnerable to Denial of Service",
           "Description": "When a server is configured to support unencrypted HTTP/2, it reads a few bytes from each new connection to see if they contain the HTTP/2 client preface. ReadHeaderTimeout is unexpectedly not being applied when doing this.",
           "Severity": "HIGH",
@@ -18611,7 +18611,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:4ae0785a4748e9dab675cbc6f0719adc946ce0c062ad44e795a2566c939b47eb",
+          "Fingerprint": "sha256:cdba2cd0b7328fcb21ec2dc95354b6b4109046247a8909a3ad24d33a22df0ff3",
           "Title": "html/template: golang: Go html/template: Cross-Site Scripting via pathological input",
           "Description": "Previously, pathological inputs could close an unescaped '/' early, allowing for attack-controlled data to inject arbitrary content, potentially leading to XSS.",
           "Severity": "HIGH",
@@ -18715,7 +18715,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:e4578c9dcfbc97ae0947e7c873982caad401a13aaf51f2e1c302160234ee97ce",
+          "Fingerprint": "sha256:7150b6bc693c9c6ba77ed1146a7e07404819953b54946440b55e722f8d8e0dde",
           "Title": "encoding/xml: golang: Go: Denial of Service via XML decoding recursion depth issue",
           "Description": "Previously, DecodeElement would reset the depth counter causing it to never fire; this could lead to stack exhaustion.",
           "Severity": "HIGH",
@@ -18819,7 +18819,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:25e8d9a339df629a4eef661281754afe978f485c6a8108f0f9538f0a068b8764",
+          "Fingerprint": "sha256:145dc673aae1c2326eef0dc1be8d00b5c259ec12d6c34ac6f5a2e098180ee0df",
           "Title": "net/url: golang: golang net/url: Denial of Service from quadratic complexity in path resolution",
           "Description": "Previously, resolving relative paths containing parent directory ('..') segments performed string conversions and buffer rewrites on each step, resulting in quadratic time complexity and high memory allocation overhead. Now, path resolution operates on a byte buffer using index-based backtracking for '..' segments, eliminating the quadratic time complexity and significantly reducing memory allocations.",
           "Severity": "HIGH",
@@ -18896,7 +18896,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:0d4a2091db97c00652d69dd5b68b4e08d5f5f5333de608d445fb88acd0914224",
+          "Fingerprint": "sha256:a64c5415af9a7999f5dd6c443d04f415bf7105612003ca642c62cce259b8379b",
           "Title": "crypto/tls: golang: Golang crypto/tls: Denial of Service via indefinite KeyUpdate messages",
           "Description": "Handshake messages, such as KeyUpdate, are always considered as state-advancing, regardless of whether a handshake has been completed or not. As a result, a malicious client can keep sending KeyUpdate messages to force the server to keep performing key derivation operations indefinitely.",
           "Severity": "HIGH",
@@ -19359,7 +19359,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:8977bc2a4a4de5203cd7628ac80cab8fb0a2d5130ee5c0aed629b8f72aba0022",
+          "Fingerprint": "sha256:7472c1173f4e3a9d45744dea627fb6cb629f5ed663c5623a75f849d9797006b2",
           "Title": "golang.org/x/crypto/ssh: golang.org/x/crypto/ssh: Authentication bypass due to unenforced source-address restrictions",
           "Description": "The source-address critical option in the Permissions returned by an authentication callback was only enforced for the PublicKeyCallback and VerifiedPublicKeyCallback paths, extending the fix for CVE-2026-46595. Permissions returned by the PasswordCallback, KeyboardInteractiveCallback, NoClientAuthCallback, and GSSAPIWithMICConfig.AllowLogin callbacks were not validated against the client's remote address, so a source-address restriction set by those callbacks was silently ignored. The check is now applied to the Permissions returned by any authentication callback.",
           "Severity": "HIGH",
@@ -19409,7 +19409,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:0c8d447f27030d7f91a153ecfc441e19c54e498e39275de14681a5c22a72bc72",
+          "Fingerprint": "sha256:feee1bdd01ac536cb470c107a8124790f061bb3bb0113250956869cb200bf12a",
           "Title": "encoding/asn1: golang: Go encoding/asn1: Denial of Service via excessive recursion in Unmarshal",
           "Description": "Enforce a recursion limit in Unmarshal to prevent stack exhaustion when parsing deeply-nested, recursive structures.",
           "Severity": "HIGH",
@@ -19486,7 +19486,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:2d9a78b2772faa72dd665cbb6a28bb2ca30b30301425865945f8978911394226",
+          "Fingerprint": "sha256:ab2a35ceb20fabccc0c83e90517daa17f6db0aabf0142fe55765d8ce41df97ab",
           "Title": "golang.org/x/net/idna: golang: net/http: golang.org/x/net/idna: Privilege escalation via incorrect Punycode label processing",
           "Description": "The ToASCII and ToUnicode functions incorrectly accept Punycode-encoded labels that decode to an ASCII-only label. For example, ToUnicode(\"xn--example-.com\") incorrectly returns the name \"example.com\" rather than an error. This behavior can lead to privilege escalation in programs using the idna package. For example, a program which performs privilege checks on the ASCII hostname may reject \"example.com\" but permit \"xn--example-.com\". If that program subsequently converts the ASCII hostname to Unicode, it will inadvertently permits access to the Unicode name \"example.com\".",
           "Severity": "HIGH",
@@ -19739,7 +19739,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:a60724b8b0a20b2c6d342e9e0889a9303d7ca1a6c284981072acbc678fe0dff3",
+          "Fingerprint": "sha256:4d5e33069443ebda2c8f3799be8c9ca1978d2d75fe3371d4d5429c301c454264",
           "Title": "golang.org/x/net/dns/dnsmessage: golang.org/x/net/dns/dnsmessage: Denial of Service via invalid DNS record parsing",
           "Description": "Parsing an invalid SVCB or HTTPS RR can panic when the size of a parameter value overflows the message buffer.",
           "Severity": "HIGH",
@@ -19796,7 +19796,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:95a6076c8fc9ba7a86fbc51373e91c9edf36572d106bdaf17df6e2a350c68fac",
+          "Fingerprint": "sha256:8a9432f0eb4908babae546fb85194f88e10b97884997f043baf9a7aadd829549",
           "Title": "net/http: golang: Go net/http: Unencrypted HTTP/2 connections vulnerable to Denial of Service",
           "Description": "When a server is configured to support unencrypted HTTP/2, it reads a few bytes from each new connection to see if they contain the HTTP/2 client preface. ReadHeaderTimeout is unexpectedly not being applied when doing this.",
           "Severity": "HIGH",
@@ -19900,7 +19900,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:3b59d32161b4c2dc853cab7dca4063457d35516283117b1fbff26a8c873172b3",
+          "Fingerprint": "sha256:1020f34b03b085bbfac9e779a2be94fab545663a2e2f7fd04c0421c531fc8d36",
           "Title": "html/template: golang: Go html/template: Cross-Site Scripting via pathological input",
           "Description": "Previously, pathological inputs could close an unescaped '/' early, allowing for attack-controlled data to inject arbitrary content, potentially leading to XSS.",
           "Severity": "HIGH",
@@ -20004,7 +20004,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:4dc892b8e84df68ea79b6293d434f4e9e6a2f3a3100919ccfbc50b7cb943bb2e",
+          "Fingerprint": "sha256:7159baeeea79a27d9e9e6bd13c43a882a29604787a69866ec149bd591b58c1f3",
           "Title": "encoding/xml: golang: Go: Denial of Service via XML decoding recursion depth issue",
           "Description": "Previously, DecodeElement would reset the depth counter causing it to never fire; this could lead to stack exhaustion.",
           "Severity": "HIGH",
@@ -20108,7 +20108,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:de5f745296fa034b8b4e153815040d95dc2030b3f7791e206c65d7f48013c902",
+          "Fingerprint": "sha256:1a5a4d59f46d37daa655084026b370562eb4ef00280fd0272b07a7e9f1f99ec6",
           "Title": "net/url: golang: golang net/url: Denial of Service from quadratic complexity in path resolution",
           "Description": "Previously, resolving relative paths containing parent directory ('..') segments performed string conversions and buffer rewrites on each step, resulting in quadratic time complexity and high memory allocation overhead. Now, path resolution operates on a byte buffer using index-based backtracking for '..' segments, eliminating the quadratic time complexity and significantly reducing memory allocations.",
           "Severity": "HIGH",
@@ -20185,7 +20185,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:5e1f84b183bbb3522c96892f65bb3d480842ce62f0ea52f91aedec2b44b73296",
+          "Fingerprint": "sha256:3ae7e51148788e8ac475981f9a7085a88ec649fc253c6e94502baba05ea61224",
           "Title": "crypto/tls: golang: Golang crypto/tls: Denial of Service via indefinite KeyUpdate messages",
           "Description": "Handshake messages, such as KeyUpdate, are always considered as state-advancing, regardless of whether a handshake has been completed or not. As a result, a malicious client can keep sending KeyUpdate messages to force the server to keep performing key derivation operations indefinitely.",
           "Severity": "HIGH",
@@ -20331,7 +20331,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:8a0b6c33b84a54f42c40832eac75ce3bf5013e80827027a38c5ed439261fb95d",
+          "Fingerprint": "sha256:b84a3290260f6ebdc7bf9271d0328510093caa69dfe02179ebb5c558d0c19e63",
           "Title": "crypto/tls: crypto/tls: Incorrect certificate validation during TLS session resumption",
           "Description": "During session resumption in crypto/tls, if the underlying Config has its ClientCAs or RootCAs fields mutated between the initial handshake and the resumed handshake, the resumed handshake may succeed when it should have failed. This may happen when a user calls Config.Clone and mutates the returned Config, or uses Config.GetConfigForClient. This can cause a client to resume a session with a server that it would not have resumed with during the initial handshake, or cause a server to resume a session with a client that it would not have resumed with during the initial handshake.",
           "Severity": "CRITICAL",
@@ -20416,7 +20416,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:57de20be721bfabcebce9396f4a54724281dada6f2a184619a70b21a0400a01c",
+          "Fingerprint": "sha256:c5de1e9d0bf7c998e802bfc191e195a8a2289bc80d7d56743c4d52404f039efb",
           "Title": "golang: net/url: Memory exhaustion in query parameter parsing in net/url",
           "Description": "The net/url package does not set a limit on the number of query parameters in a query. While the maximum size of query parameters in URLs is generally limited by the maximum request header size, the net/http.Request.ParseForm method can parse large URL-encoded forms. Parsing a large form containing many unique query parameters can cause excessive memory consumption.",
           "Severity": "HIGH",
@@ -20773,7 +20773,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:aa7cd3d4708088cdd3a4b577b041cb15245560a1ac22c51442b776d0d699137b",
+          "Fingerprint": "sha256:4239a74aac7a8657975a81db3ff32ec1970804fc085e5059726c5a924c141eb4",
           "Title": "crypto/x509: golang: Denial of Service due to excessive resource consumption via crafted certificate",
           "Description": "Within HostnameError.Error(), when constructing an error string, there is no limit to the number of hosts that will be printed out. Furthermore, the error string is constructed by repeated string concatenation, leading to quadratic runtime. Therefore, a certificate provided by a malicious actor can result in excessive resource consumption.",
           "Severity": "HIGH",
@@ -20852,7 +20852,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:b682747dfce5684f9b789764f25b337038a79fdf7582f504a9e0abe07972340e",
+          "Fingerprint": "sha256:eb468a79e9d38234e41af069fd5f5be1bb3dfeab641d5ce20d62c0cff9c5643e",
           "Title": "net/url: Incorrect parsing of IPv6 host literals in net/url",
           "Description": "url.Parse insufficiently validated the host/authority component and accepted some invalid URLs.",
           "Severity": "HIGH",
@@ -21178,7 +21178,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:821358a19c375a452144789de3307996a6e4d45e59de3eb403d9784ad996c41f",
+          "Fingerprint": "sha256:80b4223367a27c1ef1a0c17f935ca6311fc0424602a5b19fcd6aaf8a216bbe9b",
           "Title": "crypto/x509: golang: golang crypto/x509: Denial of Service via excessive processing of DNS SAN entries",
           "Description": "(*x509.Certificate).VerifyHostname previously called matchHostnames in a loop over all DNS Subject Alternative Name (SAN) entries. This caused strings.Split(host, \".\") to execute repeatedly on the same input hostname. With a large DNS SAN list, verification costs scaled quadratically based on the number of SAN entries multiplied by the hostname's label count. Because x509.Verify validates hostnames before building the certificate chain, this overhead occurred even for untrusted certificates.",
           "Severity": "HIGH",
@@ -21346,7 +21346,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:acea6da8ace2d5af80a998052c1cbd9c8ed944b072314f056bd4b0623b0a7959",
+          "Fingerprint": "sha256:1141eb24c088d0fe3962ffebcc253770e005e0470113f319f724436ac10e5493",
           "Title": "crypto/x509: crypto/tls: golang: Go: Denial of Service vulnerability in certificate chain building",
           "Description": "During chain building, the amount of work that is done is not correctly limited when a large number of intermediate certificates are passed in VerifyOptions.Intermediates, which can lead to a denial of service. This affects both direct users of crypto/x509 and users of crypto/tls.",
           "Severity": "HIGH",
@@ -21637,7 +21637,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:cc201e6a1fcde368d93762238e6077c714d9d9a89bbd6ebfb7012e077070503b",
+          "Fingerprint": "sha256:8905213b64c3c34ef33d7ecd53a6280e1bcd038f5bde3112cc250ab2c97395ef",
           "Title": "crypto/x509: golang: Go crypto/x509: Denial of Service via inefficient certificate chain validation",
           "Description": "Validating certificate chains which use policies is unexpectedly inefficient when certificates in the chain contain a very large number of policy mappings, possibly causing denial of service. This only affects validation of otherwise trusted certificate chains, issued by a root CA in the VerifyOptions.Roots CertPool, or in the system certificate pool.",
           "Severity": "HIGH",
@@ -21743,7 +21743,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:7efad217bf37b1c7c38a838f5d4d9b15cee8081902c9a692252ef35c7de20798",
+          "Fingerprint": "sha256:eb77ecb89e7b35ca3a871030867eff0d648c63ac2b921268699be1dc7abe5ae3",
           "Title": "crypto/tls: golang: Go crypto/tls: Denial of Service via multiple TLS 1.3 key update messages",
           "Description": "If one side of the TLS connection sends multiple key update messages post-handshake in a single record, the connection can deadlock, causing uncontrolled consumption of resources. This can lead to a denial of service. This only affects TLS 1.3.",
           "Severity": "HIGH",
@@ -21966,7 +21966,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:760de265744ffa9356feb0c89729df1548e19e208927e1677d3179972abeac3e",
+          "Fingerprint": "sha256:6c3735438ed03a203dbc3e064684d46bd5b2ca61c5ff0f0e486093a0109236aa",
           "Title": "net: golang: Go net package: Denial of Service via long CNAME response in LookupCNAME",
           "Description": "When using LookupCNAME with the cgo DNS resolver, a very long CNAME response can trigger a double-free of C memory and a crash.",
           "Severity": "HIGH",
@@ -22193,7 +22193,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:6a409f4595c0fe19fdd661cd950f640a964d61cb431e4b331f25557d2a0697fd",
+          "Fingerprint": "sha256:b73057d98caa049998b6ad10d7f8475fbc80a6c3f4d70ebe50dc7d0a92336490",
           "Title": "net/http/internal/http2: golang: golang.org/x/net: Go HTTP/2: Denial of Service via malformed SETTINGS_MAX_FRAME_SIZE frame",
           "Description": "When processing HTTP/2 SETTINGS frames, transport will enter an infinite loop of writing CONTINUATION frames if it receives a SETTINGS_MAX_FRAME_SIZE with a value of 0.",
           "Severity": "HIGH",
@@ -22358,7 +22358,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:c5b9969f2d9fa6ed82ca45e275077071023dd4e665b50c2735359c19a6e8adb5",
+          "Fingerprint": "sha256:093ee02924ae48afdf1b513a0dbce36f3cf96118f9455008824225fde2eea482",
           "Title": "encoding/asn1: golang: Go encoding/asn1: Denial of Service via excessive recursion in Unmarshal",
           "Description": "Enforce a recursion limit in Unmarshal to prevent stack exhaustion when parsing deeply-nested, recursive structures.",
           "Severity": "HIGH",
@@ -22436,7 +22436,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:24b77bd8f9f9b97d214c3edc8002af37fd437a9618b6ce84185884c992272319",
+          "Fingerprint": "sha256:bc6735150d70da827f5ef88f3342083356928f57909e5340022e8d6da5d217cb",
           "Title": "net/mail: golang: Go net/mail: Denial of Service via crafted email inputs",
           "Description": "Well-crafted inputs reaching ParseAddress, ParseAddressList, and ParseDate were able to trigger excessive CPU exhaustion and memory allocations.",
           "Severity": "HIGH",
@@ -22635,7 +22635,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:e379ab0300be4d7a6a0483d03ce1b262b2d3ad0d76dd3a63703b5e99e8122ea6",
+          "Fingerprint": "sha256:9620cbe79db1d6544afbfc8a1dfa5d864ba3cd77f8fc35e9062ee9d4a1877a0d",
           "Title": "golang.org/x/net/idna: golang: net/http: golang.org/x/net/idna: Privilege escalation via incorrect Punycode label processing",
           "Description": "The ToASCII and ToUnicode functions incorrectly accept Punycode-encoded labels that decode to an ASCII-only label. For example, ToUnicode(\"xn--example-.com\") incorrectly returns the name \"example.com\" rather than an error. This behavior can lead to privilege escalation in programs using the idna package. For example, a program which performs privilege checks on the ASCII hostname may reject \"example.com\" but permit \"xn--example-.com\". If that program subsequently converts the ASCII hostname to Unicode, it will inadvertently permits access to the Unicode name \"example.com\".",
           "Severity": "HIGH",
@@ -22888,7 +22888,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:96563be67c699f3f75742959fd26d63f5127d790a4b631998bb12620c34f4ccf",
+          "Fingerprint": "sha256:cbab810af25a3e1772ad3cbb5618daa03e0a665b0b787fa669930658b00bb25c",
           "Title": "golang: Go os.Root: Symlink following vulnerability allows directory traversal",
           "Description": "On Unix systems, opening a file in an os.Root improperly follows symlinks to locations outside of the Root when the final path component of the a path is a symbolic link and the path ends in /. For example, 'root.Open(\"symlink/\")' will open \"symlink\" even when \"symlink\" is a symbolic link pointing outside of the root.",
           "Severity": "HIGH",
@@ -22963,7 +22963,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:85c20fe5e2f12d8ce34c98e938b08c269d5a83fca257c1724fa31b5f6873c7cb",
+          "Fingerprint": "sha256:74c8e7df83faca82cc5ec0abfab4220a78798a778509563fb29dd029b89d448b",
           "Title": "net: golang: Go net package: Denial of Service via NUL byte in Dial and LookupPort on Windows",
           "Description": "The Dial and LookupPort functions panic on Windows when provided with an input containing a NUL (0).",
           "Severity": "HIGH",
@@ -23054,7 +23054,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:e3ddb5392e7a607b2601f59ddc3a6266840b28e5efc97c029d7d8f2ac719ef0c",
+          "Fingerprint": "sha256:3bd00ee80aa15a3df1a6b33d4aa33b449e45cb7cde5b657485e6ad64caafcba4",
           "Title": "net/mail: golang: net/mail: Denial of Service via pathological email address parsing",
           "Description": "Pathological inputs could cause DoS through consumePhrase when parsing an email address according to RFC 5322.",
           "Severity": "HIGH",
@@ -23247,7 +23247,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:c3ab45fba475dd0d6bef59b2241303958d434693e5e0f316e7ed4e8bf3b77c35",
+          "Fingerprint": "sha256:dfd3b970c8f7557ce495ea43da80a0b9042be31c6e48614c6a8c851d7736d805",
           "Title": "mime: golang: Golang MIME: Denial of Service via maliciously-crafted MIME header",
           "Description": "Decoding a maliciously-crafted MIME header containing many invalid encoded-words can consume excessive CPU.",
           "Severity": "HIGH",
@@ -23348,7 +23348,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:81896d186c25c7d4f27ac1e8ac41d51f817517fad03a017e53889772fa1c041a",
+          "Fingerprint": "sha256:6483de5eb4692bb8f7538fb8a0d13afe01db239cfc0881310c470eab48651491",
           "Title": "net/http: golang: Go net/http: Unencrypted HTTP/2 connections vulnerable to Denial of Service",
           "Description": "When a server is configured to support unencrypted HTTP/2, it reads a few bytes from each new connection to see if they contain the HTTP/2 client preface. ReadHeaderTimeout is unexpectedly not being applied when doing this.",
           "Severity": "HIGH",
@@ -23452,7 +23452,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:efe6c1f202f6fbaccffdcdc948a2c2feae013fea0ec48709b3e013a05dffa84a",
+          "Fingerprint": "sha256:8d88bbab176e342d6cb2cc8b33d2da7c9d4ee03526f98ef63b4c4bd09c516b8f",
           "Title": "html/template: golang: Go html/template: Cross-Site Scripting via pathological input",
           "Description": "Previously, pathological inputs could close an unescaped '/' early, allowing for attack-controlled data to inject arbitrary content, potentially leading to XSS.",
           "Severity": "HIGH",
@@ -23556,7 +23556,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:168067519168375816979c33bb0822bd9aa18b9c53b40842e5d828c32b818ad4",
+          "Fingerprint": "sha256:d3b576ba09e26ac8ed87e6c4f70e2006e5cea9e8f3962b711911ba2e24bcaede",
           "Title": "encoding/xml: golang: Go: Denial of Service via XML decoding recursion depth issue",
           "Description": "Previously, DecodeElement would reset the depth counter causing it to never fire; this could lead to stack exhaustion.",
           "Severity": "HIGH",
@@ -23660,7 +23660,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:ad2d8ac2263c6867e4a1677306257c334414d335a97fa1c8f9ebc63179fe4b26",
+          "Fingerprint": "sha256:d32a370a7ab93274f63940521b2f9eaee4ed455b14140c2bea0a14f8b3ef49d2",
           "Title": "net/url: golang: golang net/url: Denial of Service from quadratic complexity in path resolution",
           "Description": "Previously, resolving relative paths containing parent directory ('..') segments performed string conversions and buffer rewrites on each step, resulting in quadratic time complexity and high memory allocation overhead. Now, path resolution operates on a byte buffer using index-based backtracking for '..' segments, eliminating the quadratic time complexity and significantly reducing memory allocations.",
           "Severity": "HIGH",
@@ -23737,7 +23737,7 @@
             "Name": "The Go Vulnerability Database",
             "URL": "https://pkg.go.dev/vuln/"
           },
-          "Fingerprint": "sha256:16168398a343fc2292677875e5be6bbcb4069c34833c1f0a36db5b50ce5ed56c",
+          "Fingerprint": "sha256:0f13f1d7234623c1d55c65ca54188e8dacfd94763f714f1e498028925235a177",
           "Title": "crypto/tls: golang: Golang crypto/tls: Denial of Service via indefinite KeyUpdate messages",
           "Description": "Handshake messages, such as KeyUpdate, are always considered as state-advancing, regardless of whether a handshake has been completed or not. As a result, a malicious client can keep sending KeyUpdate messages to force the server to keep performing key derivation operations indefinitely.",
           "Severity": "HIGH",
