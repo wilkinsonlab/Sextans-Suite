@@ -10,4 +10,7 @@ TRIPLESTORE_PASS=root
 # (i.e. they are docker network addresses, not external URLs)
 # DATA_SPARQL_ENDPOINT=http://virtuoso:8890/sparql
 # TRIPLESTORE_GRAPH=urn:acme:sextans-fix
-
+# which data model this install transforms into: CARE-SM-2 or FLAIR-GG (see Daemon/models/)
+DATA_MODEL=CARE-SM-2
+# compose profiles to start: "caresm" for CARE-SM-2 (its Toolkit service); leave empty for FLAIR-GG
+COMPOSE_PROFILES=caresm

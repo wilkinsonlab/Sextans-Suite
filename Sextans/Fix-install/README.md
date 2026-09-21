@@ -17,6 +17,7 @@ It consists of 4 "dockreized" components, all of them _mandatory_, but with diff
 - [Downloading Fix](#downloading)
 - [Installing Sight](#installing)
 - [Quick Start - Data Transformations](#testing)
+- [Using the FLAIR-GG data model](#flair)
 
 <a name="requirements"></a>
 
@@ -58,10 +59,26 @@ git clone https://github.com/wilkinsonlab/Sextans-Suite.git
 
 ## Preparing for Installation
 
-At the beginning of the installation process you are asked four questions:
+At the beginning of the installation process you are asked five questions:
 
 ### A Prefix for your installation
 The prefix is used as a "namespace" to isolate indepdent Fix installations from one another.  This allows you to run multiple CARE-SM Data servers on the same machine.  The prefix is used for the docker network, docker volumes, and appears in the configuration files and docker-compose yaml files.  This can be any set of letter/number characters.  Please do not use punctuation characters.  e.g. 'euronmd1'  We will use *'ACME'* for the remainder of this document.
+
+### Which data model? (CARE-SM-2 or FLAIR-GG)
+Sextans Fix itself is domain-neutral: what makes a server "CARE-SM" or "FLAIR-GG" is the *data model* it
+transforms your CSV files into. The installer asks which one you want (or set `DATA_MODEL=CARE-SM-2` /
+`DATA_MODEL=FLAIR-GG` in the environment to skip the question):
+
+| Model | For | What runs |
+| --- | --- | --- |
+| **CARE-SM-2** | rare-disease patient registries | the CARE-SM-2 Toolkit (`caresm` service) prepares your CSVs, then the CARE-SM-2 mapping (auto-updated and smoke-tested) turns them into RDF |
+| **FLAIR-GG** | germplasm collections | no toolkit; your `admin.csv`, `germplasm.csv` and `location.csv` are mapped directly by the FLAIR-GG mappings, fetched from the [FLAIR-GG repository](https://github.com/wilkinsonlab/FLAIR-GG/tree/main/SemanticModel/YARRRML) |
+
+Your choice is stored in `.env` as `DATA_MODEL` (and `COMPOSE_PROFILES`, which decides whether the
+`caresm` service is started). Models are defined by small files in `Daemon/models/`; every model may
+define a *toolkit* (a service that sanity-checks your data before it is mapped) -- if it defines none,
+the daemon logs that and moves on. To use FLAIR-GG, see [Using the FLAIR-GG data model](#flair) below.
+Different models need separate installs (use a different prefix for each).
 
 ### Port for your Virtuoso database
 This is the port that will be used by the Virtuoso database.  This is validated against a list of "banned" ports (ports that are likely to be used by other software on your system).  It is a good idea to stay in the range of ~4000-10000.  By detault, this port is disabled after installation, so your Virtuoso instance cannot be accessed.  This port does NOT need to be enabled for the regular operation of Sight, and should be disabled when not needed.
@@ -185,6 +202,29 @@ point on is what's in Virtuoso.
 
 
 
+
+<a name="flair"></a>
+## Using the FLAIR-GG data model
+
+(Applies only if you chose **FLAIR-GG** at install time; the rest of this page describes the CARE-SM-2 model.)
+
+1. Put your CSV files in `Sextans-Fix/data/` -- **`admin.csv`, `germplasm.csv` and `location.csv`**. The
+   filenames are fixed. Column definitions and examples are in the
+   [FLAIR-GG CSV templates](https://github.com/wilkinsonlab/FLAIR-GG/tree/main/SemanticModel/CSV).
+   Each file is optional: **a type with no CSV file is not published** (e.g. leave out `location.csv`
+   if collection locations are sensitive). Because each transformation replaces the previous one, removing a
+   file and triggering again also removes that type's data from Virtuoso.
+2. Trigger the transformation by requesting the daemon's port (`curl http://localhost:<port>/`). The daemon
+   fetches the current FLAIR-GG mappings from GitHub, fills in your `baseURI`, maps each CSV, and uploads
+   the result to Virtuoso.
+3. **Your data must be valid.** FLAIR-GG has no toolkit yet to check or repair your export, so if the
+   transformation produces invalid RDF -- the usual cause is dates that are not ISO 8601 (`2024-01-01`, **not**
+   `2024/01/01`) -- the daemon stops with HTTP 422 and a message listing the offending values. **Nothing is
+   cleared or uploaded**, so your existing data is untouched; correct your data export and trigger again.
+
+Triples that no mapping assigns to a named graph (all of FLAIR-GG's) are stored in the default graph you
+named in `.env` as `TRIPLESTORE_GRAPH` (by default `urn:<prefix>-sextans-fix`), which is cleared and rewritten on
+every run. Don't point `TRIPLESTORE_GRAPH` at a graph that holds anything else.
 
 # CARE-SM Sextans Fix Quick Start!
 <a name="testing"></a>

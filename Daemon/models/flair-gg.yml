@@ -1,0 +1,30 @@
+# Data model definition read by transform-cdev2.rb (selected with the DATA_MODEL
+# environment variable; the Fix installer asks which one you want).
+# See care-sm-2.yml for what each key means.
+#
+# FLAIR-GG (germplasm): your CSVs (admin.csv, germplasm.csv, location.csv,
+# dropped into Sextans-Fix/data/) are mapped directly by the FLAIR-GG YARRRML
+# mappings, fetched from the FLAIR-GG repository. Each type is optional: if you
+# don't provide its CSV it is not published (e.g. leave out location.csv if
+# collection locations are sensitive).
+#
+# There is no `toolkit` yet, so no sanity check runs on the CSVs before mapping
+# (the daemon notes this and moves on). When FLAIR-GG gets one, add:
+#   toolkit:
+#     url: http://<service>:<port>/<path>
+#
+# Conventions this relies on (see yarrrml-rml/t.rb): for each type <t> the CSV
+# is /data/<t>.csv, the mapping is /data/<t>_yarrrml.yaml, and each mapping's
+# own `access:` points at that CSV.
+label: FLAIR-GG
+mapping_source:
+  kind: git
+  git: https://github.com/wilkinsonlab/FLAIR-GG.git
+  # only this folder is checked out (sparse); the repository is otherwise large
+  path: SemanticModel/YARRRML
+  # mapping files are named <type>_yarrrml.pre-yaml, with |||baseURI||| placeholders
+  suffix: _yarrrml.pre-yaml
+types:
+  - admin
+  - germplasm
+  - location

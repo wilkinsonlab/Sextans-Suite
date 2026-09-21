@@ -1,0 +1,23 @@
+# Data model definition read by transform-cdev2.rb (selected with the DATA_MODEL
+# environment variable; the Fix installer asks which one you want).
+#
+# CARE-SM-2 is the original (and default) Sextans Fix pipeline.
+#
+# toolkit:        an optional service the daemon calls before mapping, to sanity-
+#                 check and prepare your source CSVs. Here it is the CARE-SM-2
+#                 Toolkit (the `caresm` compose service), which turns your CSVs
+#                 into the single CARE.csv the mapping reads. Every model is
+#                 checked for one; a model that defines none simply skips this.
+# mapping_source: `baked` = the CARE-SM-2 repository cloned into this image at
+#                 build time, git-pulled on each run, and smoke-tested against a
+#                 known-good fixture before a new mapping is trusted (see
+#                 smoke_test_passed? in transform-cdev2.rb).
+# types:          the transformation types this model produces; each reads
+#                 /data/<type>.csv (see yarrrml-rml/t.rb).
+label: CARE-SM-2
+toolkit:
+  url: http://caresm:8000/toolkit
+mapping_source:
+  kind: baked
+types:
+  - CARE

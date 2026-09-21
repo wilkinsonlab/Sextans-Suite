@@ -6,6 +6,9 @@ require './http_utils'
 require 'open3'
 require 'cgi'
 require 'fileutils'
+require 'yaml'
+require 'rdf'
+require 'rdf/nquads'
 
 # This service is only ever called from other containers on the same internal
 # compose network (by hostname, e.g. "cde-box-daemon:4567") or via its
@@ -32,14 +35,128 @@ end
 include HTTPUtils
 
 get '/' do
-  update
-  caresm
-  yarrrml_substitute
-  execute
-  load_cde
+  model = data_model
+  update_mappings(model)
+  run_toolkit(model)
+  yarrrml_substitute if model['mapping_source']['kind'] == 'baked'
+  types = types_to_run(model)
+  # Fail closed: each run replaces the previous snapshot, so proceeding without
+  # a type's mapping would silently wipe that type from the store. Stop now,
+  # before anything is cleared or uploaded.
+  missing = types.reject { |t| File.exist?(mapping_path(t)) }
+  unless missing.empty?
+    warn "ABORTING: no mapping available for #{missing.join(', ')}; nothing was cleared or uploaded"
+    halt 500, "Aborted: no mapping available for #{missing.join(', ')}. See docker log.\n"
+  end
+  execute(types)
+  begin
+    load_cde(types)
+  rescue InvalidDataError => e
+    warn "ABORTING: #{e.message}"
+    halt 422, "Aborted: #{e.message}\n"
+  end
   cleanup
   metadata_update
   "Execution complete.  See docker log for errors (if any)\n\n"
+end
+
+# Which data model this install transforms into is chosen at install time
+# (DATA_MODEL, written to .env by the Fix installer) and defined by a small
+# file in models/. Unset/empty means CARE-SM-2, which is what every install
+# before this setting existed was doing.
+MODELS_DIR = File.expand_path('models', __dir__)
+DEFAULT_DATA_MODEL = 'CARE-SM-2'
+# Where mapping repositories for non-baked models are checked out at runtime.
+MODEL_SRC_DIR = File.expand_path('model-src', __dir__)
+
+def data_model
+  name = ENV['DATA_MODEL'].to_s.strip
+  name = DEFAULT_DATA_MODEL if name.empty?
+  # The name becomes part of a file path -- whitelist it.
+  raise ArgumentError, "invalid DATA_MODEL '#{name}'" unless name =~ /\A[a-zA-Z0-9_-]+\z/
+
+  file = File.join(MODELS_DIR, "#{name.downcase}.yml")
+  raise ArgumentError, "unknown DATA_MODEL '#{name}' (no #{file})" unless File.exist?(file)
+
+  YAML.safe_load_file(file).merge('key' => name.downcase)
+end
+
+# The types transformed on this run: only those whose source CSV is actually
+# present. A type with no CSV is *not published* -- and, since each run replaces
+# the previous snapshot, is not left behind from an earlier run either (this
+# is how a data owner opts a type out, e.g. sensitive collection locations).
+def types_to_run(model)
+  types = Array(model['types']).select { |t| File.exist?("/data/#{t}.csv") }
+  types.concat(custom_type_names.map { |name| "custom-#{name}" })
+  types
+end
+
+# Where yarrrml-rdfizer (t.rb) looks for a type's mapping.
+def mapping_path(type)
+  return "/data/custom/#{type.delete_prefix('custom-')}_yarrrml.yaml" if type.start_with?('custom-')
+
+  "/data/#{type}_yarrrml.yaml"
+end
+
+# How a model's mappings are kept current depends on where they live:
+#   baked -- CARE-SM-2 (cloned into the image at build time; git-pulled and
+#            smoke-tested before use, see `update`)
+#   git   -- a repository checked out at runtime (see update_git_mappings)
+def update_mappings(model)
+  case model['mapping_source']['kind']
+  when 'baked' then update
+  when 'git' then update_git_mappings(model)
+  else raise ArgumentError, "model #{model['label']}: unknown mapping_source kind"
+  end
+end
+
+# Git-sourced models (e.g. FLAIR-GG): keep a sparse checkout of the model's own
+# mapping repository, and (re)generate /data/<type>_yarrrml.yaml from its
+# <type>_yarrrml.pre-yaml files, with the |||baseURI||| placeholder filled in.
+# NOTE: unlike CARE-SM-2 there is no fixture-based smoke test for these yet.
+# The only check is a coarse one (non-empty, looks like YARRRML). Deliberately
+# NOT a strict YAML parse: yarrrml-parser (JavaScript) accepts plain scalars
+# such as `fao: https://...owl#CO_020:` that Ruby's stricter parser rejects,
+# and FLAIR-GG's own mappings contain exactly that -- a Ruby-side parse here
+# would wrongly refuse mappings the real engine runs fine.
+def update_git_mappings(model)
+  src = model.fetch('mapping_source')
+  repo_dir = File.join(MODEL_SRC_DIR, model['key'])
+  sync_model_repo(src, repo_dir)
+
+  base_uri = ENV.fetch('baseURI', 'http://example.org/')
+  base_uri = 'http://example.org/' if base_uri.empty?
+
+  Array(model['types']).each do |type|
+    pre = File.join(repo_dir, src['path'], "#{type}#{src['suffix']}")
+    unless File.exist?(pre)
+      warn "model #{model['label']}: no mapping #{pre} for type '#{type}', skipping"
+      next
+    end
+    content = File.read(pre).gsub('|||baseURI|||', base_uri)
+    unless content =~ /^mappings?:/
+      warn "model #{model['label']}: #{pre} does not look like a YARRRML mapping; " \
+           'NOT promoting it, keeping the previous mapping (if any)'
+      next
+    end
+    File.write("/data/#{type}_yarrrml.yaml", content)
+    warn "model #{model['label']}: wrote /data/#{type}_yarrrml.yaml"
+  end
+end
+
+def sync_model_repo(src, repo_dir)
+  if File.directory?(File.join(repo_dir, '.git'))
+    out, status = Open3.capture2e('git', '-C', repo_dir, 'pull', '--ff-only')
+  else
+    FileUtils.mkdir_p(File.dirname(repo_dir))
+    out, status = Open3.capture2e('git', 'clone', '--depth', '1', '--filter=blob:none', '--sparse',
+                                  src.fetch('git'), repo_dir)
+    if status.success?
+      out2, status = Open3.capture2e('git', '-C', repo_dir, 'sparse-checkout', 'set', src.fetch('path'))
+      out += out2
+    end
+  end
+  warn "model repository sync #{status.success? ? 'ok' : 'FAILED (using whatever is already checked out)'}: #{out}"
 end
 
 LIVE_MAPPING = '/data/CARE_Fiab_yarrrml.yaml'
@@ -113,15 +230,22 @@ def smoke_test_output_valid?(nquads_content)
   nquads_content.include?('XMLSchema#boolean')
 end
 
-def caresm
-  warn 'starting CareSM'
+# Every model is checked for a toolkit -- an optional service that sanity-checks
+# and prepares the user's source data before it is mapped (CARE-SM-2's is the
+# `caresm` Toolkit). A model that defines none is fine: note it and move on.
+# A toolkit that IS defined but fails aborts the whole run here, before
+# anything is cleared or uploaded, rather than mapping data it didn't approve.
+def run_toolkit(model)
+  toolkit = model['toolkit']
+  if toolkit.nil? || toolkit['url'].to_s.empty?
+    warn "model #{model['label']} defines no toolkit -- skipping the sanity check, moving on"
+    return
+  end
 
-  warn 'calling the caresm interface'
-  _res = RestClient.post('http://caresm:8000/toolkit', '{}')
+  warn "calling the #{model['label']} toolkit at #{toolkit['url']}"
+  res = RestClient.post(toolkit['url'], '{}')
   sleep 3
-  warn _res.inspect
-  # end
-  # warn "finished Hefesto"
+  warn res.inspect
 end
 
 def yarrrml_substitute
@@ -160,11 +284,10 @@ def custom_type_names
   end
 end
 
-def execute
+def execute(types)
   warn 'executing transform'
   purge_nt
-  trigger_type('CARE') if File.exist?('/data/CARE.csv')
-  custom_type_names.each { |name| trigger_type("custom-#{name}") }
+  types.each { |type| trigger_type(type) }
   warn 'done transform'
 end
 
@@ -175,11 +298,10 @@ rescue StandardError => e
   warn "transform for type '#{type}' failed: #{e}"
 end
 
-def load_cde
-  triples_dirs = ['/data/CARE/triples']
-  custom_type_names.each { |name| triples_dirs << "/data/custom-#{name}/triples" }
-
-  files = triples_dirs.flat_map { |d| Dir["#{d}/*.nq"] }
+def load_cde(types)
+  # t.rb writes each type's output to /data/<type>/triples/ (custom types are
+  # already "custom-<name>", so the same rule covers them).
+  files = types.flat_map { |type| Dir["/data/#{type}/triples/*.nq"] }
   concatenated = ''
   files.each do |f|
     warn "Processing file #{f}"
@@ -200,6 +322,10 @@ def write_to_virtuoso(concatenated)
   pass = ENV['TRIPLESTORE_PASS'] || ENV.fetch('GraphDB_Pass', nil)
   network = ENV['networkname'] || 'virtuoso'
 
+  # Before anything is cleared: if the content can't be parsed, fail here with
+  # the existing data untouched.
+  concatenated = assign_default_graph(concatenated, triplestore_graph)
+
   clear_all_graphs(network, user, pass)
 
   # A graph URI (e.g. urn:{prefix}:sextans-fix), not a bare repository name --
@@ -213,7 +339,9 @@ def write_to_virtuoso(concatenated)
   # conformant SPARQL 1.1 Graph Store Protocol implementation. Left in place
   # since the Graph Store Protocol's PUT still requires *a* target graph
   # parameter to be present in the request, and it's harmless as a no-op.
-  graph = ENV['TRIPLESTORE_GRAPH'] || ENV.fetch('GRAPHDB_REPONAME')
+  # (Triples that carry no graph at all were given TRIPLESTORE_GRAPH above,
+  # precisely because this parameter would NOT have caught them.)
+  graph = triplestore_graph
   url = "http://#{network}:8890/sparql-graph-crud-auth?graph=#{CGI.escape(graph)}"
 
   # Virtuoso's Graph Store Protocol write endpoint requires real HTTP Digest auth
@@ -251,6 +379,68 @@ def clear_all_graphs(network, user, pass)
   graphs = data_graphs_under(network, baseuri, user, pass)
   warn "Clearing #{graphs.length} existing data graph(s) under #{baseuri} before this write"
   graphs.each { |g| clear_graph(network, g, user, pass) }
+
+  # The operator-chosen default graph (TRIPLESTORE_GRAPH, e.g. urn:<prefix>-sextans-fix)
+  # is where any triple whose mapping names no graph of its own ends up (see
+  # write_to_virtuoso) -- which is every triple for a model like FLAIR-GG, whose
+  # mappings mint no named graphs. That graph is not under baseURI, so the
+  # sweep above never sees it; clear it explicitly so those runs replace the
+  # previous snapshot too instead of accumulating. It is a graph dedicated to
+  # this install (the installer names it after your prefix); don't point
+  # TRIPLESTORE_GRAPH at a graph that holds anything else.
+  default_graph = triplestore_graph
+  if protected_graph?(default_graph)
+    warn "NOT clearing TRIPLESTORE_GRAPH #{default_graph}: it looks like a vocabulary/system graph"
+  else
+    warn "Clearing default graph #{default_graph} before this write"
+    clear_graph(network, default_graph, user, pass)
+  end
+end
+
+def triplestore_graph
+  ENV['TRIPLESTORE_GRAPH'] || ENV.fetch('GRAPHDB_REPONAME')
+end
+
+# A triple with no graph of its own -- every triple for a mapping that mints no
+# named graphs (FLAIR-GG), and a few from CARE-SM-2's -- is *not* put in the
+# request's ?graph= target by Virtuoso: for n-quads content it lands in a
+# built-in placeholder graph (urn:dummy), which nothing ever clears, so those
+# triples used to accumulate across runs. Give them an explicit home instead:
+# the operator-chosen TRIPLESTORE_GRAPH, which write_to_virtuoso then also
+# clears on every run (see clear_all_graphs).
+def assign_default_graph(nquads, graph_uri)
+  default_graph = RDF::URI(graph_uri)
+  invalid = []
+  out = RDF::NQuads::Writer.buffer(validate: false) do |writer|
+    RDF::NQuads::Reader.new(nquads, validate: false).each_statement do |st|
+      invalid << st unless st.valid?
+      st = RDF::Statement.new(st.subject, st.predicate, st.object, graph_name: default_graph) if st.graph_name.nil?
+      writer << st
+    end
+  end
+  raise InvalidDataError, invalid_data_message(invalid) unless invalid.empty?
+
+  out
+end
+
+# Refuse to publish data that isn't valid RDF -- e.g. "2024/01/01" typed
+# xsd:date (which needs 2024-01-01). Better a clear failure now, with the
+# existing data left untouched, than bad values silently published; the fix
+# belongs in the data export.
+class InvalidDataError < StandardError; end
+
+def invalid_data_message(invalid)
+  shown = invalid.first(10).map { |st| "  #{st.subject.to_ntriples} #{st.predicate.to_ntriples} #{st.object.to_ntriples}" }
+  "#{invalid.length} statement(s) produced from your data are not valid RDF, so NOTHING was " \
+    "cleared or uploaded. Fix your data export and try again. Typical causes: dates not in ISO " \
+    "8601 form (YYYY-MM-DD, not YYYY/MM/DD), non-numeric text in a numeric column, or malformed " \
+    "URIs. First #{shown.length}:\n#{shown.join("\n")}"
+end
+
+# Never wipe Virtuoso's own graphs or well-known vocabularies if
+# TRIPLESTORE_GRAPH is ever mis-set to one of them.
+def protected_graph?(uri)
+  uri.start_with?('http://www.openlinksw.com/', 'http://www.w3.org/', 'http://localhost')
 end
 
 def data_graphs_under(network, baseuri, user, pass)
@@ -267,7 +457,7 @@ end
 
 def clear_graph(network, graph_uri, user, pass)
   url = "http://#{network}:8890/sparql-auth"
-  body = "update=#{CGI.escape("CLEAR GRAPH #{sparql_iri_literal(graph_uri)}")}"
+  body = "update=#{CGI.escape("CLEAR SILENT GRAPH #{sparql_iri_literal(graph_uri)}")}"
   response = HTTPUtils.post_digest(url, 'application/x-www-form-urlencoded', body, user, pass)
   warn "Cleared graph #{graph_uri}: #{response.code} #{response.message}"
   response

@@ -50,8 +50,12 @@ services:
       TRIPLESTORE_PASS: ${TRIPLESTORE_PASS}
       baseURI: ${baseURI}
       TRIPLESTORE_GRAPH: ${TRIPLESTORE_GRAPH}
+      # which data model this install transforms into (chosen at install time)
+      DATA_MODEL: ${DATA_MODEL}
+    # No depends_on for the model's toolkit (caresm): it is optional -- only
+    # started for models that use it (see the profile on that service) -- and
+    # the daemon calls it at request time, not at startup.
     depends_on:
-      - caresm
       - yarrrml-rdfizer
     mem_limit: 512m
     cpus: 1
@@ -63,6 +67,9 @@ services:
       - {PREFIX}-backend
 
   caresm:
+    # The CARE-SM-2 Toolkit -- only started for the CARE-SM-2 data model. The
+    # installer sets COMPOSE_PROFILES=caresm in .env for that choice only.
+    profiles: ["caresm"]
     image: fairdatasystems/care2:2026-09-21
     hostname: caresm
     # The image itself has no non-root user baked in, but a plain uid:gid

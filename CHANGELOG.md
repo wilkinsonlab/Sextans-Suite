@@ -4,6 +4,39 @@ All notable changes to Sextans Suite are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Unreleased]
+
+### Added
+
+- **Sextans Fix now asks which data model to install for: CARE-SM-2 or FLAIR-GG.** Fix itself is
+  domain-neutral; the model decides which mappings are used and whether a toolkit runs. Models are
+  defined by small files in `Daemon/models/`, chosen with `DATA_MODEL` (written to `.env`; the
+  installer also honours it from the environment). An unset `DATA_MODEL` means CARE-SM-2, so existing
+  installs behave as before. The FLAIR-GG model maps `admin.csv`/`germplasm.csv`/`location.csv` with
+  the FLAIR-GG mappings, sparse-checked-out from the FLAIR-GG repository at run time.
+- **Every model may define a toolkit** -- a service the daemon calls to sanity-check and prepare
+  source data before mapping (CARE-SM-2's is the `caresm` Toolkit). A model that defines none is
+  simply skipped, with a log line. The `caresm` compose service is now a compose profile
+  (`COMPOSE_PROFILES=caresm` in `.env`, set only for the CARE-SM-2 choice) and the daemon no longer
+  has a `depends_on` on it.
+
+### Changed
+
+- The daemon now **fails closed**: it aborts before clearing or uploading anything if a type has a CSV
+  but no mapping, or if the data it produced is not valid RDF (HTTP 422 with the offending values --
+  typically dates that aren't ISO 8601). Previously invalid literals were passed through.
+- A type with no source CSV is not published, and is no longer left behind from an earlier run (this
+  is how a data owner opts a type out, e.g. sensitive collection locations).
+
+### Fixed
+
+- **Triples with no graph of their own were silently piling up in Virtuoso's built-in `urn:dummy`
+  graph** and never cleared, so those triples accumulated across runs instead of being replaced --
+  including a few from CARE-SM-2's mapping and *all* of a mapping that mints no named graphs. They are
+  now written to `TRIPLESTORE_GRAPH` (the default graph you control, `urn:<prefix>-sextans-fix` by
+  default), which is cleared on every run. Existing installs keep whatever already accumulated in
+  `urn:dummy` (Virtuoso keeps some of its own triples there too, so it isn't cleared automatically).
+
 ## [3.2.0] - 2026-09-21
 
 ### Documentation

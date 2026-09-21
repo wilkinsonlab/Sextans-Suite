@@ -73,6 +73,29 @@ fi
 echo ""
 echo ""
 echo ""
+# Which data model will this server transform your CSVs into? DATA_MODEL can be
+# set in the environment to skip the question. The names here must match the
+# definitions in Daemon/models/*.yml (which the daemon reads at run time).
+if [ -z "$DATA_MODEL" ]; then
+  echo "Which data model is this Sextans Fix server for?"
+  echo "  1) CARE-SM-2  (rare-disease patient registries; uses the CARE-SM-2 Toolkit)"
+  echo "  2) FLAIR-GG   (germplasm collections)"
+  read -p "Enter 1 or 2 [1]: " model_choice
+  case "${model_choice:-1}" in
+    1) DATA_MODEL="CARE-SM-2" ;;
+    2) DATA_MODEL="FLAIR-GG" ;;
+    *) echo "invalid..."; exit 1 ;;
+  esac
+fi
+case "$DATA_MODEL" in
+  CARE-SM-2) COMPOSE_PROFILES="caresm" ;;   # start the CARE-SM-2 Toolkit service
+  FLAIR-GG) COMPOSE_PROFILES="" ;;          # no toolkit for this model
+  *) echo "Error: unknown data model '$DATA_MODEL' (expected CARE-SM-2 or FLAIR-GG)."; exit 1 ;;
+esac
+
+echo ""
+echo ""
+echo ""
 # VIRTUOSO_PORT handling (GDB_PORT is the pre-rename name, still honoured if set)
 VIRTUOSO_PORT="${VIRTUOSO_PORT:-$GDB_PORT}"
 if [ -z "$VIRTUOSO_PORT" ]; then
@@ -173,7 +196,13 @@ echo ""
 cd ..
 rm -rf ./${P}-Sextans-Fix
 mkdir ./${P}-Sextans-Fix
-cp -r ./Sextans-Fix/data ./${P}-Sextans-Fix/
+if [ "$DATA_MODEL" = "CARE-SM-2" ]; then
+  # the CARE-SM-2 example CSV
+  cp -r ./Sextans-Fix/data ./${P}-Sextans-Fix/
+else
+  # other models: an empty data folder -- see the Fix README for the CSVs each model reads
+  mkdir -p ./${P}-Sextans-Fix/data
+fi
 # cde-box-daemon and yarrrml-rdfizer run as fixed-UID non-root users inside their
 # containers, which won't generally match your host UID -- open this bind-mounted
 # data directory to any user so both containers can read/write it regardless.
@@ -191,6 +220,8 @@ sed -i'' -e "s/{VIRTUOSO_PORT}/${VIRTUOSO_PORT}/" "./${P}-Sextans-Fix/docker-com
 sed -i'' -e "s/{RDF_TRIGGER}/${RDF_TRIGGER}/" "./${P}-Sextans-Fix/docker-compose-${P}.yml"
 sed -i'' -e "s/{SEXTANS_DB_NAME}/${P}-sextans-fix/" "./${P}-Sextans-Fix/.env"
 sed -i'' -e "s%{VIRTUOSO_PASS}%${VIRTUOSO_PASSWORD}%" "./${P}-Sextans-Fix/.env"
+sed -i'' -e "s/{DATA_MODEL}/${DATA_MODEL}/" "./${P}-Sextans-Fix/.env"
+sed -i'' -e "s/{COMPOSE_PROFILES}/${COMPOSE_PROFILES}/" "./${P}-Sextans-Fix/.env"
 # sed -i'' -e 's|{GUID}|'"${uri}"'|g' "./${P}-Sextans-Fix/.env"
 chmod 600 "./${P}-Sextans-Fix/.env"
 echo ""
