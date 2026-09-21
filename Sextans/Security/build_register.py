@@ -29,12 +29,6 @@ REGISTER_PATH = os.path.join(SCRIPT_DIR, "vulnerability-register.csv")
 #                          we can only patch the base OS/runtime layer, not app deps
 #           vendor       = pure third-party image; only lever is tracking upstream releases
 IMAGE_INFO = {
-    "gdb":       {"exposure": 1, "control": "vendor",
-                   "note": "GraphDB. No published port to the internet directly, but "
-                            "reachable from fdp/fdp_client and cde-box-daemon over the "
-                            "internal network, and serves a SPARQL endpoint that processes "
-                            "data flowing in from the public-facing FDP layer. Treated as "
-                            "exposed out of caution."},
     "fdpserv":   {"exposure": 1, "control": "vendor",
                    "note": "FAIR Data Point server. Has no published port of its own, but "
                             "fdp_client (nginx) proxies to it, so its full REST API surface "
@@ -53,8 +47,12 @@ IMAGE_INFO = {
                    "note": "Virtuoso triple store, shared by Sextans Fix and Sextans Sight. "
                             "No published port to the internet directly; reachable only from "
                             "fdp/fdp_client (Sight) or cde-box-daemon (Fix) over the internal "
-                            "network. Pure vendor image (openlink/virtuoso-opensource-7) -- "
-                            "only lever is tracking upstream releases."},
+                            "network. Pure vendor image (openlink/virtuoso-opensource-7, "
+                            "-alpine variant: much smaller than the Ubuntu one, and "
+                            "apk-patchable -- the Ubuntu builds from 7.2.17-r25 onward "
+                            "ship without /var/lib/dpkg, so apt can't patch them and "
+                            "Trivy can't see their OS packages). Only lever is "
+                            "tracking upstream releases."},
     "fdpclient": {"exposure": 1, "control": "vendor",
                    "note": "FDP web client (nginx/Alpine). Directly publishes {FDP_PORT} to "
                             "the internet."},
@@ -64,9 +62,13 @@ IMAGE_INFO = {
                             "target at all. Every flagged CVE sits on bundled Go CLI "
                             "utilities (mongodump/mongoexport/bsondump/etc.) or gosu, none "
                             "of which our deployment invokes or exposes."},
-    # "cdeb"/"care" retired in favor of "cdeb2"/"care2" when Sextans Fix moved to
-    # CARE-SM-2 -- kept here (not removed) so archived scans under the old names
-    # still parse correctly.
+    # Retired images. "cdeb"/"care" were replaced by "cdeb2"/"care2" when Sextans
+    # Fix moved to CARE-SM-2 (kept so an older CSV dropped back into
+    # security_scan_output/ still parses). "gdb" (GraphDB) and "beacon"
+    # (pabloalarconm/beacon-api4care-sm) have been removed outright: GraphDB was
+    # replaced by Virtuoso, and Beacon by our own Beacon2 facade built on
+    # Severance (see VULNERABILITY_TRIAGE.md). Neither is built or scanned any
+    # more, and archived scans in security_scan_output/old/ are never read.
     "cdeb":      {"exposure": 2, "control": "owned",
                    "note": "cde-box-daemon (CARE-SM v1, retired). Ours to build. Port bound "
                             "to 127.0.0.1 only (host-local), also reachable from "
@@ -90,11 +92,6 @@ IMAGE_INFO = {
                             "inside is a third-party project -- we can only fix the base "
                             "OS/build-hygiene layer, not app-level dependencies. No "
                             "published port; internal network only."},
-    "beacon":    {"exposure": 2, "control": "collaborator",
-                   "note": "beacon_count. Built under a CARE-SM collaborator's namespace "
-                            "(pabloalarconm) -- PR-able. NOT CURRENTLY DEPLOYED: the service "
-                            "is fully commented out in Fix-install/docker-compose-template.yml. "
-                            "Zero exposure today; must be patched before ever enabling it."},
 }
 
 # Manually researched dispositions for CVEs that need individual judgment
@@ -108,11 +105,11 @@ MANUAL_DECISIONS = {
         "conditions (not an injection/RCE bug). Real but lower practical severity "
         "than the CRITICAL label suggests for us; verify our security-header "
         "posture isn't relying solely on Spring's default headers, then track "
-        "upstream Spring Boot bump in gdb/fdpserv's next vendor release."
+        "upstream Spring Boot bump in fdpserv2's next FAIRDataPoint release."
     ),
     "CVE-2026-41293": (
         "REVIEW",
-        "Apache Tomcat improper input validation (embedded in gdb/fdpserv's Spring "
+        "Apache Tomcat improper input validation (embedded in fdpserv2's Spring "
         "Boot runtime). Need the specific advisory text to judge exploitability -- "
         "flagged for a closer read before deciding bump vs. accept."
     ),
@@ -143,13 +140,6 @@ MANUAL_DECISIONS = {
         "CLI tools), not mongod itself (C++, not a Trivy target here) and not the "
         "clean Ubuntu OS layer. Inert given our deployment. Also: Red Hat rates it "
         "'important', not critical."
-    ),
-    "CVE-2025-43859": (
-        "MUST-FIX-BEFORE-ENABLE",
-        "h11 (Python) HTTP request smuggling, CVSS 9.1 -- genuinely critical if "
-        "exposed. beacon is currently fully commented out / not deployed, so "
-        "exposure is zero today, but this MUST be resolved before that service is "
-        "ever turned on. Open a PR upstream (pabloalarconm) to bump h11."
     ),
     "CVE-2026-27820": (
         "REVIEW",

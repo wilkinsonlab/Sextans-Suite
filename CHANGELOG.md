@@ -4,6 +4,39 @@ All notable changes to Sextans Suite are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Unreleased]
+
+### Changed
+
+- **Sextans Virtuoso image now uses the `-alpine` variant** (`openlink/virtuoso-opensource-7:7.2.17-alpine`),
+  patched with `apk upgrade`. It is much smaller than the Ubuntu image, and the Ubuntu builds from
+  `7.2.17-r25` onward ship without `/var/lib/dpkg`, so they could not be patched with `apt` at all
+  (and Trivy could not see their OS packages). `security-patch.sh` also now runs under `set -e`, so
+  a failed patch step stops the run instead of pushing an unpatched image.
+
+- **GraphDB-era variable names renamed to triplestore-neutral ones**, since both Fix and Sight run on Virtuoso:
+  `.env` keys `GraphDB_User`/`GraphDB_Pass`/`GRAPHDB_REPONAME` are now `TRIPLESTORE_USER`/`TRIPLESTORE_PASS`/`TRIPLESTORE_GRAPH`
+  (matching Severance's names); installer variables `GDB_PORT`/`GRAPHDB_PASSWORD` are now `VIRTUOSO_PORT`/`VIRTUOSO_PASSWORD`;
+  compose-template placeholders `{GDB_PORT}`/`{GDB_PASS}` are now `{VIRTUOSO_PORT}`/`{VIRTUOSO_PASS}`. The installers still accept
+  the old `GDB_PORT`/`GRAPHDB_PASSWORD` if set in the environment, and `Daemon/transform-cdev2.rb` still reads the old `.env` keys as a
+  fallback, so an existing Fix install keeps working if only the `cdeb2` image is updated. An existing install's own compose file and
+  `.env` are not rewritten -- they keep the old names until reinstalled. The stale GraphDB example endpoints in the `exemplar_env`
+  files now show Virtuoso's.
+
+- `parse-security-scans.rb` now writes a header-only CSV for an image with no CRITICAL/HIGH findings (previously it wrote nothing), so a clean scan is distinguishable from a missing one.
+
+### Removed
+
+- **Beacon is no longer built, patched, or scanned.** `security-patch.sh` no longer touches
+  `pabloalarconm/beacon-api4care-sm`, and the commented-out `beacon_count` service and its
+  `BEACON_PORT` prompt are gone from the Fix compose templates and installer. That form of Beacon
+  will not be used again: Beacon v2 for CARE-SM-2 is now our own facade
+  (`CARE-Semantic-Model-Version-2/implementation/Beacon2/`) built on top of
+  [Severance](https://github.com/FAIR-Data-Systems/Severance), the secure SPARQL relay, and is
+  scanned in that project's own `Security/` pipeline.
+- The vulnerability triage docs (`VULNERABILITY_TRIAGE.md`, `build_register.py`) drop the retired
+  `gdb` (GraphDB) and `beacon` images, and a "Retired images" section records why.
+
 ## [3.1.0] - 2026-09-09
 
 ### Added

@@ -36,8 +36,10 @@ end
 
 def write_csv_output(vulns, output_file)
   # Write filtered vulnerabilities to a CSV file for spreadsheet use.
-  return "No CRITICAL or HIGH vulnerabilities found. No CSV file created for #{output_file}." if vulns.empty?
-
+  # A scan with nothing to report still gets a (header-only) CSV: a file that
+  # exists with zero rows is a demonstrated "clean", whereas a missing file
+  # can't be told apart from "never scanned" -- and it also overwrites any
+  # stale CSV left over from an earlier, dirtier scan.
   headers = %w[Target VulnerabilityID Package InstalledVersion FixedVersion Severity Title
                PrimaryURL]
   CSV.open(output_file, 'w') do |csv|
@@ -55,6 +57,8 @@ def write_csv_output(vulns, output_file)
       ]
     end
   end
+
+  return "No CRITICAL or HIGH vulnerabilities found. Wrote header-only CSV '#{output_file}' (demonstrably zero)." if vulns.empty?
 
   critical_count = vulns.count { |v| v['Severity'] == 'CRITICAL' }
   high_count = vulns.count { |v| v['Severity'] == 'HIGH' }

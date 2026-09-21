@@ -1,7 +1,7 @@
 services:
 
   virtuoso:
-    image: fairdatasystems/virtuoso:2026-09-10
+    image: fairdatasystems/virtuoso:2026-09-21
     restart: always
     hostname: virtuoso
     security_opt:
@@ -18,7 +18,7 @@ services:
       - SETUID
       - SETGID
     environment:
-      - "DBA_PASSWORD=${GraphDB_Pass}"
+      - "DBA_PASSWORD=${TRIPLESTORE_PASS}"
       - "SPARQL_UPDATE=true"
     # No service in this stack had any resource ceiling before this -- a bug or
     # a burst of requests against any of them could exhaust the whole host with
@@ -27,7 +27,7 @@ services:
     mem_limit: 2g
     cpus: 2
     ports:
-      - 127.0.0.1:{GDB_PORT}:8890
+      - 127.0.0.1:{VIRTUOSO_PORT}:8890
     volumes:
       - {PREFIX}-virtuoso:/opt/virtuoso-opensource/database
       # Only takes effect if this compose file is ever what actually creates
@@ -40,16 +40,16 @@ services:
 
 
   cde-box-daemon:
-    image:  fairdatasystems/cdeb2:2026-09-10    # to use the CARE-SM-2 models with the care-sm-2 toolkit
+    image:  fairdatasystems/cdeb2:2026-09-21    # to use the CARE-SM-2 models with the care-sm-2 toolkit
     security_opt:
       - "no-new-privileges:true"
     cap_drop:
       - ALL
     environment:
-      GraphDB_User: ${GraphDB_User}
-      GraphDB_Pass: ${GraphDB_Pass}
+      TRIPLESTORE_USER: ${TRIPLESTORE_USER}
+      TRIPLESTORE_PASS: ${TRIPLESTORE_PASS}
       baseURI: ${baseURI}
-      GRAPHDB_REPONAME: ${GRAPHDB_REPONAME}
+      TRIPLESTORE_GRAPH: ${TRIPLESTORE_GRAPH}
     depends_on:
       - caresm
       - yarrrml-rdfizer
@@ -63,7 +63,7 @@ services:
       - {PREFIX}-backend
 
   caresm:
-    image: fairdatasystems/care2:2026-09-10
+    image: fairdatasystems/care2:2026-09-21
     hostname: caresm
     # The image itself has no non-root user baked in, but a plain uid:gid
     # override works cleanly -- verified live, no startup issues.
@@ -80,7 +80,7 @@ services:
       - {PREFIX}-backend
 
   yarrrml-rdfizer:
-    image: fairdatasystems/yrml:2026-09-10
+    image: fairdatasystems/yrml:2026-09-21
     hostname: yarrrml-rdfizer
     security_opt:
       - "no-new-privileges:true"
@@ -99,27 +99,6 @@ services:
       - ./data:/mnt/data
     networks:
       - {PREFIX}-backend
-
-  # beacon_count:
-  #   image: fairdatasystems/beacon:2026-09-10
-  #   hostname: beacon_count
-  #   restart: always
-  #   ports:
-  #     - "{BEACON_PORT}:8000"
-  #   environment:
-  #     - TRIPLESTORE_URL=${DATA_SPARQL_ENDPOINT}
-  #     - TRIPLESTORE_USERNAME=${GraphDB_User}
-  #     - TRIPLESTORE_PASSWORD=${GraphDB_Pass}
-  #     - FILTER_SEX=True
-  #     - FILTER_DISEASE=True
-  #     - FILTER_SYMPTOM=True
-  #     - FILTER_GENE_VARIANT=True
-  #     - FILTER_BIRTHYEAR=True
-  #     - FILTER_AGE_SYMPTOM_ONSET=True
-  #     - FILTER_AGE_DIAGNOSIS=True
-  #     - URL_SERVER=http://my.server.org/beaconAPI/  # DO NOT include the path e.g. /individuals
-  #   networks:
-  #     - {PREFIX}-backend
 
 
 volumes:

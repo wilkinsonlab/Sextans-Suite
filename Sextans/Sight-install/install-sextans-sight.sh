@@ -123,25 +123,26 @@ echo ""
 echo ""
 echo ""
 
-# GDB_PORT handling
-if [ -z "$GDB_PORT" ]; then
+# VIRTUOSO_PORT handling (GDB_PORT is the pre-rename name, still honoured if set)
+VIRTUOSO_PORT="${VIRTUOSO_PORT:-$GDB_PORT}"
+if [ -z "$VIRTUOSO_PORT" ]; then
   echo "The next question relates to the Virtuoso database that contains your Sight metadata. "
   echo "By default, this will NOT be exposed after installation, but we capture the port number here so that it can easily be switched ON for troubleshooting or maintenance. "
-  read -p "Enter the port where your Virtuoso database will serve (e.g. 8890): " GDB_PORT
+  read -p "Enter the port where your Virtuoso database will serve (e.g. 8890): " VIRTUOSO_PORT
 fi
 
-if [ -z "$GDB_PORT" ]; then
+if [ -z "$VIRTUOSO_PORT" ]; then
   echo "Error: No port specified for Virtuoso."
   exit 1
 fi
 
-if ! [[ "$GDB_PORT" =~ ^[0-9]+$ ]] || (( GDB_PORT < 1 || GDB_PORT > 65535 )); then
-  echo "Error: Invalid port '$GDB_PORT' – must be a number between 1 and 65535."
+if ! [[ "$VIRTUOSO_PORT" =~ ^[0-9]+$ ]] || (( VIRTUOSO_PORT < 1 || VIRTUOSO_PORT > 65535 )); then
+  echo "Error: Invalid port '$VIRTUOSO_PORT' – must be a number between 1 and 65535."
   exit 1
 fi
 
-if is_banned_port "$GDB_PORT"; then
-  echo "Error: Port $GDB_PORT is restricted in many web browsers (including Firefox and Chrome) for security reasons."
+if is_banned_port "$VIRTUOSO_PORT"; then
+  echo "Error: Port $VIRTUOSO_PORT is restricted in many web browsers (including Firefox and Chrome) for security reasons."
   echo "This will prevent users from connecting to your server through those browsers."
   echo "Please choose a different port. Safe common options include 3000, 4000, 5000, 7200, 8080, 8000, or 9000."
   exit 1
@@ -155,13 +156,15 @@ echo ""
 # Virtuoso's `dba` superuser password is set directly from this value via the
 # image's own DBA_PASSWORD environment variable at container start -- no
 # separate admin-API call needed (unlike GraphDB's REST-based security model).
-if [ -z "$GRAPHDB_PASSWORD" ]; then
+# GRAPHDB_PASSWORD is the pre-rename name, still honoured if set
+VIRTUOSO_PASSWORD="${VIRTUOSO_PASSWORD:-$GRAPHDB_PASSWORD}"
+if [ -z "$VIRTUOSO_PASSWORD" ]; then
   echo "Choose a password for Virtuoso's 'dba' superuser account."
-  read -s -p "Enter a Virtuoso dba password (min 12 characters): " GRAPHDB_PASSWORD
+  read -s -p "Enter a Virtuoso dba password (min 12 characters): " VIRTUOSO_PASSWORD
   echo ""
 fi
 
-if [ -z "$GRAPHDB_PASSWORD" ] || [ "${#GRAPHDB_PASSWORD}" -lt 12 ] || [ "$GRAPHDB_PASSWORD" = "root" ] || [ "$GRAPHDB_PASSWORD" = "admin" ] || [ "$GRAPHDB_PASSWORD" = "dba" ]; then
+if [ -z "$VIRTUOSO_PASSWORD" ] || [ "${#VIRTUOSO_PASSWORD}" -lt 12 ] || [ "$VIRTUOSO_PASSWORD" = "root" ] || [ "$VIRTUOSO_PASSWORD" = "admin" ] || [ "$VIRTUOSO_PASSWORD" = "dba" ]; then
   echo "Error: Virtuoso dba password must be at least 12 characters and not a common default such as 'root', 'admin', or 'dba'."
   exit 1
 fi
@@ -202,8 +205,8 @@ echo ""
 cd bootstrap_sight
 cp docker-compose-template.yml "docker-compose-${P}.yml"
 sed -i'' -e "s/{PREFIX}/${P}/" "docker-compose-${P}.yml"
-sed -i'' -e "s/{GDB_PORT}/${GDB_PORT}/" "docker-compose-${P}.yml"
-sed -i'' -e "s%{GDB_PASS}%${GRAPHDB_PASSWORD}%" "docker-compose-${P}.yml"
+sed -i'' -e "s/{VIRTUOSO_PORT}/${VIRTUOSO_PORT}/" "docker-compose-${P}.yml"
+sed -i'' -e "s%{VIRTUOSO_PASS}%${VIRTUOSO_PASSWORD}%" "docker-compose-${P}.yml"
 $DOCKER_COMPOSE -f "docker-compose-${P}.yml" down
 sleep 10
 
@@ -237,7 +240,7 @@ sed -i'' -e "s/{FDP_PORT}/$FDP_PORT/" "./fdp/application-${P}.yml"
 echo "E"
 sed -i'' -e "s%{GUID}%$uri%" "./fdp/application-${P}.yml"
 echo "F"
-sed -i'' -e "s%{GDB_PASS}%${GRAPHDB_PASSWORD}%" "./fdp/application-${P}.yml"
+sed -i'' -e "s%{VIRTUOSO_PASS}%${VIRTUOSO_PASSWORD}%" "./fdp/application-${P}.yml"
 sed -i'' -e "s%{JWT_SECRET}%${JWT_SECRET}%" "./fdp/application-${P}.yml"
 sed -i'' -e "s%{MONGO_PASS}%${MONGO_PASSWORD}%" "docker-compose-${P}.yml"
 sed -i'' -e "s%{MONGO_PASS}%${MONGO_PASSWORD}%" "./fdp/application-${P}.yml"
@@ -271,7 +274,7 @@ sed -i'' -e "s/{PREFIX}/${P}/" "./${P}-Sextans-Sight/docker-compose-${P}.yml"
 echo "2"
 sed -i'' -e "s/{FDP_PORT}/${FDP_PORT}/" "./${P}-Sextans-Sight/docker-compose-${P}.yml"
 echo "3"
-sed -i'' -e "s/{GDB_PORT}/${GDB_PORT}/" "./${P}-Sextans-Sight/docker-compose-${P}.yml"
+sed -i'' -e "s/{VIRTUOSO_PORT}/${VIRTUOSO_PORT}/" "./${P}-Sextans-Sight/docker-compose-${P}.yml"
 echo "4"
 sed -i'' -e "s/{PREFIX}/${P}/" "./${P}-Sextans-Sight/fdp/application-${P}.yml"
 echo "5"
@@ -280,8 +283,8 @@ echo "6"
 sed -i'' -e 's|{GUID}|'"${uri}"'|g' "./${P}-Sextans-Sight/fdp/application-${P}.yml"
 echo "7"
 sed -i'' -e 's|{GUID}|'"${uri}"'|g' "./${P}-Sextans-Sight/.env"
-sed -i'' -e "s%{GDB_PASS}%${GRAPHDB_PASSWORD}%" "./${P}-Sextans-Sight/.env"
-sed -i'' -e "s%{GDB_PASS}%${GRAPHDB_PASSWORD}%" "./${P}-Sextans-Sight/fdp/application-${P}.yml"
+sed -i'' -e "s%{VIRTUOSO_PASS}%${VIRTUOSO_PASSWORD}%" "./${P}-Sextans-Sight/.env"
+sed -i'' -e "s%{VIRTUOSO_PASS}%${VIRTUOSO_PASSWORD}%" "./${P}-Sextans-Sight/fdp/application-${P}.yml"
 sed -i'' -e "s%{JWT_SECRET}%${JWT_SECRET}%" "./${P}-Sextans-Sight/fdp/application-${P}.yml"
 sed -i'' -e "s%{MONGO_PASS}%${MONGO_PASSWORD}%" "./${P}-Sextans-Sight/.env"
 sed -i'' -e "s%{MONGO_PASS}%${MONGO_PASSWORD}%" "./${P}-Sextans-Sight/fdp/application-${P}.yml"

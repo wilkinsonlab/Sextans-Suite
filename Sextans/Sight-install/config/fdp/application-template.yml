@@ -18,7 +18,7 @@ repository:
   virtuoso:
     url: http://virtuoso:8890
     username: "dba"
-    password: "{GDB_PASS}"
+    password: "{VIRTUOSO_PASS}"
 
 # Enable MongoDB authentication -- see the `mongo-auth` Spring profile in FDP's own
 # application.yml (fairdatasystems/fdpserv2) for why this needs its own profile rather

@@ -3,11 +3,11 @@
 # this DOES NOT HAVE TO RESOLVE - these are local identifiers.
 baseURI=http://my.domain.org/data/
 # user and password with write-permissions on the CDE database
-GraphDB_User=admin
-GraphDB_Pass=root
-# This is used by both Beacon and the Updater - must be active if you use either
+TRIPLESTORE_USER=admin
+TRIPLESTORE_PASS=root
+# This is used by the Updater - must be active if you use it
 # These addresses are from the perspective of the Docker container 
 # (i.e. they are docker network addresses, not external URLs)
-# DATA_SPARQL_ENDPOINT=http://graphdb:7200/repositories/xxx-sextans-fix
-# GRAPHDB_REPONAME=acme-sextans-fix
+# DATA_SPARQL_ENDPOINT=http://virtuoso:8890/sparql
+# TRIPLESTORE_GRAPH=urn:acme:sextans-fix
 

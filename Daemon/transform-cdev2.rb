@@ -193,8 +193,11 @@ def load_cde
 end
 
 def write_to_virtuoso(concatenated)
-  user = ENV.fetch('GraphDB_User', nil)
-  pass = ENV.fetch('GraphDB_Pass', nil)
+  # Legacy names (GraphDB_User/GraphDB_Pass/GRAPHDB_REPONAME) are still honoured so
+  # a Sextans Fix install created before the rename keeps working when only this
+  # image is updated -- its compose file and .env still use the old names.
+  user = ENV['TRIPLESTORE_USER'] || ENV.fetch('GraphDB_User', nil)
+  pass = ENV['TRIPLESTORE_PASS'] || ENV.fetch('GraphDB_Pass', nil)
   network = ENV['networkname'] || 'virtuoso'
 
   clear_all_graphs(network, user, pass)
@@ -210,7 +213,7 @@ def write_to_virtuoso(concatenated)
   # conformant SPARQL 1.1 Graph Store Protocol implementation. Left in place
   # since the Graph Store Protocol's PUT still requires *a* target graph
   # parameter to be present in the request, and it's harmless as a no-op.
-  graph = ENV.fetch('GRAPHDB_REPONAME')
+  graph = ENV['TRIPLESTORE_GRAPH'] || ENV.fetch('GRAPHDB_REPONAME')
   url = "http://#{network}:8890/sparql-graph-crud-auth?graph=#{CGI.escape(graph)}"
 
   # Virtuoso's Graph Store Protocol write endpoint requires real HTTP Digest auth

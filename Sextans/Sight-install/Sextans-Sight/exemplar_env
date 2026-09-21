@@ -2,7 +2,7 @@
 # what the CDE transform will use as the base for all URLs it genereates
 baseURI=http://proof.of.life.for.sure/data/
 # user and password with write-permissions on the CDE database
-GraphDB_User=admin
-GraphDB_Pass=root
-# This is used by both Beacon and the Updater - must be active if you use either
-DATA_SPARQL_ENDPOINT=http://graphdb:7200/repositories/cde
+TRIPLESTORE_USER=admin
+TRIPLESTORE_PASS=root
+# This is used by the Updater - must be active if you use it
+DATA_SPARQL_ENDPOINT=http://virtuoso:8890/sparql

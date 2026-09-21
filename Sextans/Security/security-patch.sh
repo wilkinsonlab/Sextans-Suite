@@ -1,3 +1,7 @@
+# Stop on the first failed step, so a patch that did not apply can never be
+# committed, pushed and scanned as if it had.
+set -e
+
 timestamp=$(date +"%Y-%m-%d")
 
 # Archive the previous run's scan results instead of deleting them -- someone
@@ -18,20 +22,19 @@ find ./security_scan_output -maxdepth 1 -type f \( -name '*.json' -o -name '*.cs
 # Fix and Sextans Sight (actively maintained, vendor-backed, has real
 # authentication -- a much better fit than GraphDB for a system meant to
 # run in a hospital).
-image="openlink/virtuoso-opensource-7:7.2.17"
+# The -alpine variant is used deliberately: it is much smaller (less attack
+# surface), and it is patchable with apk. The Ubuntu variants from 7.2.17-r25
+# onward ship with /var/lib/dpkg stripped out, so apt cannot upgrade them and
+# Trivy cannot see their OS packages.
+image="openlink/virtuoso-opensource-7:7.2.17-alpine"
 name="virtuoso"
 outputfile=("./security_scan_output/scanresults_${name}_${timestamp}.json")
 docker run -d --name ${name} ${image}
 echo ""
 echo ""
 echo "updating ${name}"
-echo "update"
-docker exec ${name} apt-get -y update
-echo "dist-upgrade"
-docker exec ${name} apt-get -y dist-upgrade --fix-missing
-echo "autoclean"
-docker start ${name}
-docker exec ${name} apt-get -y autoclean
+docker exec -u root ${name} sh -c "apk update && apk upgrade --no-cache --force-missing-repositories"
+# Commit the patched container, with a new name, overwriting the previous version
 echo "commit"
 docker commit ${name} fairdatasystems/${name}:${timestamp}
 docker stop ${name}
@@ -208,30 +211,6 @@ YRDF="fairdatasystems/${name}:${timestamp}"
 trivy image --scanners vuln  --format json  --severity CRITICAL,HIGH  --timeout 1800s fairdatasystems/${name}:${timestamp} > ${outputfile}
 echo "END"
 
-# pabloalarconm/beacon-api4care-sm:4.1.0 
-image="pabloalarconm/beacon-api4care-sm:4.1.0"
-name="beacon"
-outputfile=("./security_scan_output/scanresults_${name}_${timestamp}.json")
-echo ""
-echo ""
-echo "updating ${name}"
-docker run -d --name ${name} ${image}
-# use the appropriate distribution upgrade tool for that container’s operating system
-docker exec -u root ${name} sh -c "apk update && apk upgrade --no-cache --force-missing-repositories"
-# Commit the patched container, with a new name, overwriting the previous version
-docker commit ${name} fairdatasystems/${name}:${timestamp}
-# stop the temporary container
-docker stop ${name}
-# delete the temporary container
-docker rm ${name}
-echo "push"
-docker push fairdatasystems/${name}:${timestamp}
-echo "pushed"
-BEACON="fairdatasystems/${name}:${timestamp}"
-# run a scan to determine success
-trivy image --scanners vuln  --format json  --severity CRITICAL,HIGH  --timeout 1800s fairdatasystems/${name}:${timestamp} > ${outputfile}
-echo "END"
-
 cp sight-docker-compose-template-template.yml sight-docker-compose-template-tmp.yml
 cp fix-docker-compose-template-template.yml fix-docker-compose-template-tmp.yml
 cp config-docker-compose-template-template.yml config-docker-compose-template-tmp.yml
@@ -242,7 +221,6 @@ sed -i'' -e "s!{FDPC}!${FDPC}!" "sight-docker-compose-template-tmp.yml"
 sed -i'' -e "s!{VIRTUOSO}!${VIRTUOSO}!" "sight-docker-compose-template-tmp.yml"
 sed -i'' -e "s!{MDB}!${MDB}!" "sight-docker-compose-template-tmp.yml"
 sed -i'' -e "s!{YRDF}!${YRDF}!" "sight-docker-compose-template-tmp.yml"
-sed -i'' -e "s!{BEACON}!${BEACON}!" "sight-docker-compose-template-tmp.yml"
 sed -i'' -e "s!{CDEB2}!${CDEB2}!" "sight-docker-compose-template-tmp.yml"
 sed -i'' -e "s!{CARE2}!${CARE2}!" "sight-docker-compose-template-tmp.yml"
 
@@ -251,7 +229,6 @@ sed -i'' -e "s!{FDPC}!${FDPC}!" "fix-docker-compose-template-tmp.yml"
 sed -i'' -e "s!{VIRTUOSO}!${VIRTUOSO}!" "fix-docker-compose-template-tmp.yml"
 sed -i'' -e "s!{MDB}!${MDB}!" "fix-docker-compose-template-tmp.yml"
 sed -i'' -e "s!{YRDF}!${YRDF}!" "fix-docker-compose-template-tmp.yml"
-sed -i'' -e "s!{BEACON}!${BEACON}!" "fix-docker-compose-template-tmp.yml"
 sed -i'' -e "s!{CDEB2}!${CDEB2}!" "fix-docker-compose-template-tmp.yml"
 sed -i'' -e "s!{CARE2}!${CARE2}!" "fix-docker-compose-template-tmp.yml"
 
