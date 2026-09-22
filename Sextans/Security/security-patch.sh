@@ -241,6 +241,11 @@ if [ "$(echo "${autopatch_log}" | tail -1)" = "CHANGED" ]; then
       echo "auto-patch verified: build OK, boot OK -- keeping the change"
       docker tag "${name}:autopatch-${timestamp}" "fairdatasystems/${name}:${timestamp}"
       branch="autopatch-gems-${name}-${timestamp}"
+      # `git checkout -b` changes the REPO's checked-out branch, not just this subshell's -- subshells
+      # isolate cwd/variables, never git's on-disk HEAD. Left unrestored, the run would leave the
+      # caller's own Sextans-Suite checkout switched to this new branch. Capture and restore right
+      # after committing.
+      original_branch=$(cd ../../Daemon && git rev-parse --abbrev-ref HEAD)
       (cd ../../Daemon && git checkout -q -b "${branch}" \
         && git add Gemfile Gemfile.lock Dockerfile \
         && git commit -q -m "Auto-patch Ruby gem CVEs in ${name} ($(date +%Y-%m-%d))
@@ -250,7 +255,8 @@ $(echo "${autopatch_log}" | grep '^PATCHED')
 Verified: image builds, boots correctly, re-scanned.
 Opened automatically by security-patch.sh -- see Security/auto_patch_ruby_gems.rb.
 
-Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>")
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>" \
+        && git checkout -q "${original_branch}")
       echo "../../Daemon|${branch}|Auto-patch Ruby gem CVEs in cdeb2 (${timestamp})" >> "${AUTOPATCH_QUEUE}"
     else
       echo "auto-patch FAILED boot verification -- reverting, keeping the pre-autopatch build"
