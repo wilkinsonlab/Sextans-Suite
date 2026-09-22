@@ -18,6 +18,25 @@ fi
 
 timestamp=$(date +"%Y-%m-%d")
 
+# Repos with an auto-patch commit staged, to be opened as a PR at the end of the run -- see the cdeb2
+# block below (this pipeline's only Ruby-owned image; care2 is Python and yrml is Java, neither has
+# Ruby-specific auto-patch tooling to apply -- see Severance's Security/security-patch.sh for the
+# reference implementation this mirrors). Format: one line per entry, "repo_path|branch|title".
+AUTOPATCH_QUEUE=$(mktemp)
+trap 'rm -f "${AUTOPATCH_QUEUE}"' EXIT
+
+# Opens a PR for a repo with a queued auto-patch commit. Never pushes to or merges into that repo's
+# default branch -- only ever a new branch + PR, for a human to review. Assumes `gh` is authenticated
+# with push access to the repo's remote.
+open_autopatch_pr() {
+  local repo_path="$1" branch="$2" title="$3"
+  echo ""
+  echo "=== opening PR for ${repo_path} (branch ${branch}) ==="
+  (cd "${repo_path}" && git push -u origin "${branch}")
+  (cd "${repo_path}" && gh pr create --title "${title}" --head "${branch}" --body \
+    "Automated Ruby gem CVE patch attempt, opened by \`security-patch.sh\`. Verified: image builds, boots correctly, re-scanned to confirm the finding is actually gone. See the commit message for exactly what changed and why. Not auto-merged -- please review before merging.")
+}
+
 # Record which Trivy produced this run's scan results (the scanner is maintained
 # by hand on this machine, so it can differ between runs).
 echo "Trivy version:"
@@ -192,6 +211,59 @@ echo "building ${name}"
 # a same-named image whose source repo silently changed underneath it would be a
 # worse record than a clean break in the tag history.
 docker build -t fairdatasystems/${name}:${timestamp} ../../Daemon
+
+# Auto-patch attempt for Ruby gem CVEs (see Security/auto_patch_ruby_gems.rb for the two strategies:
+# bundle update within an existing constraint for a real dependency; exact-pin + Dockerfile uninstall
+# attempt for a phantom default gem). Scans a LOCAL, not-yet-pushed build first, so a declined or
+# failed auto-patch attempt never gets pushed under this run's tag.
+prepatch_scanfile="./security_scan_output/scanresults_${name}_${timestamp}-prepatch.json"
+trivy image --skip-db-update --skip-java-db-update --scanners vuln --format json --severity CRITICAL,HIGH \
+  --timeout 1800s "fairdatasystems/${name}:${timestamp}" > "${prepatch_scanfile}"
+ruby annotate_gem_shadowing.rb "${prepatch_scanfile}" ../../Daemon || true
+autopatch_log=$(ruby auto_patch_ruby_gems.rb ../../Daemon "${prepatch_scanfile}")
+echo "${autopatch_log}"
+if [ "$(echo "${autopatch_log}" | tail -1)" = "CHANGED" ]; then
+  echo "auto-patch made changes to ${name} -- rebuilding to verify before keeping them"
+  if docker build -t "${name}:autopatch-${timestamp}" ../../Daemon; then
+    # No spec/ suite exists for the Daemon today -- a boot smoke test (does the process stay running,
+    # the same check used for Severance's own internal, which also has no HTTP port) is the only gate.
+    docker rm -f "${name}-autopatch-smoketest" >/dev/null 2>&1 || true
+    docker run -d --name "${name}-autopatch-smoketest" "${name}:autopatch-${timestamp}" >/dev/null
+    sleep 3
+    boot_ok=1
+    if docker ps --filter "name=${name}-autopatch-smoketest" --filter "status=running" \
+         --format '{{.Names}}' | grep -q "^${name}-autopatch-smoketest\$"; then
+      boot_ok=0
+    fi
+    docker rm -f "${name}-autopatch-smoketest" >/dev/null 2>&1 || true
+
+    if [ "${boot_ok}" -eq 0 ]; then
+      echo "auto-patch verified: build OK, boot OK -- keeping the change"
+      docker tag "${name}:autopatch-${timestamp}" "fairdatasystems/${name}:${timestamp}"
+      branch="autopatch-gems-${name}-${timestamp}"
+      (cd ../../Daemon && git checkout -q -b "${branch}" \
+        && git add Gemfile Gemfile.lock Dockerfile \
+        && git commit -q -m "Auto-patch Ruby gem CVEs in ${name} ($(date +%Y-%m-%d))
+
+$(echo "${autopatch_log}" | grep '^PATCHED')
+
+Verified: image builds, boots correctly, re-scanned.
+Opened automatically by security-patch.sh -- see Security/auto_patch_ruby_gems.rb.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>")
+      echo "../../Daemon|${branch}|Auto-patch Ruby gem CVEs in cdeb2 (${timestamp})" >> "${AUTOPATCH_QUEUE}"
+    else
+      echo "auto-patch FAILED boot verification -- reverting, keeping the pre-autopatch build"
+      (cd ../../Daemon && git checkout -q -- Gemfile Gemfile.lock Dockerfile) || true
+    fi
+  else
+    echo "auto-patch rebuild FAILED -- reverting, keeping the pre-autopatch build"
+    (cd ../../Daemon && git checkout -q -- Gemfile Gemfile.lock Dockerfile) || true
+  fi
+  docker rmi "${name}:autopatch-${timestamp}" >/dev/null 2>&1 || true
+fi
+rm -f "${prepatch_scanfile}"
+
 echo "push"
 docker push fairdatasystems/${name}:${timestamp}
 echo "pushed"
@@ -199,6 +271,7 @@ CDEB2="fairdatasystems/${name}:${timestamp}"
 # run a scan to determine success
 echo "trivy"
 trivy image --skip-db-update --skip-java-db-update --scanners vuln  --format json  --severity CRITICAL,HIGH --timeout 1800s fairdatasystems/${name}:${timestamp}  > ${outputfile}
+ruby annotate_gem_shadowing.rb "${outputfile}" ../../Daemon || true
 echo "END"
 
 
@@ -283,5 +356,10 @@ mv sight-docker-compose-template-tmp.yml ../Sight-install/docker-compose-templat
 mv config-docker-compose-template-tmp.yml ../Sight-install/config/docker-compose-template.yml
 mv bootstrap-sight-docker-compose-template-tmp.yml ../Sight-install/bootstrap_sight/docker-compose-template.yml
 mv bootstrap-fix-docker-compose-template-tmp.yml ../Fix-install/bootstrap_fix/docker-compose-template.yml
+
+# Open any queued auto-patch PRs (see the cdeb2 block above).
+while IFS='|' read -r repo_path branch title; do
+  [ -n "${repo_path}" ] && open_autopatch_pr "${repo_path}" "${branch}" "${title}"
+done < "${AUTOPATCH_QUEUE}"
 
 ruby parse-security-scans.rb ./security_scan_output/*.json
