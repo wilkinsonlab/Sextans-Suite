@@ -198,6 +198,7 @@ def load_rows():
     rows = collections.defaultdict(lambda: {
         "packages": set(), "installed": set(), "fixed": set(),
         "severity": None, "title": None, "url": None,
+        "shadowed": set(), "shadowed_detail": set(),
     })
     # Only the current run's CSVs live directly in SCAN_DIR (non-recursive glob);
     # everything superseded gets moved into SCAN_DIR/old/ by security-patch.sh
@@ -216,7 +217,23 @@ def load_rows():
                 agg["severity"] = row["Severity"]
                 agg["title"] = row["Title"]
                 agg["url"] = row["PrimaryURL"]
+                # See annotate_gem_shadowing.rb -- set only for gemspec findings it ran against
+                # (currently only cdeb2; care2/yrml aren't Ruby).
+                shadowed = (row.get("BundlerShadowed") or "").strip()
+                if shadowed:
+                    agg["shadowed"].add(shadowed)
+                detail = (row.get("BundlerShadowedDetail") or "").strip()
+                if detail:
+                    agg["shadowed_detail"].add(detail)
     return rows
+
+
+def shadowed_summary(agg):
+    """'yes' only if every contributing package/row was shadowed; 'no' if any real, unaddressed one
+    exists; '' if annotate_gem_shadowing.rb never ran against this row."""
+    if not agg["shadowed"]:
+        return ""
+    return "yes" if agg["shadowed"] == {"yes"} else "no"
 
 
 def load_existing_decisions():
@@ -238,10 +255,23 @@ def main():
         info = IMAGE_INFO[image]
         exposure, control = info["exposure"], info["control"]
 
+        shadowed = shadowed_summary(agg)
+
         if (image, cve) in existing:
             decision, notes = existing[(image, cve)]
         elif cve in MANUAL_DECISIONS:
             decision, notes = MANUAL_DECISIONS[cve]
+        elif shadowed == "yes":
+            # See annotate_gem_shadowing.rb: every package contributing to this finding is a stale
+            # default-gem copy that `bundle exec` never actually loads -- not currently exploitable via
+            # this app's own code path, unlike the ordinary (exposure, control) default below.
+            decision, notes = (
+                "SHADOWED",
+                "Flagged copy present on disk but never loaded at runtime -- bundle exec resolves a "
+                "newer, Gemfile-pinned version instead (RubyGems refuses to uninstall this compiled "
+                "default gem). See the per-image CSV's BundlerShadowedDetail column. Not currently "
+                "exploitable via this app's own code path.",
+            )
         else:
             decision, notes = DEFAULT_DECISIONS[(exposure, control)]
 
@@ -258,6 +288,7 @@ def main():
             "Notes": notes,
             "Title": agg["title"],
             "PrimaryURL": agg["url"],
+            "BundlerShadowed": shadowed,
         })
 
     # Sort: CRITICAL first, then by exposure tier, then image, then CVE
@@ -267,7 +298,7 @@ def main():
 
     fieldnames = ["Image", "VulnerabilityID", "Severity", "ExposureTier", "Control",
                   "Package", "InstalledVersion", "FixedVersion", "Decision", "Notes",
-                  "Title", "PrimaryURL"]
+                  "Title", "PrimaryURL", "BundlerShadowed"]
     with open(REGISTER_PATH, "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
