@@ -3,8 +3,8 @@
   "Trivy": {
     "Version": "0.69.1"
   },
-  "ReportID": "01a0c3bf-0ef8-7716-97cf-6808e26e8ca7",
-  "CreatedAt": "2026-09-21T13:34:33.464469086+02:00",
+  "ReportID": "01a0c458-0c59-7f1b-9ff7-18795bc04f7c",
+  "CreatedAt": "2026-09-21T16:21:39.801993538+02:00",
   "ArtifactID": "sha256:a512d3da459b4c3d5baf912d9c4d7731bb6eccfe72e358788a53281e6dac0afd",
   "ArtifactName": "fairdatasystems/yrml:2026-09-21",
   "ArtifactType": "container_image",

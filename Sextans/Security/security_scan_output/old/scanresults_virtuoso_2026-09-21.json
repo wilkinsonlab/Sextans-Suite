@@ -3,9 +3,9 @@
   "Trivy": {
     "Version": "0.69.1"
   },
-  "ReportID": "01a0c3aa-796b-75ea-8da3-297792d83c39",
-  "CreatedAt": "2026-09-21T13:12:04.459390955+02:00",
-  "ArtifactID": "sha256:8b142a0cdc4ba6e3a57c9bc4a421415469c52317e2296dab1a8ef2a7cdd7ee79",
+  "ReportID": "01a0c439-5587-7dce-8f54-8d5b6842ba34",
+  "CreatedAt": "2026-09-21T15:48:06.919909044+02:00",
+  "ArtifactID": "sha256:13caf0d8c1e7933419318fd4d0d950d36ae0910c92a498abf26d7966e503e0f9",
   "ArtifactName": "fairdatasystems/virtuoso:2026-09-21",
   "ArtifactType": "container_image",
   "Metadata": {
@@ -14,22 +14,22 @@
       "Family": "alpine",
       "Name": "3.21.7"
     },
-    "ImageID": "sha256:75516babba8e645345c5fb75c5a1fa27b01cbea60b8f7ba94045ab996345d924",
+    "ImageID": "sha256:bc3ee5660f56ec49d537e0c75b1e5ac625652015225f0ea61637b2f28a75c4b7",
     "DiffIDs": [
       "sha256:be6955f9917f1289afb9b2348dbbcf50e610556a3e2b9da63f4aa8ab3375ba03",
       "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
-      "sha256:34ddda0495892ba4991cbdb9a3ead5c9e21a3ef07e3ec4e38d3d5d3b449aa8b3"
+      "sha256:35fb3c5da89228fad9f2aaee670c27f23759a1dd16b990d64fac8a03793887bc"
     ],
     "RepoTags": [
       "fairdatasystems/virtuoso:2026-09-21"
     ],
     "RepoDigests": [
-      "fairdatasystems/virtuoso@sha256:ebbc0e67626c2407becdcb7f0d344015b2281bee0f785a2e4ea54a50e8d35320"
+      "fairdatasystems/virtuoso@sha256:441c467a0aefd334d23d40d441f80814f4254b5bc50656d6fb2efae3be901fd6"
     ],
     "Reference": "fairdatasystems/virtuoso:2026-09-21",
     "ImageConfig": {
       "architecture": "amd64",
-      "created": "2026-09-21T11:11:25.431949687Z",
+      "created": "2026-09-21T13:47:39.550104587Z",
       "docker_version": "28.2.2",
       "history": [
         {
@@ -175,7 +175,7 @@
           "empty_layer": true
         },
         {
-          "created": "2026-09-21T11:11:25Z",
+          "created": "2026-09-21T13:47:39Z",
           "created_by": "start"
         }
       ],
@@ -185,7 +185,7 @@
         "diff_ids": [
           "sha256:be6955f9917f1289afb9b2348dbbcf50e610556a3e2b9da63f4aa8ab3375ba03",
           "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
-          "sha256:34ddda0495892ba4991cbdb9a3ead5c9e21a3ef07e3ec4e38d3d5d3b449aa8b3"
+          "sha256:35fb3c5da89228fad9f2aaee670c27f23759a1dd16b990d64fac8a03793887bc"
         ]
       },
       "config": {
@@ -234,7 +234,7 @@
       },
       {
         "Size": 9283072,
-        "DiffID": "sha256:34ddda0495892ba4991cbdb9a3ead5c9e21a3ef07e3ec4e38d3d5d3b449aa8b3"
+        "DiffID": "sha256:35fb3c5da89228fad9f2aaee670c27f23759a1dd16b990d64fac8a03793887bc"
       }
     ]
   },
@@ -408,7 +408,7 @@
             "alpine-keys@2.5-r0"
           ],
           "Layer": {
-            "DiffID": "sha256:34ddda0495892ba4991cbdb9a3ead5c9e21a3ef07e3ec4e38d3d5d3b449aa8b3"
+            "DiffID": "sha256:35fb3c5da89228fad9f2aaee670c27f23759a1dd16b990d64fac8a03793887bc"
           },
           "Digest": "sha1:b9f721564df2173714031baf62c25c0344eedb36",
           "InstalledFiles": [
@@ -656,7 +656,7 @@
           ],
           "Maintainer": "Natanael Copa \u003cncopa@alpinelinux.org\u003e",
           "Layer": {
-            "DiffID": "sha256:34ddda0495892ba4991cbdb9a3ead5c9e21a3ef07e3ec4e38d3d5d3b449aa8b3"
+            "DiffID": "sha256:35fb3c5da89228fad9f2aaee670c27f23759a1dd16b990d64fac8a03793887bc"
           },
           "Digest": "sha1:4db63915a6ac9040a8e06d5306c57855fb1f7bae",
           "InstalledFiles": [
@@ -744,7 +744,7 @@
             "musl@1.2.5-r11"
           ],
           "Layer": {
-            "DiffID": "sha256:34ddda0495892ba4991cbdb9a3ead5c9e21a3ef07e3ec4e38d3d5d3b449aa8b3"
+            "DiffID": "sha256:35fb3c5da89228fad9f2aaee670c27f23759a1dd16b990d64fac8a03793887bc"
           },
           "Digest": "sha1:87f57457abaa6ad05847c88be7b0dc67c36aaad4",
           "InstalledFiles": [
@@ -965,7 +965,7 @@
             "musl@1.2.5-r11"
           ],
           "Layer": {
-            "DiffID": "sha256:34ddda0495892ba4991cbdb9a3ead5c9e21a3ef07e3ec4e38d3d5d3b449aa8b3"
+            "DiffID": "sha256:35fb3c5da89228fad9f2aaee670c27f23759a1dd16b990d64fac8a03793887bc"
           },
           "Digest": "sha1:c2f31cf4773de9ef0902479939d8d24385e62bff",
           "InstalledFiles": [
@@ -1203,7 +1203,7 @@
             "musl@1.2.5-r11"
           ],
           "Layer": {
-            "DiffID": "sha256:34ddda0495892ba4991cbdb9a3ead5c9e21a3ef07e3ec4e38d3d5d3b449aa8b3"
+            "DiffID": "sha256:35fb3c5da89228fad9f2aaee670c27f23759a1dd16b990d64fac8a03793887bc"
           },
           "Digest": "sha1:2d9abea4fa82c784d1d124bae077b740c8df9f3e",
           "InstalledFiles": [
@@ -1436,7 +1436,7 @@
             "musl@1.2.5-r11"
           ],
           "Layer": {
-            "DiffID": "sha256:34ddda0495892ba4991cbdb9a3ead5c9e21a3ef07e3ec4e38d3d5d3b449aa8b3"
+            "DiffID": "sha256:35fb3c5da89228fad9f2aaee670c27f23759a1dd16b990d64fac8a03793887bc"
           },
           "Digest": "sha1:9e344c1e5989cb574dd95f8b65b8fcfe9e3ef568",
           "InstalledFiles": [

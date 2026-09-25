@@ -1,6 +1,6 @@
 services:
   virtuoso:
-    image: fairdatasystems/virtuoso:2026-09-21
+    image: fairdatasystems/virtuoso:2026-09-22
     restart: always
     hostname: virtuoso
     security_opt:
