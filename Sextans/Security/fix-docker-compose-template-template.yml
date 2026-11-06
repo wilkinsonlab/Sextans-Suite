@@ -104,12 +104,6 @@ services:
 volumes:
   {PREFIX}-virtuoso:
     external: true
-  {PREFIX}-mongo-data:
-    external: true
-  {PREFIX}-mongo-init:
-    external: true
-  {PREFIX}-fdp-server:
-    external: true
 
 networks:
   # Note: intentionally NOT `internal: true` -- that flag also blocks Docker from

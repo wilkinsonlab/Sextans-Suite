@@ -21,7 +21,7 @@ The Sextant is an 18th-century navigational tool that uses celestial bodies and 
 
 Sextans Sight should be deployed on a publicly-accessible server (e.g. in your Demilitarized Zone), and optimally has no access control - it acts like your institutional homepage, but for machines.
 
-Sextans Fix is an optional second component that includes software for executing data transformations compatible with the [Clinical and Registry Entries Semantic Model (CARE-SM)](https://github.com/CARE-SM/).  Sextans Fix should be deployed inside of your firewall, and can only be accessed via tightly regulated calls from Sextans Sight (see detailed documentation below).
+Sextans Fix is an optional second component that includes software for executing data transformations compatible with the [Clinical and Registry Entries Semantic Model (CARE-SM)](https://github.com/CARE-SM/).  Sextans Fix should be deployed inside of your firewall. **Sextans Sight and Sextans Fix are fully independent** - neither component calls, is called by, or shares any network, volume, or database with the other. Each is installed, secured, and operated on its own.
 
 <center><img src='./docs/images/SextansSuite_architecture.png'/></center>
 
@@ -33,6 +33,8 @@ Sextans Fix is an optional second component that includes software for executing
 [Installing Sextans Sight](./Sextans/Sight-install/)
 
 [Installing Sextans Fix](./Sextans/Fix-install/)
+
+[Security & vulnerability transparency](./Sextans/Security/VULNERABILITY_TRIAGE.md) -- every CRITICAL/HIGH finding from our image scans, and whether it's safe to deploy
 
 ## Acknowledgement
 

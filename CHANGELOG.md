@@ -6,8 +6,30 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- **Published partner-facing vulnerability transparency documentation.** `Security/VULNERABILITY_TRIAGE.md`
+  now opens with a "For partners: how to decide whether to deploy a given image" section explaining,
+  in plain terms, what the `Decision` column in `vulnerability-register.csv` means for a deploy
+  decision, where to find the raw per-image/per-date Trivy scan backing it, and how to read
+  `ExposureTier`. Linked from the top-level README and from the "Securing your server" section of
+  both `Fix-install/README.md` and `Sight-install/README.md` -- previously this documentation
+  existed but wasn't linked from anywhere a partner would actually find it.
+
 ### Fixed
 
+- **`care2` (CARE-SM-2 Toolkit) shipped an unpatched Alpine OS layer.** Its Dockerfile never ran
+  `apk upgrade` at all, unlike the other owned images -- found while re-triaging the 2026-11-06
+  scan. Fixed upstream in `CARE-Semantic-Model-Version-2` (Toolkit bumped to 2.1.1), rebuilt,
+  rescanned clean (was 1 CRITICAL + ~18 HIGH, all OS-layer), and re-pushed under the same
+  `fairdatasystems/care2:2026-11-06` tag.
+- **`build_register.py`'s `MANUAL_DECISIONS` could silently misapply a disposition researched for
+  one image to a different image reporting the same CVE.** Concretely: `CVE-2026-31789` was marked
+  `RESOLVED` globally based on evidence specific to `fdpclient`'s fix; when the same CVE later
+  appeared in `care2` (still genuinely unpatched there), the register wrongly inherited `RESOLVED`.
+  Fixed by letting `MANUAL_DECISIONS` take an `(image, cve)` key that overrides the CVE-only one,
+  and removed the two stale global entries that caused this (both already covered on their own by
+  the "a CVE drops out of the register once it's gone from an image's scan" mechanism).
 - **Sextans Fix: data folder permissions no longer apply only at install time.** `install-sextans-fix.sh`
   previously ran `chmod -R o+rwX` on `Sextans-Fix/data` once, during installation, to let the
   fixed-UID `cde-box-daemon`/`yarrrml-rdfizer` containers read and write a folder owned by the host

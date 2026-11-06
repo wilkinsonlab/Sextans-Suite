@@ -123,16 +123,17 @@ MANUAL_DECISIONS = {
         "Same as CVE-2026-43512 -- Tomcat-related, needs a closer read of the full "
         "advisory before deciding."
     ),
-    "CVE-2026-31789": (
-        "RESOLVED",
-        "OpenSSL heap buffer overflow (libcrypto3, Alpine). Confirmed fixed: the "
-        "fdpclient rescan after our apk update/upgrade fix shows 0 vulnerabilities."
-    ),
-    "CVE-2025-58050": (
-        "RESOLVED",
-        "PCRE2 heap-buffer-overflow read (Alpine). Confirmed fixed: the fdpclient "
-        "rescan after our apk update/upgrade fix shows 0 vulnerabilities."
-    ),
+    # CVE-2026-31789 and CVE-2025-58050 used to have global RESOLVED entries here,
+    # from when they were confirmed fixed in fdpclient specifically. Removed
+    # 2026-11-06: fdpclient dropping a CVE from its own scan already makes that
+    # (image, cve) pair disappear from the register on its own (see
+    # VULNERABILITY_TRIAGE.md, "Re-running after a new scan") -- a global,
+    # CVE-ID-only RESOLVED entry adds no value for that case and is actively
+    # dangerous, since MANUAL_DECISIONS applies "across every image it appears
+    # in." That's exactly what happened: CVE-2026-31789 reappeared in care2 (a
+    # different, still-unpatched image) and was silently marked RESOLVED on the
+    # strength of fdpclient's unrelated fix. See the (image, cve)-specific
+    # overrides below for the real, currently-open findings.
     "CVE-2025-68121": (
         "ACCEPT",
         "Go TLS session-resumption bug (mutated ClientCAs/RootCAs between "
@@ -140,6 +141,19 @@ MANUAL_DECISIONS = {
         "CLI tools), not mongod itself (C++, not a Trivy target here) and not the "
         "clean Ubuntu OS layer. Inert given our deployment. Also: Red Hat rates it "
         "'important', not critical."
+    ),
+    ("care2", "CVE-2026-31789"): (
+        "PATCH",
+        "OpenSSL heap buffer overflow, Alpine libcrypto3/libssl3 (installed 3.5.4-r0, "
+        "fixed 3.5.6-r0). Root cause found 2026-11-06: care2's Dockerfile "
+        "(CARE-Semantic-Model-Version-2/implementation/Toolkit/Dockerfile) never ran "
+        "`apk upgrade` at all, unlike cdeb2/yrml's Alpine base -- it just shipped whatever "
+        "OS packages came baked into the `python:3.12.11-alpine3.22` base image. That's also "
+        "why care2 carried all ~18 of its other HIGH openssl/libuuid/musl/zlib findings this "
+        "pass. Fixed by adding `RUN apk update && apk upgrade --no-cache` right after FROM; "
+        "next care2 build+rescan should resolve this and most of the rest. (The advisory's "
+        "'32-bit systems' caveat doesn't make this ACCEPT-able on its own -- the fix is a "
+        "trivial apk bump, not a tradeoff worth skipping.)"
     ),
     "CVE-2026-27820": (
         "REVIEW",
@@ -259,6 +273,11 @@ def main():
 
         if (image, cve) in existing:
             decision, notes = existing[(image, cve)]
+        elif (image, cve) in MANUAL_DECISIONS:
+            # A specific (image, cve) key always wins over a cve-only one below --
+            # needed when the same CVE shows up in more than one image and the
+            # research/evidence genuinely differs per image.
+            decision, notes = MANUAL_DECISIONS[(image, cve)]
         elif cve in MANUAL_DECISIONS:
             decision, notes = MANUAL_DECISIONS[cve]
         elif shadowed == "yes":

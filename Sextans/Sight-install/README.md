@@ -97,13 +97,13 @@ with the Virtuoso password above, this is written into `application-ACME.yml` (m
 
 ## Installing Sextans Sight
 
-Once you have completed the "Downloading" section of this , and you have prepared your answers to the questions, cd into the `/Sight-install/` folder and run the instaler.
+Once you have completed the "Downloading" section of this tutorial, and you have prepared your answers to the questions, cd into the `/Sight-install/` folder and run the instaler.
 
 ```
 bash ./install-sextans-sight.sh
 ```
 
-This script will bootstrap your FAIR Data Point and its associated Virtuoso instance, secured with the password you chose. Your metadata is stored in Virtuoso's single database (unlike GraphDB, it has no separate "repositories" to create).
+This script will bootstrap your FAIR Data Point and its associated Virtuoso instance, secured with the password you chose. Your metadata is stored in Virtuoso's single database.
 
 ### If you abort installation before it completes...
 
@@ -150,6 +150,11 @@ __Nota Bene: This script can only be run one time!__  Please do not run it again
 
 There are two components that you need to be aware of:  Virtuoso and the FAIR Data Point Client.
 
+Every image we ship is scanned for known vulnerabilities, and the full, unfiltered results are
+published -- see [Security & vulnerability transparency](../Security/VULNERABILITY_TRIAGE.md) for
+how to look up what applies to the image tag you're running, and how to read our disposition on
+each open finding before you decide to deploy or update.
+
 #### Virtuoso
 
 | Service name | Local deployment                                | Production deployment |
@@ -162,9 +167,8 @@ at the "Virtuoso dba password" prompt:
 1.  Set the `dba` superuser's password -- done automatically during installation, via Virtuoso's
     own `DBA_PASSWORD` startup setting. Your chosen password is stored (file mode 600) in
     `application-ACME.yml` and `.env`, alongside a freshly-generated JWT signing secret for the
-    FDP server (also no longer a fixed shared value). Unlike GraphDB, there's no separate "turn
-    security on" step -- write access to Virtuoso's SPARQL Update endpoint always requires this
-    password.
+    FDP server. There's no separate "turn security on" step -- write access to Virtuoso's SPARQL
+    Update endpoint always requires this password.
 2.  Lock down anonymous reads -- by default, Virtuoso's unauthenticated `/sparql` endpoint can
     read every graph in the store. The installer runs a one-time SQL script
     (`virtuoso-initdb/lockdown-anonymous-sparql.sql`) when it first creates the database that
