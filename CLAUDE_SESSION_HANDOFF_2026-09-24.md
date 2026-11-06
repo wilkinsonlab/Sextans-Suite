@@ -21,6 +21,19 @@ sections, and the Virtuoso, CDE-Box Daemon, Severance and FDP Client rows of the
 
 ## 1. Verify: mitigation for the world-readable Fix data folder (UNTESTED claim in the DPIA)
 
+**2026-11-06 update:** a user reported Sextans Fix failing on Linux (worked for them via a
+standalone CARE-SM-2 run on Windows) with an error they described as ENOENT, "related to file
+permissions," right after dropping their own CSV into `data/` on a fresh install. That's consistent
+with the gap this item already describes: `chmod -R o+rwX` only ran once, at install time, over
+whatever was in the template folder then (just the sample `Diagnosis.csv`) -- any file added
+afterwards (including a user-created `data/custom/`) was never covered. Fixed in
+`install-sextans-fix.sh` by also setting a default ACL on `data/` (falls back to a printed warning
++ manual `chmod` instruction if `setfacl`/`acl` isn't available), documented in
+`Fix-install/README.md`. **Not yet confirmed against the actual reporter's error** -- a pure
+permissions problem on Linux normally surfaces as EACCES, not ENOENT, so this may only be part of
+the story; still waiting on the reporter's exact error text/log and file layout to confirm. The
+"world-readable" security verification below is still untested and separate from this fix.
+
 `install-sextans-fix.sh:180` runs `chmod -R o+rwX ./${P}-Sextans-Fix/data`, because `cde-box-daemon`
 and `yarrrml-rdfizer` run as a fixed UID that usually doesn't match the host user. So any local user
 on the Fix host can read the source CSV and `data/*/triples/*.nq`.

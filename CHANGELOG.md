@@ -4,6 +4,20 @@ All notable changes to Sextans Suite are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Unreleased]
+
+### Fixed
+
+- **Sextans Fix: data folder permissions no longer apply only at install time.** `install-sextans-fix.sh`
+  previously ran `chmod -R o+rwX` on `Sextans-Fix/data` once, during installation, to let the
+  fixed-UID `cde-box-daemon`/`yarrrml-rdfizer` containers read and write a folder owned by the host
+  user. Any CSV/YARRRML dropped into that folder afterwards -- including a `data/custom/` folder
+  the user creates themselves for a custom datatype -- never got the same treatment, which could
+  make a transformation fail to find a newly-added file. The installer now also sets a default ACL
+  on `data/` (when the `acl` package is available) so new files and folders inherit the same
+  permissions automatically; it prints a warning with the manual `chmod` workaround when `setfacl`
+  isn't available. Documented in `Fix-install/README.md`.
+
 ## [3.2.0] - 2026-09-21
 
 ### Documentation

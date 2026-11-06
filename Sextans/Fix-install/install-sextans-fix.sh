@@ -178,6 +178,27 @@ cp -r ./Sextans-Fix/data ./${P}-Sextans-Fix/
 # containers, which won't generally match your host UID -- open this bind-mounted
 # data directory to any user so both containers can read/write it regardless.
 chmod -R o+rwX ./${P}-Sextans-Fix/data
+# The chmod above only covers what's already in this folder right now (the
+# sample Diagnosis.csv). It is NOT a one-time setup step -- this is the folder
+# you keep dropping new CSV/YARRRML files into for every future transformation
+# (including a data/custom/ folder you create yourself later), and none of
+# those later additions would get opened up the same way, which a user hit as
+# a transformation failing against a brand-new file. A default
+# ACL makes every file/directory created under here from now on inherit the
+# same "other rwX" permission automatically, without needing to re-run chmod
+# by hand each time.
+if command -v setfacl >/dev/null 2>&1; then
+  if ! setfacl -R -d -m o::rwx ./${P}-Sextans-Fix/data 2>/dev/null || ! setfacl -R -m o::rwx ./${P}-Sextans-Fix/data 2>/dev/null; then
+    echo -e "${RED}Warning: setfacl failed on ./${P}-Sextans-Fix/data (filesystem may not support ACLs).${NC}"
+    echo -e "${RED}Any CSV/YARRRML file you add to that folder later will need${NC}"
+    echo -e "${RED}'chmod -R o+rwX ./${P}-Sextans-Fix/data' run by hand before triggering a transformation.${NC}"
+  fi
+else
+  echo -e "${RED}Warning: 'setfacl' (package 'acl') not found.${NC}"
+  echo -e "${RED}Any CSV/YARRRML file you add to ./${P}-Sextans-Fix/data later will need${NC}"
+  echo -e "${RED}'chmod -R o+rwX ./${P}-Sextans-Fix/data' run by hand before triggering a transformation,${NC}"
+  echo -e "${RED}or install the 'acl' package so this is handled for you automatically next install.${NC}"
+fi
 # Only takes effect if the bootstrap step above didn't already create the
 # database (see docker-compose-template.yml's own comment on this mount) --
 # copied here too so the final compose file is self-contained if this folder

@@ -183,6 +183,15 @@ loaded successfully into Virtuoso, delete the CSV and `data/triples/*.nq` files 
 them in place -- they're not needed after a successful load, since the data of record from that
 point on is what's in Virtuoso.
 
+The installer also sets a default ACL on `data/` (if your system has the `acl` package) so any
+file or folder you add here *later* -- a new CSV, a fresh `data/custom/` folder -- automatically
+gets the same permissions, without you needing to re-run chmod every time. If `setfacl` isn't
+available on your server, the installer prints a warning and you'll need to run
+`chmod -R o+rwX ./data` by hand (from inside `Sextans-Fix/`) after adding new source files, before
+triggering a transformation -- otherwise the transformation can fail with a file-not-found error
+on the new file, since the containers (running as their own fixed UID) can't see into a folder
+their user has no read/execute permission on yet.
+
 
 
 
