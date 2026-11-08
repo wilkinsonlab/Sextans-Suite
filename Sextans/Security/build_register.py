@@ -135,7 +135,7 @@ MANUAL_DECISIONS = {
     # strength of fdpclient's unrelated fix. See the (image, cve)-specific
     # overrides below for the real, currently-open findings.
     "CVE-2025-68121": (
-        "ACCEPT",
+        "NOT REACHABLE",
         "Go TLS session-resumption bug (mutated ClientCAs/RootCAs between "
         "handshakes) -- affects Go-compiled binaries in the mdb image (gosu / mongo "
         "CLI tools), not mongod itself (C++, not a Trivy target here) and not the "
@@ -202,7 +202,7 @@ DEFAULT_DECISIONS = {
     (2, "wrapper"): ("TRACK", "Internal-only; app-level dependency we don't control the "
                                "source of -- only actionable if it's in the base OS/runtime "
                                "layer of our own Dockerfile."),
-    (3, "vendor"): ("ACCEPT", "Inert -- bundled but never invoked/exposed by our "
+    (3, "vendor"): ("NOT REACHABLE", "Inert -- bundled but never invoked/exposed by our "
                                "deployment. Re-verify this reasoning if the deployment "
                                "changes (e.g. if we ever call these CLI tools directly)."),
 }
@@ -293,6 +293,13 @@ def main():
             )
         else:
             decision, notes = DEFAULT_DECISIONS[(exposure, control)]
+
+        # "ACCEPT" was renamed "NOT REACHABLE" on 2026-11-08 (same meaning: the vulnerable code
+        # can't be reached in our deployment). Partners would read "accepted" as "known risk,
+        # tolerated", which it never meant. Decisions carried over from an older register keep
+        # their notes and get the new name.
+        if decision == "ACCEPT":
+            decision = "NOT REACHABLE"
 
         out_rows.append({
             "Image": image,

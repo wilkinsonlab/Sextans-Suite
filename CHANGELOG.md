@@ -6,6 +6,14 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Changed
+
+- The vulnerability register's `ACCEPT` decision is now called `NOT REACHABLE` (same meaning: the vulnerable
+  code can't be reached in our deployment). Partners would read "accepted" as "known risk, tolerated", which
+  it never meant. The 29 existing rows were relabelled (no other change; no rescan), and the partner legend
+  now says plainly that the 28 Tier-3 rows rest on a per-component judgment rather than per-CVE research.
+  Same rename as in Severance (2026-11-08). Mark's call.
+
 ### Added
 
 - **Published partner-facing vulnerability transparency documentation.** `Security/VULNERABILITY_TRIAGE.md`
