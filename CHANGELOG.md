@@ -31,9 +31,12 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   tag-only fallback). Ported from Severance. Mark flagged that the suite had already moved to digest-based
   pulls, which caught that the freshly regenerated templates would otherwise have shipped tag-only.
 - **All seven images (`virtuoso`, `fdpserv2`, `fdpclient`, `mdb`, `cdeb2`, `care2`, `yrml`) rebuilt, rescanned
-  and re-pushed under the `2026-11-08` tag.** `virtuoso`, `fdpclient` and `care2` scan clean (zero
-  CRITICAL/HIGH). The register stayed at 86 rows; see `Security/VULNERABILITY_TRIAGE.md` ("2026-11-08 re-scan
-  review") for the per-finding review of the two new CVEs (`cdeb2` musl `regcomp`, `mdb` `golang.org/x/net/html`).
+  and re-pushed under the `2026-11-08` tag, and the compose templates re-pinned to their new digests.**
+  `virtuoso` and `fdpclient` scan completely clean (no recorded findings); `care2` and `cdeb2` carry zero
+  CRITICAL/HIGH (only lower-severity gem findings, newly visible under every-severity scanning). The remaining
+  CRITICAL/HIGH are confined to `mdb` (30), `fdpserv2` (28) and `yrml` (12), each dispositioned in
+  `vulnerability-register.csv`; see `Security/VULNERABILITY_TRIAGE.md` ("2026-11-08 re-scan review") for the
+  per-finding reasoning.
 - The vulnerability register's `ACCEPT` decision is now called `NOT REACHABLE` (same meaning: the vulnerable
   code can't be reached in our deployment). Partners would read "accepted" as "known risk, tolerated", which
   it never meant. The 29 existing rows were relabelled (no other change; no rescan), and the partner legend
