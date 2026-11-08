@@ -178,34 +178,160 @@ MANUAL_DECISIONS = {
         "WRAPPER-ONLY",
         "maven-shared-utils, same build-hygiene situation as CVE-2017-1000487."
     ),
+    # Reviewed 2026-11-08 (see VULNERABILITY_TRIAGE.md, "2026-11-08 re-scan review").
+    ("cdeb2", "CVE-2026-107891"): (
+        "PATCH",
+        "musl integer overflow in regcomp (Alpine 1.2.6-r2 -> r3), internal-only image we own. "
+        "Code execution needs an attacker-controlled regex pattern reaching musl's regcomp; the "
+        "Ruby app uses its own Onigmo regex engine, not musl, so there is no obvious reachable "
+        "path -- but we patch owned images anyway. r3 was not yet in the Alpine mirror at the "
+        "2026-11-08 build (the image still carries r2 after apk upgrade); it lands on the next "
+        "rebuild once r3 is published."
+    ),
+    ("mdb", "CVE-2026-78661"): (
+        "NOT REACHABLE",
+        "golang.org/x/net/html denial-of-service via crafted HTML input, in bundled Go tooling "
+        "(mongodump/mongoexport/etc.) that our MongoDB deployment never invokes and that parses no "
+        "HTML in our use -- same inert-Go-tooling basis as mdb's other findings. Re-verify if we "
+        "ever call those CLI tools directly."
+    ),
 }
 
-DEFAULT_DECISIONS = {
-    (1, "vendor"): ("TRACK", "Network-exposed, third-party image. No fork by default "
-                              "(see project policy) -- bump the pinned tag as soon as "
-                              "upstream ships a release containing FixedVersion."),
-    (1, "owned"): ("PATCH", "Network-exposed, and we build this image directly -- patch "
-                             "immediately, higher urgency than internal-only 'owned' findings "
-                             "given real exposure. Currently only applies to fdpserv2, whose "
-                             "'owned' classification is itself temporary (see the dedicated "
-                             "note in VULNERABILITY_TRIAGE.md) -- revisit this default if it "
-                             "moves back to 'vendor'."),
-    (2, "vendor"): ("TRACK", "Internal-only, third-party image. No fork by default -- bump "
-                              "the pinned tag as soon as upstream ships a release containing "
-                              "FixedVersion. Lower urgency than (1, vendor) given no direct "
-                              "network exposure."),
-    (2, "owned"): ("PATCH", "Internal-only, and we build this image -- bump the "
-                             "dependency directly next time this Dockerfile is touched."),
-    (2, "collaborator"): ("FLAG-UPSTREAM", "Internal-only, built by a CARE-SM "
-                                            "collaborator -- open an issue/PR rather than "
-                                            "forking; low urgency given exposure."),
-    (2, "wrapper"): ("TRACK", "Internal-only; app-level dependency we don't control the "
-                               "source of -- only actionable if it's in the base OS/runtime "
-                               "layer of our own Dockerfile."),
-    (3, "vendor"): ("NOT REACHABLE", "Inert -- bundled but never invoked/exposed by our "
-                               "deployment. Re-verify this reasoning if the deployment "
-                               "changes (e.g. if we ever call these CLI tools directly)."),
+# Package-wide dispositions, for packages whose findings all share the same reachability argument
+# regardless of the individual CVE. Checked after MANUAL_DECISIONS, before the (exposure, control,
+# has_fix) default. linux-libc-dev is a Debian source package of C kernel headers only -- a
+# container never runs its image's kernel, it runs the host's -- so a kernel CVE reported against it
+# is not reachable in the container. Our owned images are Alpine (no linux-libc-dev), so this should
+# not currently fire; it's here for parity with Severance and to catch a Debian-based owned image if
+# one is ever added. If linux-libc-dev shows up in an owned image, it almost always means a build
+# toolchain (build-base/build-essential) leaked into the runtime image -- find out why.
+PACKAGE_DECISIONS = {
+    "linux-libc-dev": ("NOT REACHABLE", "Kernel CVE reported against linux-libc-dev, which is only C "
+                       "header files (no executable code). A container never runs its image's "
+                       "kernel; it runs the host's. If this package is in a runtime image at all, a "
+                       "build toolchain leaked into it -- find out why. The bug matters for the HOST "
+                       "kernel: keep the host patched."),
 }
+
+# Defaults for findings nobody has individually researched yet. Keyed on
+# (exposure, control, has_fix) -- has_fix is whether Trivy reported a FixedVersion. Telling a reader
+# to "patch immediately" when there is nothing to patch to is wrong, so for images we build, a
+# finding with no published fix is TRACK ("applied automatically once it exists") rather than PATCH.
+# For third-party (vendor/wrapper/collaborator) control we never fork regardless, so has_fix doesn't
+# change the disposition, only the wording.
+_NO_FIX = (" No fixed version is published upstream yet -- the next security-patch.sh run's "
+           "OS-level upgrade (or a dependency bump) applies one automatically once it exists.")
+DEFAULT_DECISIONS = {
+    (1, "owned", True): ("PATCH", "Network-exposed, and we build this image directly; a fix exists "
+                         "-- patch immediately (bump the pinned dependency, or confirm the next "
+                         "security-patch.sh run's OS-level upgrade already resolves it). Higher "
+                         "urgency than internal-only 'owned' findings given real exposure. Not yet "
+                         "individually reviewed for reachability."),
+    (1, "owned", False): ("TRACK", "Network-exposed image we build directly, but no upstream fix "
+                          "yet." + _NO_FIX + " Not yet individually reviewed for reachability."),
+    (2, "owned", True): ("PATCH", "Internal-only, and we build this image; a fix exists -- bump the "
+                         "dependency directly next time this Dockerfile is touched (or via the next "
+                         "OS-level upgrade). Not yet individually reviewed for reachability."),
+    (2, "owned", False): ("TRACK", "Internal-only image we build, but no upstream fix yet." + _NO_FIX +
+                          " Not yet individually reviewed for reachability."),
+    (1, "vendor", True): ("TRACK", "Network-exposed, third-party image. No fork by default (see "
+                          "project policy) -- bump the pinned tag as soon as upstream ships a "
+                          "release containing FixedVersion."),
+    (1, "vendor", False): ("TRACK", "Network-exposed, third-party image, no upstream fix yet. No "
+                           "fork by default -- bump the pinned tag once upstream ships one."),
+    (2, "vendor", True): ("TRACK", "Internal-only, third-party image. No fork by default -- bump the "
+                          "pinned tag as soon as upstream ships a release containing FixedVersion. "
+                          "Lower urgency than (1, vendor) given no direct network exposure."),
+    (2, "vendor", False): ("TRACK", "Internal-only, third-party image, no upstream fix yet. No fork "
+                           "by default -- bump the pinned tag once upstream ships one. Lower urgency "
+                           "than (1, vendor) given no direct network exposure."),
+    (2, "collaborator", True): ("FLAG-UPSTREAM", "Internal-only, built by a CARE-SM collaborator -- "
+                                "open an issue/PR rather than forking; low urgency given exposure."),
+    (2, "collaborator", False): ("FLAG-UPSTREAM", "Internal-only, built by a CARE-SM collaborator, "
+                                 "no upstream fix yet -- open an issue/PR rather than forking; low "
+                                 "urgency given exposure."),
+    (2, "wrapper", True): ("TRACK", "Internal-only; app-level dependency we don't control the source "
+                           "of -- only actionable if it's in the base OS/runtime layer of our own "
+                           "Dockerfile."),
+    (2, "wrapper", False): ("TRACK", "Internal-only; app-level dependency we don't control the "
+                            "source of, no upstream fix yet -- only actionable if it's in the base "
+                            "OS/runtime layer of our own Dockerfile."),
+    (3, "vendor", True): ("NOT REACHABLE", "Inert in our deployment -- either bundled but never "
+                          "invoked, or (like the mdb image's gosu, which does run at container "
+                          "start) invoked but doing no networking/TLS and reading no untrusted "
+                          "input. Re-verify if the deployment changes (e.g. if we ever call these "
+                          "CLI tools directly)."),
+    (3, "vendor", False): ("NOT REACHABLE", "Inert in our deployment -- either bundled but never "
+                           "invoked, or (like the mdb image's gosu, which does run at container "
+                           "start) invoked but doing no networking/TLS and reading no untrusted "
+                           "input. Re-verify if the deployment changes (e.g. if we ever call these "
+                           "CLI tools directly)."),
+}
+
+SHADOWED_DECISION = (
+    "SHADOWED",
+    "Flagged copy present on disk but never loaded at runtime -- bundle exec resolves a "
+    "newer, Gemfile-pinned version instead (RubyGems refuses to uninstall this compiled "
+    "default gem). See the per-image CSV's BundlerShadowedDetail column. Not currently "
+    "exploitable via this app's own code path.",
+)
+
+# Notes text this script generates by itself. A prior register row carrying one of these was never a
+# human decision, so it is recomputed every run rather than kept -- otherwise improving a default
+# (e.g. the has_fix split added 2026-11-08) or adding research above could never replace what an
+# earlier run wrote. Includes the pre-2026-11-08 default strings that older registers still carry.
+_OLD_GENERATED_NOTES = {
+    "Network-exposed, third-party image. No fork by default (see project policy) -- bump the "
+    "pinned tag as soon as upstream ships a release containing FixedVersion.",
+    "Network-exposed, and we build this image directly -- patch immediately, higher urgency than "
+    "internal-only 'owned' findings given real exposure. Currently only applies to fdpserv2, whose "
+    "'owned' classification is itself temporary (see the dedicated note in VULNERABILITY_TRIAGE.md) "
+    "-- revisit this default if it moves back to 'vendor'.",
+    "Internal-only, third-party image. No fork by default -- bump the pinned tag as soon as upstream "
+    "ships a release containing FixedVersion. Lower urgency than (1, vendor) given no direct network "
+    "exposure.",
+    "Internal-only, and we build this image -- bump the dependency directly next time this "
+    "Dockerfile is touched.",
+    "Internal-only, built by a CARE-SM collaborator -- open an issue/PR rather than forking; low "
+    "urgency given exposure.",
+    "Internal-only; app-level dependency we don't control the source of -- only actionable if it's "
+    "in the base OS/runtime layer of our own Dockerfile.",
+    "Inert -- bundled but never invoked/exposed by our deployment. Re-verify this reasoning if the "
+    "deployment changes (e.g. if we ever call these CLI tools directly).",
+    "Flagged copy present on disk but never loaded at runtime -- bundle exec resolves a newer, "
+    "Gemfile-pinned version instead (RubyGems refuses to uninstall this compiled default gem). See "
+    "the per-image CSV's BundlerShadowedDetail column. Not currently exploitable via this app's own "
+    "code path.",
+}
+_GENERATED_NOTES = ({n for _, n in DEFAULT_DECISIONS.values()}
+                    | {SHADOWED_DECISION[1]}
+                    | _OLD_GENERATED_NOTES)
+
+
+def decide(image, cve, packages, exposure, control, has_fix, shadowed, prior):
+    """Disposition for one (image, cve) row. Precedence: researched (image, cve) > researched cve >
+    package-wide rule > a prior *human* decision kept in the register > shadowed > (exposure,
+    control, has_fix) default. A prior row whose Notes are one this script generated was never a
+    human decision, so it is recomputed rather than kept."""
+    if (image, cve) in MANUAL_DECISIONS:
+        return MANUAL_DECISIONS[(image, cve)]
+    if cve in MANUAL_DECISIONS:
+        return MANUAL_DECISIONS[cve]
+    if packages and all(p in PACKAGE_DECISIONS for p in packages):
+        decisions = {PACKAGE_DECISIONS[p] for p in packages}
+        if len(decisions) == 1:
+            return decisions.pop()
+    if prior and prior[1] not in _GENERATED_NOTES:
+        # Sticky human decision -- unless the finding has since become shadowed (the Gemfile now
+        # pins a fixed version and annotate_gem_shadowing.rb confirmed bundle exec never loads the
+        # flagged copy): that decision predates the fix and was never reviewed against it.
+        if not (prior[0] != "SHADOWED" and shadowed == "yes"):
+            # "ACCEPT" was renamed "NOT REACHABLE" on 2026-11-08 (same meaning). A hand-written row
+            # in an older register keeps its notes but gets the new name.
+            return ("NOT REACHABLE", prior[1]) if prior[0] == "ACCEPT" else prior
+    if shadowed == "yes":
+        return SHADOWED_DECISION
+    return DEFAULT_DECISIONS[(exposure, control, has_fix)]
 
 
 def load_rows():
@@ -270,36 +396,8 @@ def main():
         exposure, control = info["exposure"], info["control"]
 
         shadowed = shadowed_summary(agg)
-
-        if (image, cve) in existing:
-            decision, notes = existing[(image, cve)]
-        elif (image, cve) in MANUAL_DECISIONS:
-            # A specific (image, cve) key always wins over a cve-only one below --
-            # needed when the same CVE shows up in more than one image and the
-            # research/evidence genuinely differs per image.
-            decision, notes = MANUAL_DECISIONS[(image, cve)]
-        elif cve in MANUAL_DECISIONS:
-            decision, notes = MANUAL_DECISIONS[cve]
-        elif shadowed == "yes":
-            # See annotate_gem_shadowing.rb: every package contributing to this finding is a stale
-            # default-gem copy that `bundle exec` never actually loads -- not currently exploitable via
-            # this app's own code path, unlike the ordinary (exposure, control) default below.
-            decision, notes = (
-                "SHADOWED",
-                "Flagged copy present on disk but never loaded at runtime -- bundle exec resolves a "
-                "newer, Gemfile-pinned version instead (RubyGems refuses to uninstall this compiled "
-                "default gem). See the per-image CSV's BundlerShadowedDetail column. Not currently "
-                "exploitable via this app's own code path.",
-            )
-        else:
-            decision, notes = DEFAULT_DECISIONS[(exposure, control)]
-
-        # "ACCEPT" was renamed "NOT REACHABLE" on 2026-11-08 (same meaning: the vulnerable code
-        # can't be reached in our deployment). Partners would read "accepted" as "known risk,
-        # tolerated", which it never meant. Decisions carried over from an older register keep
-        # their notes and get the new name.
-        if decision == "ACCEPT":
-            decision = "NOT REACHABLE"
+        decision, notes = decide(image, cve, agg["packages"], exposure, control,
+                                 bool(agg["fixed"]), shadowed, existing.get((image, cve)))
 
         out_rows.append({
             "Image": image,
@@ -318,7 +416,7 @@ def main():
         })
 
     # Sort: CRITICAL first, then by exposure tier, then image, then CVE
-    sev_rank = {"CRITICAL": 0, "HIGH": 1}
+    sev_rank = {"CRITICAL": 0, "HIGH": 1, "MEDIUM": 2, "LOW": 3, "UNKNOWN": 4}
     out_rows.sort(key=lambda r: (sev_rank.get(r["Severity"], 9), r["ExposureTier"],
                                   r["Image"], r["VulnerabilityID"]))
 

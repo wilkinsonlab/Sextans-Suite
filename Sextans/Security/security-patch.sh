@@ -56,6 +56,56 @@ pinned_ref() {
   echo "${tag}@${digest}"
 }
 
+# Fail the run if a freshly built/patched image won't even start, so a broken image can never be
+# committed, pushed and scanned as if healthy. Catches the class of break where an image builds
+# fine but crashes on startup -- e.g. a Ruby that no longer bundles a stdlib the app requires, or a
+# bad entrypoint. Runs the image with no args/env (as the scan does) and waits a few seconds: PASS
+# if it is still running, or exited cleanly (0); FAIL (print its log, exit 1) only on a non-zero
+# exit. The short wait is deliberate -- a server that depends on a DB it can't reach here is still
+# booting at this point (so it passes), while a startup crash happens near-instantly. Verified
+# 2026-11-08 that all seven images stay up under this check with no env.
+boot_check() {
+  local name="$1" tag="fairdatasystems/$1:${timestamp}" cn="bootcheck-$1" state exitc
+  echo "boot-check ${name}"
+  docker rm -f "${cn}" >/dev/null 2>&1 || true
+  docker run -d --name "${cn}" "${tag}" >/dev/null
+  sleep 5
+  state=$(docker inspect -f '{{.State.Status}}' "${cn}" 2>/dev/null || echo missing)
+  exitc=$(docker inspect -f '{{.State.ExitCode}}' "${cn}" 2>/dev/null || echo 1)
+  if [ "${state}" = "running" ] || { [ "${state}" = "exited" ] && [ "${exitc}" = "0" ]; }; then
+    echo "boot-check ${name}: OK (state=${state} exit=${exitc})"
+    docker rm -f "${cn}" >/dev/null 2>&1 || true
+  else
+    echo "FATAL: ${tag} failed boot-check (state=${state} exit=${exitc}). Last log:" >&2
+    docker logs "${cn}" 2>&1 | tail -40 >&2
+    docker rm -f "${cn}" >/dev/null 2>&1 || true
+    exit 1
+  fi
+}
+
+# Fail the run if an image still trusts the compromised "emSign ECC Root CA - G3" (eMudhra, Oct
+# 2026). cdeb2 and yrml actively strip it in their Dockerfiles (the fixed Alpine bundle isn't in
+# their release repos yet); the other images' bases already dropped it. This gate catches a strip
+# that silently stopped working, or a base image that re-introduces the CA, for ANY image. Reads the
+# image's trust bundle and parses it with openssl on the host (a plain grep finds nothing on an
+# Alpine bundle -- it has no subject comments). Images without a standard bundle path are skipped.
+ca_check() {
+  local name="$1" tag="fairdatasystems/$1:${timestamp}" bad="emSign ECC Root CA - G3" bundle
+  echo "ca-check ${name}"
+  bundle=$(docker run --rm --entrypoint sh "${tag}" -c \
+    'cat /etc/ssl/certs/ca-certificates.crt 2>/dev/null || cat /etc/ssl/cert.pem 2>/dev/null' 2>/dev/null)
+  if [ -z "${bundle}" ]; then
+    echo "ca-check ${name}: no standard CA bundle found -- skipped"
+    return 0
+  fi
+  if printf '%s' "${bundle}" | openssl crl2pkcs7 -nocrl -certfile /dev/stdin 2>/dev/null \
+       | openssl pkcs7 -print_certs -noout 2>/dev/null | grep -q "${bad}"; then
+    echo "FATAL: ${tag} still trusts the compromised CA '${bad}'." >&2
+    exit 1
+  fi
+  echo "ca-check ${name}: OK (compromised CA not trusted)"
+}
+
 # Record which Trivy produced this run's scan results (the scanner is maintained
 # by hand on this machine, so it can differ between runs).
 echo "Trivy version:"
@@ -116,12 +166,14 @@ echo "commit"
 docker commit ${name} fairdatasystems/${name}:${timestamp}
 docker stop ${name}
 docker rm ${name}
+boot_check "${name}"
+ca_check "${name}"
 echo "push"
 docker push fairdatasystems/${name}:${timestamp}
 echo "pushed"
 VIRTUOSO=$(pinned_ref "${name}")
 echo "trivy"
-trivy image --skip-db-update --skip-java-db-update --scanners vuln --format json --severity CRITICAL,HIGH  --timeout 1800s fairdatasystems/${name}:${timestamp}  > ${outputfile}
+trivy image --skip-db-update --skip-java-db-update --scanners vuln --format json --timeout 1800s fairdatasystems/${name}:${timestamp}  > ${outputfile}
 echo "END"
 
 
@@ -144,13 +196,15 @@ git clone --branch feature/virtuoso-repository --depth 1 \
 docker build --build-arg PROJECT_VERSION="${timestamp}" \
   -t fairdatasystems/${name}:${timestamp} "${fdpserv2_clone_dir}"
 rm -rf "${fdpserv2_clone_dir}"
+boot_check "${name}"
+ca_check "${name}"
 echo "push"
 docker push fairdatasystems/${name}:${timestamp}
 echo "pushed"
 FDP2=$(pinned_ref "${name}")
 # run a scan to determine success
 echo "trivy"
-trivy image --skip-db-update --skip-java-db-update --scanners vuln  --format json  --severity CRITICAL,HIGH --timeout 1800s fairdatasystems/${name}:${timestamp}  > ${outputfile}
+trivy image --skip-db-update --skip-java-db-update --scanners vuln  --format json --timeout 1800s fairdatasystems/${name}:${timestamp}  > ${outputfile}
 echo "END"
 
 
@@ -170,12 +224,14 @@ docker commit ${name} fairdatasystems/${name}:${timestamp}
 docker stop ${name}
 # delete the temporary container
 docker rm ${name}
+boot_check "${name}"
+ca_check "${name}"
 echo "push"
 docker push fairdatasystems/${name}:${timestamp}
 echo "pushed"
 FDPC=$(pinned_ref "${name}")
 # run a scan to determine success
-trivy image --skip-db-update --skip-java-db-update --scanners vuln  --format json  --severity CRITICAL,HIGH --timeout 1800s fairdatasystems/${name}:${timestamp} > ${outputfile}
+trivy image --skip-db-update --skip-java-db-update --scanners vuln  --format json --timeout 1800s fairdatasystems/${name}:${timestamp} > ${outputfile}
 echo "END"
 
 
@@ -203,13 +259,15 @@ docker commit ${name} fairdatasystems/${name}:${timestamp}
 docker stop ${name}
 # delete the temporary container
 docker rm ${name}
+boot_check "${name}"
+ca_check "${name}"
 echo "push"
 docker push fairdatasystems/${name}:${timestamp}
 echo "pushed"
 MDB=$(pinned_ref "${name}")
 # run a scan to determine success
 echo "trivy"
-trivy image --skip-db-update --skip-java-db-update --scanners vuln  --format json  --severity CRITICAL,HIGH  --timeout 1800s fairdatasystems/${name}:${timestamp}  > ${outputfile}
+trivy image --skip-db-update --skip-java-db-update --scanners vuln  --format json --timeout 1800s fairdatasystems/${name}:${timestamp}  > ${outputfile}
 echo "END"
 
 
@@ -289,13 +347,15 @@ Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>" \
 fi
 rm -f "${prepatch_scanfile}"
 
+boot_check "${name}"
+ca_check "${name}"
 echo "push"
 docker push fairdatasystems/${name}:${timestamp}
 echo "pushed"
 CDEB2=$(pinned_ref "${name}")
 # run a scan to determine success
 echo "trivy"
-trivy image --skip-db-update --skip-java-db-update --scanners vuln  --format json  --severity CRITICAL,HIGH --timeout 1800s fairdatasystems/${name}:${timestamp}  > ${outputfile}
+trivy image --skip-db-update --skip-java-db-update --scanners vuln  --format json --timeout 1800s fairdatasystems/${name}:${timestamp}  > ${outputfile}
 ruby annotate_gem_shadowing.rb "${outputfile}" ../../Daemon || true
 echo "END"
 
@@ -316,13 +376,15 @@ care2_clone_dir=$(mktemp -d)
 git clone --depth 1 https://github.com/wilkinsonlab/CARE-Semantic-Model-Version-2.git "${care2_clone_dir}"
 docker build -t fairdatasystems/${name}:${timestamp} "${care2_clone_dir}/implementation/Toolkit"
 rm -rf "${care2_clone_dir}"
+boot_check "${name}"
+ca_check "${name}"
 echo "push"
 docker push fairdatasystems/${name}:${timestamp}
 echo "pushed"
 CARE2=$(pinned_ref "${name}")
 # run a scan to determine success
 echo "trivy"
-trivy image --skip-db-update --skip-java-db-update --scanners vuln  --format json  --severity CRITICAL,HIGH  --timeout 1800s fairdatasystems/${name}:${timestamp}  > ${outputfile}
+trivy image --skip-db-update --skip-java-db-update --scanners vuln  --format json --timeout 1800s fairdatasystems/${name}:${timestamp}  > ${outputfile}
 echo "END"
 
 
@@ -340,12 +402,14 @@ echo "building ${name}"
 # USER, npm/maven CVE overrides) never reached the actually-deployed image --
 # only OS packages on top of whatever was published under that tag.
 docker build -t fairdatasystems/${name}:${timestamp} ../../yarrrml-rml
+boot_check "${name}"
+ca_check "${name}"
 echo "push"
 docker push fairdatasystems/${name}:${timestamp}
 echo "pushed"
 YRDF=$(pinned_ref "${name}")
 # run a scan to determine success
-trivy image --skip-db-update --skip-java-db-update --scanners vuln  --format json  --severity CRITICAL,HIGH  --timeout 1800s fairdatasystems/${name}:${timestamp} > ${outputfile}
+trivy image --skip-db-update --skip-java-db-update --scanners vuln  --format json --timeout 1800s fairdatasystems/${name}:${timestamp} > ${outputfile}
 echo "END"
 
 cp sight-docker-compose-template-template.yml sight-docker-compose-template-tmp.yml

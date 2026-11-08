@@ -63,6 +63,11 @@ WORKDIR /usr/app
 COPY . /usr/app
 RUN bundle install && apk del alpine-sdk ruby-dev
 
+# Remove the compromised emSign ECC Root CA - G3 from the OS trust bundle. This image's Alpine 3.19
+# base still ships it and the fixed ca-certificates-bundle isn't in that release's repo, so apk
+# can't drop it -- strip it directly. See the script header. Runs as root (USER switch is below).
+RUN sh strip-compromised-ca.sh
+
 RUN chmod a+x entrypoint.sh
 
 # Run as a non-root, unprivileged user. The install script opens up the
