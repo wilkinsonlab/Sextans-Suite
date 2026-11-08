@@ -37,6 +37,25 @@ open_autopatch_pr() {
     "Automated Ruby gem CVE patch attempt, opened by \`security-patch.sh\`. Verified: image builds, boots correctly, re-scanned to confirm the finding is actually gone. See the commit message for exactly what changed and why. Not auto-merged -- please review before merging.")
 }
 
+# After an image has been pushed, echo the `fairdatasystems/<name>:<timestamp>@sha256:<digest>`
+# reference that the compose templates should pin to. A tag can be re-pointed by anyone who gets
+# push access to the registry; a content digest cannot. That is exactly what happened to Vantage6
+# in Mar-Apr 2026 -- an attacker with registry access pushed malware under existing tags, and
+# everyone who pulled those tags got it. With `tag@sha256:...`, docker refuses an image whose
+# content doesn't match. The digest only exists in .RepoDigests after a successful push, so this is
+# called after `docker push`. No digest = no pin = stop the whole run (exit 1) rather than silently
+# fall back to a tag-only reference. Mirrors Severance's Security/security-patch.sh (patch_image).
+pinned_ref() {
+  local name="$1" tag="fairdatasystems/$1:${timestamp}" digest
+  digest=$(docker inspect --format '{{range .RepoDigests}}{{println .}}{{end}}' "${tag}" \
+    | grep "^fairdatasystems/${name}@sha256:" | head -1 | cut -d@ -f2)
+  if [ -z "${digest}" ]; then
+    echo "FATAL: no registry digest for ${tag} after push -- not writing a tag-only pin" >&2
+    exit 1
+  fi
+  echo "${tag}@${digest}"
+}
+
 # Record which Trivy produced this run's scan results (the scanner is maintained
 # by hand on this machine, so it can differ between runs).
 echo "Trivy version:"
@@ -100,7 +119,7 @@ docker rm ${name}
 echo "push"
 docker push fairdatasystems/${name}:${timestamp}
 echo "pushed"
-VIRTUOSO="fairdatasystems/${name}:${timestamp}"
+VIRTUOSO=$(pinned_ref "${name}")
 echo "trivy"
 trivy image --skip-db-update --skip-java-db-update --scanners vuln --format json --severity CRITICAL,HIGH  --timeout 1800s fairdatasystems/${name}:${timestamp}  > ${outputfile}
 echo "END"
@@ -128,7 +147,7 @@ rm -rf "${fdpserv2_clone_dir}"
 echo "push"
 docker push fairdatasystems/${name}:${timestamp}
 echo "pushed"
-FDP2="fairdatasystems/${name}:${timestamp}"
+FDP2=$(pinned_ref "${name}")
 # run a scan to determine success
 echo "trivy"
 trivy image --skip-db-update --skip-java-db-update --scanners vuln  --format json  --severity CRITICAL,HIGH --timeout 1800s fairdatasystems/${name}:${timestamp}  > ${outputfile}
@@ -154,7 +173,7 @@ docker rm ${name}
 echo "push"
 docker push fairdatasystems/${name}:${timestamp}
 echo "pushed"
-FDPC="fairdatasystems/${name}:${timestamp}"
+FDPC=$(pinned_ref "${name}")
 # run a scan to determine success
 trivy image --skip-db-update --skip-java-db-update --scanners vuln  --format json  --severity CRITICAL,HIGH --timeout 1800s fairdatasystems/${name}:${timestamp} > ${outputfile}
 echo "END"
@@ -187,7 +206,7 @@ docker rm ${name}
 echo "push"
 docker push fairdatasystems/${name}:${timestamp}
 echo "pushed"
-MDB="fairdatasystems/${name}:${timestamp}"
+MDB=$(pinned_ref "${name}")
 # run a scan to determine success
 echo "trivy"
 trivy image --skip-db-update --skip-java-db-update --scanners vuln  --format json  --severity CRITICAL,HIGH  --timeout 1800s fairdatasystems/${name}:${timestamp}  > ${outputfile}
@@ -273,7 +292,7 @@ rm -f "${prepatch_scanfile}"
 echo "push"
 docker push fairdatasystems/${name}:${timestamp}
 echo "pushed"
-CDEB2="fairdatasystems/${name}:${timestamp}"
+CDEB2=$(pinned_ref "${name}")
 # run a scan to determine success
 echo "trivy"
 trivy image --skip-db-update --skip-java-db-update --scanners vuln  --format json  --severity CRITICAL,HIGH --timeout 1800s fairdatasystems/${name}:${timestamp}  > ${outputfile}
@@ -300,7 +319,7 @@ rm -rf "${care2_clone_dir}"
 echo "push"
 docker push fairdatasystems/${name}:${timestamp}
 echo "pushed"
-CARE2="fairdatasystems/${name}:${timestamp}"
+CARE2=$(pinned_ref "${name}")
 # run a scan to determine success
 echo "trivy"
 trivy image --skip-db-update --skip-java-db-update --scanners vuln  --format json  --severity CRITICAL,HIGH  --timeout 1800s fairdatasystems/${name}:${timestamp}  > ${outputfile}
@@ -324,7 +343,7 @@ docker build -t fairdatasystems/${name}:${timestamp} ../../yarrrml-rml
 echo "push"
 docker push fairdatasystems/${name}:${timestamp}
 echo "pushed"
-YRDF="fairdatasystems/${name}:${timestamp}"
+YRDF=$(pinned_ref "${name}")
 # run a scan to determine success
 trivy image --skip-db-update --skip-java-db-update --scanners vuln  --format json  --severity CRITICAL,HIGH  --timeout 1800s fairdatasystems/${name}:${timestamp} > ${outputfile}
 echo "END"

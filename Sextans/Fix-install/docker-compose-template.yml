@@ -1,7 +1,7 @@
 services:
 
   virtuoso:
-    image: fairdatasystems/virtuoso:2026-11-06
+    image: fairdatasystems/virtuoso:2026-11-08@sha256:831c61f3209b38487839cb23b6f9e4f1f60bd2d6dd7508e049b7db492de0c236
     restart: always
     hostname: virtuoso
     security_opt:
@@ -40,7 +40,7 @@ services:
 
 
   cde-box-daemon:
-    image:  fairdatasystems/cdeb2:2026-11-06    # to use the CARE-SM-2 models with the care-sm-2 toolkit
+    image:  fairdatasystems/cdeb2:2026-11-08@sha256:a7d729e5c3c293e2276798d0a81486d5e46dde4687819eb09df0eae5cb73302a    # to use the CARE-SM-2 models with the care-sm-2 toolkit
     security_opt:
       - "no-new-privileges:true"
     cap_drop:
@@ -63,7 +63,7 @@ services:
       - {PREFIX}-backend
 
   caresm:
-    image: fairdatasystems/care2:2026-11-06
+    image: fairdatasystems/care2:2026-11-08@sha256:585b2a41cecd4b3d5de02897e8d9f2fdbe489d94ba697e373866934caa0af2f9
     hostname: caresm
     # The image itself has no non-root user baked in, but a plain uid:gid
     # override works cleanly -- verified live, no startup issues.
@@ -80,7 +80,7 @@ services:
       - {PREFIX}-backend
 
   yarrrml-rdfizer:
-    image: fairdatasystems/yrml:2026-11-06
+    image: fairdatasystems/yrml:2026-11-08@sha256:b1cdc12c90eb41ea91dcfd8dadd0facc026be7701a0486f2c9470e2ccfc3d458
     hostname: yarrrml-rdfizer
     security_opt:
       - "no-new-privileges:true"

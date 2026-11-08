@@ -8,6 +8,17 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
+- **The deployment compose templates now pin each image by content digest** (`fairdatasystems/<name>:<date>@sha256:<digest>`),
+  not by tag alone. A tag can be silently re-pointed by anyone who gains registry push access; a digest can't,
+  so Docker refuses an image whose bytes don't match -- a direct response to the Vantage6 registry compromise
+  of Mar–Apr 2026, where malware was pushed under existing tags. `security-patch.sh` now reads each image's
+  digest from `.RepoDigests` after pushing it and aborts the whole run if any image has no digest (no silent
+  tag-only fallback). Ported from Severance. Mark flagged that the suite had already moved to digest-based
+  pulls, which caught that the freshly regenerated templates would otherwise have shipped tag-only.
+- **All seven images (`virtuoso`, `fdpserv2`, `fdpclient`, `mdb`, `cdeb2`, `care2`, `yrml`) rebuilt, rescanned
+  and re-pushed under the `2026-11-08` tag.** `virtuoso`, `fdpclient` and `care2` scan clean (zero
+  CRITICAL/HIGH). The register stayed at 86 rows; see `Security/VULNERABILITY_TRIAGE.md` ("2026-11-08 re-scan
+  review") for the per-finding review of the two new CVEs (`cdeb2` musl `regcomp`, `mdb` `golang.org/x/net/html`).
 - The vulnerability register's `ACCEPT` decision is now called `NOT REACHABLE` (same meaning: the vulnerable
   code can't be reached in our deployment). Partners would read "accepted" as "known risk, tolerated", which
   it never meant. The 29 existing rows were relabelled (no other change; no rescan), and the partner legend
@@ -26,6 +37,17 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- **Pre-auth multipart denial-of-service in the `cdeb2` and `yrml` Sinatra services.** Both pinned
+  rack 3.2.6, whose multipart parser retains the full parsed body in its scan buffer
+  (`GHSA-5v64-555j-wjxm`, HIGH -- enough to exhaust a small container's memory). Sinatra merges
+  `request.params` (including a parsed multipart body) before any route runs, and classic-style apps
+  enable `Rack::MethodOverride`, which reads the body earlier still -- so the parser was reachable
+  before any application logic. Neither advisory is in the GitHub/OSV databases, so Dependabot never
+  proposed the bump. Fixed by bumping rack to `>= 3.2.8` in both `Daemon/` and `yarrrml-rml/`,
+  disabling `method_override` (neither app uses `_method`), and adding a `RefuseMultipart` Rack
+  middleware that returns 415 for any `multipart/*` body -- taking the whole multipart parser off the
+  reachable surface, since neither service has a multipart route (both are GET-only). Mirrors the fix
+  already shipped in Severance. Mark identified both apps as carrying the same exposure found there.
 - **`care2` (CARE-SM-2 Toolkit) shipped an unpatched Alpine OS layer.** Its Dockerfile never ran
   `apk upgrade` at all, unlike the other owned images -- found while re-triaging the 2026-11-06
   scan. Fixed upstream in `CARE-Semantic-Model-Version-2` (Toolkit bumped to 2.1.1), rebuilt,
