@@ -8,6 +8,21 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
+- **The security pipeline now scans at every severity, with two new build gates.** `security-patch.sh`
+  drops the CRITICAL/HIGH Trivy filter on the published scans; `parse-security-scans.rb` records OS
+  findings at CRITICAL/HIGH/UNKNOWN (UNKNOWN catches unscored advisories like the eMudhra CA bundle)
+  and language/gem findings at **every** severity (a gem MEDIUM can be directly reachable). Two gates
+  abort the run before an image is pushed: a **boot-check** (the image must actually start) and a
+  **CA-check** (the image must not trust the compromised `emSign ECC Root CA - G3`). The vulnerability
+  register grew from 86 to 160 rows as the previously-filtered MEDIUM/LOW/UNKNOWN findings became
+  visible. Ported from Severance.
+- **`build_register.py` disposition logic reworked.** Precedence is now researched `(image,cve)` >
+  researched `cve` > package-wide rule > a prior **human** decision > shadowed > `(exposure, control,
+  has_fix)` default; a row whose Notes are a generated default is recomputed each run, so an improved
+  default or new research can finally replace a stale auto-default (previously the existing register
+  row always won). Defaults now split on whether a fix exists: an owned-image finding with no
+  published fix is `TRACK`, not `PATCH` ("nothing to patch to"). This moved `fdpserv2`'s two
+  no-fix `lz4-java` findings from PATCH to TRACK.
 - **The deployment compose templates now pin each image by content digest** (`fairdatasystems/<name>:<date>@sha256:<digest>`),
   not by tag alone. A tag can be silently re-pointed by anyone who gains registry push access; a digest can't,
   so Docker refuses an image whose bytes don't match -- a direct response to the Vantage6 registry compromise
@@ -37,6 +52,19 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- **`cdeb2` carried 35 CRITICAL/HIGH findings that were entirely build-time cruft; now 0.** Its
+  Dockerfile is now a multi-stage build: the compiler toolchain, and the second (Alpine) Ruby that
+  `ruby-dev` pulled in purely for build headers, stay in a builder stage, and the runtime image
+  copies only the compiled gems plus the handful of shared libraries `ldd` shows they load. All 35
+  CRITICAL/HIGH findings (every one a build-toolchain or Alpine-ruby-package CVE) dropped to zero;
+  the image still boots and runs identically. Only lower-severity gem findings (addressable, json,
+  nokogiri), newly visible under every-severity scanning, remain.
+- **`cdeb2` and `yrml` no longer trust the compromised `emSign ECC Root CA - G3`.** Although rebuilt
+  after the fix date, both still shipped the compromised eMudhra CA because the corrected Alpine
+  `ca-certificates-bundle` (20261020-r0) isn't in their base releases' repos yet (Alpine 3.24 / 3.19),
+  so `apk upgrade` couldn't remove it. Their Dockerfiles now strip that one CA from the OS trust
+  bundle directly (`strip-compromised-ca.sh`); verified the images still trust ordinary public CAs.
+  A pipeline CA-check now fails the build if any image trusts it.
 - **Pre-auth multipart denial-of-service in the `cdeb2` and `yrml` Sinatra services.** Both pinned
   rack 3.2.6, whose multipart parser retains the full parsed body in its scan buffer
   (`GHSA-5v64-555j-wjxm`, HIGH -- enough to exhaust a small container's memory). Sinatra merges

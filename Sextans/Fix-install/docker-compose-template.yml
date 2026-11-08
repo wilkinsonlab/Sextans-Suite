@@ -1,7 +1,7 @@
 services:
 
   virtuoso:
-    image: fairdatasystems/virtuoso:2026-11-08@sha256:831c61f3209b38487839cb23b6f9e4f1f60bd2d6dd7508e049b7db492de0c236
+    image: fairdatasystems/virtuoso:2026-11-08@sha256:5391ca2745cffd29f80d028565b422e365ad03feb1a5b23e9f7c0393ac7a674a
     restart: always
     hostname: virtuoso
     security_opt:
@@ -40,7 +40,7 @@ services:
 
 
   cde-box-daemon:
-    image:  fairdatasystems/cdeb2:2026-11-08@sha256:a7d729e5c3c293e2276798d0a81486d5e46dde4687819eb09df0eae5cb73302a    # to use the CARE-SM-2 models with the care-sm-2 toolkit
+    image:  fairdatasystems/cdeb2:2026-11-08@sha256:1aedb56337756331ebc7ccd2b7bb7c7e67c0fe07b293fc127a08eab1266889e0    # to use the CARE-SM-2 models with the care-sm-2 toolkit
     security_opt:
       - "no-new-privileges:true"
     cap_drop:
@@ -80,7 +80,7 @@ services:
       - {PREFIX}-backend
 
   yarrrml-rdfizer:
-    image: fairdatasystems/yrml:2026-11-08@sha256:b1cdc12c90eb41ea91dcfd8dadd0facc026be7701a0486f2c9470e2ccfc3d458
+    image: fairdatasystems/yrml:2026-11-08@sha256:4e4bde567d7ac47fd854c6cba0e8f8c8b18617b65b2b6171a47a1d7d46c6bde9
     hostname: yarrrml-rdfizer
     security_opt:
       - "no-new-privileges:true"

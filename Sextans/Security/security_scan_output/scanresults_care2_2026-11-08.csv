@@ -1,1 +1,7 @@
 Target,VulnerabilityID,Package,InstalledVersion,FixedVersion,Severity,Title,PrimaryURL,BundlerShadowed,BundlerShadowedDetail
+Python,CVE-2025-8869,pip,25.0.1,25.3,MEDIUM,pip: pip missing checks on symbolic link extraction,https://avd.aquasec.com/nvd/cve-2025-8869,"",""
+Python,CVE-2026-13346,pip,25.0.1,26.2.0,MEDIUM,pip: pip: Arbitrary file installation via malicious package indexes,https://avd.aquasec.com/nvd/cve-2026-13346,"",""
+Python,CVE-2026-3219,pip,25.0.1,26.1,MEDIUM,pip: pip: Incorrect file installation due to improper archive handling,https://avd.aquasec.com/nvd/cve-2026-3219,"",""
+Python,CVE-2026-6357,pip,25.0.1,26.1,MEDIUM,pip: pip: Arbitrary code execution or information disclosure via malicious wheel package installation,https://avd.aquasec.com/nvd/cve-2026-6357,"",""
+Python,CVE-2026-8643,pip,25.0.1,26.1.2,MEDIUM,python-pip: Path traversal via malicious entry point name in pip wheel installation allows arbitrary file overwrite,https://avd.aquasec.com/nvd/cve-2026-8643,"",""
+Python,CVE-2026-1703,pip,25.0.1,26.0,LOW,pip: pip: Information disclosure via path traversal when installing crafted wheel archives,https://avd.aquasec.com/nvd/cve-2026-1703,"",""

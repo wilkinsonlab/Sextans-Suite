@@ -1,7 +1,7 @@
 
 services:
   virtuoso:
-    image: fairdatasystems/virtuoso:2026-11-08@sha256:831c61f3209b38487839cb23b6f9e4f1f60bd2d6dd7508e049b7db492de0c236
+    image: fairdatasystems/virtuoso:2026-11-08@sha256:5391ca2745cffd29f80d028565b422e365ad03feb1a5b23e9f7c0393ac7a674a
     restart: always
     hostname: virtuoso
     security_opt:
