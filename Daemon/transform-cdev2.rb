@@ -29,6 +29,35 @@ class Rack::Protection::HostAuthorization
   end
 end
 
+# Rack::MethodOverride (on by default for classic-style Sinatra apps) reads the
+# request body looking for a `_method` field -- i.e. it parses form/multipart
+# bodies before any route (or the RefuseMultipart guard below) runs. This app
+# only has a GET '/' route and never uses `_method`, so turn it off.
+set :method_override, false
+
+# Refuses multipart/form-data before anything parses it. Sinatra merges
+# request.params (which includes a parsed multipart body) in dispatch!, so a
+# multipart-parser bug is reachable with no route of ours ever consenting to
+# it. rack < 3.2.8 held a crafted multipart body in memory in full
+# (GHSA-5v64-555j-wjxm, HIGH) -- enough to OOM this container. This service has
+# no multipart route at all (only GET '/'), so the whole parser is taken off
+# the reachable surface rather than relying on it being bug-free. Kept
+# consistent with yarrrml-rdfizer's t.rb and Severance's outie.rb.
+class RefuseMultipart
+  def initialize(app)
+    @app = app
+  end
+
+  def call(env)
+    if env['CONTENT_TYPE'].to_s.downcase.include?('multipart/')
+      return [415, { 'content-type' => 'application/json' }, ['{"error":"multipart bodies are not accepted"}']]
+    end
+
+    @app.call(env)
+  end
+end
+use RefuseMultipart
+
 include HTTPUtils
 
 get '/' do

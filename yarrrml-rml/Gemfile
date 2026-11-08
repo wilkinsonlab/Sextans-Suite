@@ -12,4 +12,9 @@ gem "fileutils"
 # the required gems weren't found!" even though thin is installed.
 gem 'rackup'
 gem 'puma'
+# Pinned floor: rack < 3.2.8 held a full multipart body in memory
+# (GHSA-5v64-555j-wjxm, HIGH) and mis-reported a forged Host
+# (GHSA-2j8w-xcrc-x985), both reachable before any app code. See the
+# RefuseMultipart middleware and :method_override setting in t.rb.
+gem 'rack', '>= 3.2.8'
 
