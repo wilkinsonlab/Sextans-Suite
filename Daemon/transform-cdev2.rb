@@ -60,15 +60,42 @@ use RefuseMultipart
 
 include HTTPUtils
 
+# Single-run guard. The transformation is triggered by a human opening
+# http://localhost:<RDF_TRIGGER>/ in a browser (see Fix-install/README.md), and
+# a browser trivially fires GET / more than once -- a reload of a slow-looking
+# run, a second tab, or a browser-level retry. The pipeline below is long and
+# destructive on shared state: the caresm step regenerates /data/CARE.csv, and
+# yarrrml-rdfizer overwrites that same fixed path in place per 200-row chunk
+# while wiping and re-splitting /mnt/data/<type>/tmp. Two overlapping runs race
+# -- one run's rm_rf + re-split deletes the other's in-flight chunk files,
+# surfacing as `Errno::ENOENT ... CARE_part_N.csv` mid-run (issue #6). Puma runs
+# this app single-process/multi-thread (classic Sinatra, no workers/config.ru),
+# so a process-wide Mutex is shared across all request threads and is enough.
+#
+# try_lock (non-blocking) rejects an overlapping trigger with 409 rather than
+# queueing it: a reload gets a clear "already running" instead of corrupting the
+# live run, and it can't pile blocked threads up against the pool. The ensure
+# releases the lock even if the pipeline raises, so a failed run never strands
+# the service (a crash takes the whole process down and docker restarts it with
+# a fresh lock).
+RUN_LOCK = Mutex.new
+
 get '/' do
-  update
-  caresm
-  yarrrml_substitute
-  execute
-  load_cde
-  cleanup
-  metadata_update
-  "Execution complete.  See docker log for errors (if any)\n\n"
+  unless RUN_LOCK.try_lock
+    halt 409, "A transformation is already running. Please wait for it to finish before triggering another.\n"
+  end
+  begin
+    update
+    caresm
+    yarrrml_substitute
+    execute
+    load_cde
+    cleanup
+    metadata_update
+    "Execution complete.  See docker log for errors (if any)\n\n"
+  ensure
+    RUN_LOCK.unlock
+  end
 end
 
 LIVE_MAPPING = '/data/CARE_Fiab_yarrrml.yaml'
