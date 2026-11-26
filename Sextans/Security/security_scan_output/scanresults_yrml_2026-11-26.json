@@ -3,19 +3,19 @@
   "Trivy": {
     "Version": "0.69.1"
   },
-  "ReportID": "01a1bc36-ac2d-7cf6-a4a1-17defca20680",
-  "CreatedAt": "2026-11-08T18:31:02.061860207+01:00",
-  "ArtifactID": "sha256:3ca8585db180eac370410abc0a458dee7a329f5aa7399ef4206e12fc5e432269",
-  "ArtifactName": "fairdatasystems/yrml:2026-11-08",
+  "ReportID": "01a21722-d3c6-7d37-9742-653de2eb48c4",
+  "CreatedAt": "2026-11-26T10:14:48.134870325+01:00",
+  "ArtifactID": "sha256:39d8061203252f7f0f05e4a44c7625d9ac20fdaa238495995e1d912937a480fb",
+  "ArtifactName": "fairdatasystems/yrml:2026-11-26",
   "ArtifactType": "container_image",
   "Metadata": {
-    "Size": 929273344,
+    "Size": 930354688,
     "OS": {
       "Family": "alpine",
       "Name": "3.19.1",
       "EOSL": true
     },
-    "ImageID": "sha256:0324d86e85c778ec3ff3e5b7c1a30b1759924e88644f2da580022d0377d6a00b",
+    "ImageID": "sha256:542f4696dbdfbd4372c234df42eac41fdf76186a42ac702e46110d6f2c80f304",
     "DiffIDs": [
       "sha256:d4fc045c9e3a848011de66f34b81f052d4f2c15a17bb196d637e526349601820",
       "sha256:21fa11835a3c429c57ff1fb70bebcdaa69774f8721e029247e718fa069cd4055",
@@ -27,22 +27,22 @@
       "sha256:26a47d1c20ba3de5e01e7780d0aea3f55f90bd3fe5506513e3c4bd4887b80ebf",
       "sha256:cb7d744c30bb594f62d311050e20a97c68583909fb3b7cb9751a627224b6ecf0",
       "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
-      "sha256:89b8828b8638434c50dd77f16ee90544ba3d36868b4a59e1acf4c68adc4dd507",
-      "sha256:0987c680e48b36fdec71da9d7a6c9bdbf11115847781e520dcc5457a1614c96c",
-      "sha256:b4905f33b6ee3f9d889c9b694e4effd5a1a6b54a2a879cda2ea13f3e616b692a",
-      "sha256:204453987a0ce1db94173e0970110a8b8090ff6085cd43bbd8c55b8ba0d44f95",
-      "sha256:8ba67b324db8ca2b04ef9aab63644f7c25b53d626217781bfc50caaa1f9ed326"
+      "sha256:83a1c03786cf1ceadb0f126d4f338148ee7498c654a5264e54736c0efc568716",
+      "sha256:71d49d48a110113b96dba11baf7e740d800125ec6f3e934e72222ba22c1ee451",
+      "sha256:cf8ca8de7dd49d60b47f3a9720e6d7e5a9d1c2b20d52003a8205520f1c29d745",
+      "sha256:4298d07446d709bb8e0a7e54aa188b97a83b7e56d14d5bbb62847b6a4ce26dbf",
+      "sha256:b53a3b9e1c8b6fbe9db1641baaec972629c3a4c13bb246716bbc14fec52eae54"
     ],
     "RepoTags": [
-      "fairdatasystems/yrml:2026-11-08"
+      "fairdatasystems/yrml:2026-11-26"
     ],
     "RepoDigests": [
-      "fairdatasystems/yrml@sha256:4e4bde567d7ac47fd854c6cba0e8f8c8b18617b65b2b6171a47a1d7d46c6bde9"
+      "fairdatasystems/yrml@sha256:808a5d880d488238e12edc59fe964109d7cda064d9570edba4ceac707f3076fd"
     ],
-    "Reference": "fairdatasystems/yrml:2026-11-08",
+    "Reference": "fairdatasystems/yrml:2026-11-26",
     "ImageConfig": {
       "architecture": "amd64",
-      "created": "2026-11-08T18:30:18.527977005+01:00",
+      "created": "2026-11-26T10:12:53.149362349+01:00",
       "history": [
         {
           "created": "2024-01-27T00:30:48Z",
@@ -147,38 +147,38 @@
           "comment": "buildkit.dockerfile.v0"
         },
         {
-          "created": "2026-11-08T17:28:54Z",
+          "created": "2026-11-26T09:11:39Z",
           "created_by": "COPY . /usr/app # buildkit",
           "comment": "buildkit.dockerfile.v0"
         },
         {
-          "created": "2026-11-08T17:30:06Z",
+          "created": "2026-11-26T09:12:44Z",
           "created_by": "RUN |2 YARRRML_PARSER_VERSION=1.12.2 RMLMAPPER_JAVA_VERSION=8.1.0 /bin/sh -c bundle install \u0026\u0026 apk del alpine-sdk ruby-dev # buildkit",
           "comment": "buildkit.dockerfile.v0"
         },
         {
-          "created": "2026-11-08T17:30:16Z",
+          "created": "2026-11-26T09:12:52Z",
           "created_by": "RUN |2 YARRRML_PARSER_VERSION=1.12.2 RMLMAPPER_JAVA_VERSION=8.1.0 /bin/sh -c sh strip-compromised-ca.sh # buildkit",
           "comment": "buildkit.dockerfile.v0"
         },
         {
-          "created": "2026-11-08T17:30:17Z",
+          "created": "2026-11-26T09:12:52Z",
           "created_by": "RUN |2 YARRRML_PARSER_VERSION=1.12.2 RMLMAPPER_JAVA_VERSION=8.1.0 /bin/sh -c chmod a+x entrypoint.sh # buildkit",
           "comment": "buildkit.dockerfile.v0"
         },
         {
-          "created": "2026-11-08T17:30:18Z",
+          "created": "2026-11-26T09:12:53Z",
           "created_by": "RUN |2 YARRRML_PARSER_VERSION=1.12.2 RMLMAPPER_JAVA_VERSION=8.1.0 /bin/sh -c addgroup -g 1000 yrml \u0026\u0026 adduser -D -u 1000 -G yrml yrml \u0026\u0026     chown -R yrml:yrml /usr/app /mnt/data # buildkit",
           "comment": "buildkit.dockerfile.v0"
         },
         {
-          "created": "2026-11-08T17:30:18Z",
+          "created": "2026-11-26T09:12:53Z",
           "created_by": "USER yrml",
           "comment": "buildkit.dockerfile.v0",
           "empty_layer": true
         },
         {
-          "created": "2026-11-08T17:30:18Z",
+          "created": "2026-11-26T09:12:53Z",
           "created_by": "ENTRYPOINT [\"./entrypoint.sh\"]",
           "comment": "buildkit.dockerfile.v0",
           "empty_layer": true
@@ -198,11 +198,11 @@
           "sha256:26a47d1c20ba3de5e01e7780d0aea3f55f90bd3fe5506513e3c4bd4887b80ebf",
           "sha256:cb7d744c30bb594f62d311050e20a97c68583909fb3b7cb9751a627224b6ecf0",
           "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
-          "sha256:89b8828b8638434c50dd77f16ee90544ba3d36868b4a59e1acf4c68adc4dd507",
-          "sha256:0987c680e48b36fdec71da9d7a6c9bdbf11115847781e520dcc5457a1614c96c",
-          "sha256:b4905f33b6ee3f9d889c9b694e4effd5a1a6b54a2a879cda2ea13f3e616b692a",
-          "sha256:204453987a0ce1db94173e0970110a8b8090ff6085cd43bbd8c55b8ba0d44f95",
-          "sha256:8ba67b324db8ca2b04ef9aab63644f7c25b53d626217781bfc50caaa1f9ed326"
+          "sha256:83a1c03786cf1ceadb0f126d4f338148ee7498c654a5264e54736c0efc568716",
+          "sha256:71d49d48a110113b96dba11baf7e740d800125ec6f3e934e72222ba22c1ee451",
+          "sha256:cf8ca8de7dd49d60b47f3a9720e6d7e5a9d1c2b20d52003a8205520f1c29d745",
+          "sha256:4298d07446d709bb8e0a7e54aa188b97a83b7e56d14d5bbb62847b6a4ce26dbf",
+          "sha256:b53a3b9e1c8b6fbe9db1641baaec972629c3a4c13bb246716bbc14fec52eae54"
         ]
       },
       "config": {
@@ -264,30 +264,30 @@
         "DiffID": "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef"
       },
       {
-        "Size": 211968,
-        "DiffID": "sha256:89b8828b8638434c50dd77f16ee90544ba3d36868b4a59e1acf4c68adc4dd507"
+        "Size": 213504,
+        "DiffID": "sha256:83a1c03786cf1ceadb0f126d4f338148ee7498c654a5264e54736c0efc568716"
       },
       {
-        "Size": 35039232,
-        "DiffID": "sha256:0987c680e48b36fdec71da9d7a6c9bdbf11115847781e520dcc5457a1614c96c"
+        "Size": 36117504,
+        "DiffID": "sha256:71d49d48a110113b96dba11baf7e740d800125ec6f3e934e72222ba22c1ee451"
       },
       {
         "Size": 544256,
-        "DiffID": "sha256:b4905f33b6ee3f9d889c9b694e4effd5a1a6b54a2a879cda2ea13f3e616b692a"
+        "DiffID": "sha256:cf8ca8de7dd49d60b47f3a9720e6d7e5a9d1c2b20d52003a8205520f1c29d745"
       },
       {
         "Size": 3584,
-        "DiffID": "sha256:204453987a0ce1db94173e0970110a8b8090ff6085cd43bbd8c55b8ba0d44f95"
+        "DiffID": "sha256:4298d07446d709bb8e0a7e54aa188b97a83b7e56d14d5bbb62847b6a4ce26dbf"
       },
       {
-        "Size": 223744,
-        "DiffID": "sha256:8ba67b324db8ca2b04ef9aab63644f7c25b53d626217781bfc50caaa1f9ed326"
+        "Size": 225280,
+        "DiffID": "sha256:b53a3b9e1c8b6fbe9db1641baaec972629c3a4c13bb246716bbc14fec52eae54"
       }
     ]
   },
   "Results": [
     {
-      "Target": "fairdatasystems/yrml:2026-11-08 (alpine 3.19.1)",
+      "Target": "fairdatasystems/yrml:2026-11-26 (alpine 3.19.1)",
       "Class": "os-pkgs",
       "Type": "alpine",
       "Packages": [
@@ -8192,7 +8192,7 @@
             "Name": "GitHub Security Advisory Maven",
             "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Amaven"
           },
-          "Fingerprint": "sha256:bc355d567043856b6bcd13bc1595f63b129e579c5a73cc188b234adacab2a5db",
+          "Fingerprint": "sha256:dc2bda3086358ed1ad5c734f9082c85f77eeb50b813a3a572ad1ff6f47349c9b",
           "Title": "ch.qos.logback/logback-core: Conditional abitrary code execution in logback-core",
           "Description": "ACE vulnerability in conditional configuration file processing  by QOS.CH logback-core up to and including version 1.5.18 in Java applications, allows an attacker to execute arbitrary code by compromising an existing logback configuration file or by injecting an environment variable before program execution.\n\n\n\nA successful attack requires the presence of Janino library and Spring Framework to be present on the user's class path. In addition, the attacker must  have write access to a \nconfiguration file. Alternatively, the attacker could inject a malicious \nenvironment variable pointing to a malicious configuration file. In both \ncases, the attack requires existing privilege.",
           "Severity": "MEDIUM",
@@ -8253,7 +8253,7 @@
             "Name": "GitHub Security Advisory Maven",
             "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Amaven"
           },
-          "Fingerprint": "sha256:541ef66e3150656eeaa8a8ed107c9962d4f0ed7b5189a8e668c402b20d8249d0",
+          "Fingerprint": "sha256:2185f6815948d4b3f1db8c24884db7a41f66aa892af6a9b3439e9bf58fcc22d6",
           "Title": "Deserialization of untrusted data vulnerability in QOS.CH Sarl logback ...",
           "Description": "Deserialization of untrusted data vulnerability in QOS.CH Sarl logback logback-core (HardenedObjectInputStream (logback-core) modules) allows Object Injection, albeit heavily restricted.\n\nMore precisely, an attacker able to influence serialized data sent to \nSimpleSocketServer or SimpleSSLSocketServer can instantiate Proxy objects.\n\n\nAlthough deserialization is heavily restricted by HardenedObjectInputStream and no \npractical way to achieve remote code execution or significant privilege \nescalation has been identified, this issue constitutes a bypass of the \nintended security restrictions.\n\n\n\nThis issue affects logback: through 1.5.33 inclusive.",
           "Severity": "LOW",
@@ -8303,7 +8303,7 @@
             "Name": "GitHub Security Advisory Maven",
             "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Amaven"
           },
-          "Fingerprint": "sha256:acd2df060ad2d55097a51cb663b2d024be2984cf805bff9dbabaa6c6772b501e",
+          "Fingerprint": "sha256:c9224fa16a1a42ecb060064cae40ae46b31204b8c4bd50a7767894d0b04e22aa",
           "Title": "ch.qos.logback/logback-core: Malicious logback.xml configuration file allows instantiation of arbitrary classes",
           "Description": "ACE vulnerability in configuration file processing  by QOS.CH logback-core up to and including version 1.5.24 in Java applications, allows an attacker to instantiate classes already present on the class path by compromising an existing logback configuration file.\n\n\n\n\nThe instantiation of a potentially malicious Java class requires that said class is present on the user's class-path. In addition, the attacker must  have write access to a \nconfiguration file. However, after successful instantiation, the instance is very likely to be discarded with no further ado.",
           "Severity": "LOW",
@@ -8362,7 +8362,7 @@
             "Name": "GitHub Security Advisory Maven",
             "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Amaven"
           },
-          "Fingerprint": "sha256:ac814944e64b0349e77a9ff725b9fcc5423204cc4858e499dc011ac03ae715b6",
+          "Fingerprint": "sha256:8364b080d522da315ae25a02de89090e15a0d7c8c95b36a7b6ca9e6e69af240a",
           "Title": "Deserialization of untrusted data vulnerability in QOS.CH Sarl logback ...",
           "Description": "Deserialization of untrusted data vulnerability in QOS.CH Sarl logback logback-core (HardenedObjectInputStream (logback-core) modules) allows Object Injection albeit heavily restricted.\n\nMore precisely, an attacker able to influence serialized data sent to \nSimpleSocketServer or SimpleSSLSocketServer can instantiate objects from\n classes in the java.lang and java.util packages that are not explicitly\n blocked.\n\nAlthough deserialization is heavily restricted by HardenedObjectInputStream and no \npractical way to achieve remote code execution or significant privilege \nescalation has been identified, this issue constitutes a bypass of the \nintended security restrictions.\n\n\n\nThis issue affects logback: through 1.5.32 inclusive.",
           "Severity": "LOW",
@@ -8411,7 +8411,7 @@
             "Name": "GitHub Security Advisory Maven",
             "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Amaven"
           },
-          "Fingerprint": "sha256:6c9c14240c7711f8d3401e3a3b6093a6a039bf0ec2f7739a77c8db2f20558e16",
+          "Fingerprint": "sha256:4ace870e62c4bca51168823217c51a1428b433aaeae13e7978a66763b73d09cd",
           "Title": "com.fasterxml.jackson/jackson-core: tools.jackson.core/jackson-core: Jackson-core: Denial of Service via regular expression backtracking",
           "Description": "NumberInput.looksLikeValidNumber() in FasterXML jackson-core pre-validates \"stringified numbers\" with two regular expressions: PATTERN_FLOAT ([+-]?[0-9]*[\\.]?[0-9]+([eE][+-]?[0-9]+)?), present since 2.17.0, and PATTERN_FLOAT_TRAILING_DOT, added in 2.17.2. PATTERN_FLOAT places adjacent quantifiers over the same character class -- an optional [0-9]* run, an optional dot, then a required [0-9]+ run -- so input that ultimately fails to match forces Java's backtracking engine to retry every possible split point of the digit run. \n\n\n\nMatching cost therefore grows with the square of the input length. \n\n\n\nAn attacker who can supply JSON that an application deserializes into a numeric target type reaches this method through jackson-databind's default String-to-number coercion (StdDeserializer and NumberDeserializers for BigDecimal, BigInteger, Double and Float). \n\n\n\nBecause StreamReadConstraints.maxStringLength defaults to 20,000,000 characters, no constraint bounds the input before it reaches the regex. \n\n\n\nTesting by the reporter confirmed O(n^2) growth across five consecutive input-size doublings, with a single 160,000-character string consuming roughly 74 seconds in one call; a small number of concurrent requests of ordinary body size can therefore exhaust a server's request-handling thread pool. \n\n\n\nThe affected method does not exist before 2.17.0, so 2.16.x and earlier releases are not affected. \n\n\n\nThe fix replaces both regular expressions with a hand-rolled single-pass scan.",
           "Severity": "HIGH",
@@ -8425,7 +8425,7 @@
             "ghsa": 3,
             "oracle-oval": 3,
             "redhat": 2,
-            "rocky": 2
+            "rocky": 3
           },
           "CVSS": {
             "ghsa": {
@@ -8438,21 +8438,21 @@
             }
           },
           "References": [
-            "https://access.redhat.com/errata/RHSA-2026:86706",
-            "https://access.redhat.com/errata/RHSA-2026:92408",
+            "https://access.redhat.com/errata/RHSA-2026:98493",
+            "https://access.redhat.com/errata/RHSA-2026:98606",
             "https://access.redhat.com/security/cve/CVE-2026-89407",
-            "https://advisory.echohq.com/cve/CVE-2026-89407",
             "https://bugzilla.redhat.com/2519756",
             "https://bugzilla.redhat.com/2519775",
             "https://bugzilla.redhat.com/2538720",
+            "https://bugzilla.redhat.com/2539084",
+            "https://bugzilla.redhat.com/2539085",
             "https://bugzilla.redhat.com/show_bug.cgi?id=2538720",
             "https://bugzilla.redhat.com/show_bug.cgi?id=2539084",
             "https://creativecommons.org/licenses/by/4.0/",
             "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-89407",
             "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-89425",
-            "https://errata.almalinux.org/10/ALSA-2026-92408.html",
-            "https://errata.rockylinux.org/RLSA-2026:86706",
-            "https://getsafety.com/vulnerabilities/SFTY-20260922-89449/CVE-2026-89407",
+            "https://errata.almalinux.org/10/ALSA-2026-98606.html",
+            "https://errata.rockylinux.org/RLSA-2026:98493",
             "https://github.com/FasterXML/jackson-core",
             "https://github.com/FasterXML/jackson-core/commit/731e794f62623aa0d86ced52490166be903fbb1d",
             "https://github.com/FasterXML/jackson-core/commit/e7acd64cc99bd346704423dc2bfea1ab0a08ddff",
@@ -8461,7 +8461,7 @@
             "https://github.com/FasterXML/jackson-core/pull/1701",
             "https://github.com/FasterXML/jackson-core/security/advisories/GHSA-p6pp-m3f8-5c89",
             "https://linux.oracle.com/cve/CVE-2026-89407.html",
-            "https://linux.oracle.com/errata/ELSA-2026-92408.html",
+            "https://linux.oracle.com/errata/ELSA-2026-98606.html",
             "https://nvd.nist.gov/vuln/detail/CVE-2026-89407",
             "https://www.cve.org/CVERecord?id=CVE-2026-89407"
           ],
@@ -8492,7 +8492,7 @@
             "Name": "GitHub Security Advisory Maven",
             "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Amaven"
           },
-          "Fingerprint": "sha256:254bf9e8b615a0fb2deb9cd9536f7670aab26900898a4c0a0efefbd921792e6d",
+          "Fingerprint": "sha256:f1095c9029514662e47026b84019c8932bcd7127e56b4221678e1fcb4619b197",
           "Title": "com.fasterxml.jackson.core/jackson-core: Jackson-core: Denial of Service via unbounded StringBuilder growth during malformed token processing",
           "Description": "UTF8DataInputJsonParser._reportInvalidToken() in FasterXML jackson-core builds the offending-token text for its error message by appending Java identifier characters to a StringBuilder in a loop that has no upper bound. Unlike the three sibling parser implementations, including UTF8StreamJsonParser, it never consults ErrorReportConfiguration.getMaxErrorTokenLength() (default 256). A malformed token supplied to a parser created through JsonFactory.createParser(DataInput) is therefore accumulated in full. No StreamReadConstraints setting mitigates this: maxDocumentLength cannot be applied to DataInput sources at all, and maxStringLength does not cover this path because the accumulation bypasses ReadConstrainedTextBuffer. The reporter measured a 20,000,109-character exception message from a 20-million-character malformed token on the DataInput path, against 367 characters for identical input on the InputStream path. Scaling the payload drives the StringBuilder, which also incurs byte-to-char expansion and internal array doubling, to many times the raw payload size and can trigger OutOfMemoryError for the whole JVM. UTF8DataInputJsonParser was introduced in 2.8.0 together with createParser(DataInput); releases before 2.8.0 do not contain the affected class.",
           "Severity": "HIGH",
@@ -8501,12 +8501,13 @@
             "CWE-770"
           ],
           "VendorSeverity": {
-            "alma": 2,
+            "alma": 3,
             "amazon": 3,
             "ghsa": 3,
             "oracle-oval": 3,
             "redhat": 3,
-            "rocky": 2
+            "rocky": 3,
+            "ubuntu": 2
           },
           "CVSS": {
             "ghsa": {
@@ -8519,18 +8520,22 @@
             }
           },
           "References": [
-            "https://access.redhat.com/errata/RHSA-2026:86706",
+            "https://access.redhat.com/errata/RHSA-2026:98493",
+            "https://access.redhat.com/errata/RHSA-2026:98606",
             "https://access.redhat.com/security/cve/CVE-2026-89425",
             "https://advisory.echohq.com/cve/CVE-2026-89425",
+            "https://bugzilla.redhat.com/2519756",
+            "https://bugzilla.redhat.com/2519775",
             "https://bugzilla.redhat.com/2538720",
             "https://bugzilla.redhat.com/2539084",
+            "https://bugzilla.redhat.com/2539085",
             "https://bugzilla.redhat.com/show_bug.cgi?id=2538720",
             "https://bugzilla.redhat.com/show_bug.cgi?id=2539084",
             "https://creativecommons.org/licenses/by/4.0/",
             "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-89407",
             "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-89425",
-            "https://errata.almalinux.org/9/ALSA-2026-86706.html",
-            "https://errata.rockylinux.org/RLSA-2026:86706",
+            "https://errata.almalinux.org/10/ALSA-2026-98606.html",
+            "https://errata.rockylinux.org/RLSA-2026:98493",
             "https://github.com/FasterXML/jackson-core",
             "https://github.com/FasterXML/jackson-core/commit/211cf2c5d91abbec38067f37efc1363cd4e88ee3",
             "https://github.com/FasterXML/jackson-core/pull/1698",
@@ -8538,7 +8543,7 @@
             "https://github.com/FasterXML/jackson-core/releases/tag/jackson-core-3.2.3",
             "https://github.com/FasterXML/jackson-core/security/advisories/GHSA-7hhh-6rmp-j9qf",
             "https://linux.oracle.com/cve/CVE-2026-89425.html",
-            "https://linux.oracle.com/errata/ELSA-2026-90909.html",
+            "https://linux.oracle.com/errata/ELSA-2026-98606.html",
             "https://nvd.nist.gov/vuln/detail/CVE-2026-89425",
             "https://www.cve.org/CVERecord?id=CVE-2026-89425"
           ],
@@ -8569,7 +8574,7 @@
             "Name": "GitHub Security Advisory Maven",
             "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Amaven"
           },
-          "Fingerprint": "sha256:d84adda29bff7eef7f1266e8756c2ed6439ba69571d10c2bcbb0060209356705",
+          "Fingerprint": "sha256:89c66fe7bc30acbfd1f47ce87d958414719afcbe26ae6658bfcc0e87183ce1ad",
           "Title": "com.fasterxml.jackson.core/jackson-databind: tools.jackson.core/jackson-databind: jackson-databind: CPU Denial of Service via unbounded numeric parsing",
           "Description": "jackson-databind binds a JSON string to a javax.xml.datatype.Duration or javax.xml.datatype.XMLGregorianCalendar field by passing the raw string verbatim to DatatypeFactory.newDuration(value) or newXMLGregorianCalendar(value) in CoreXMLDeserializers.Std._deserialize. These deserializers are registered by default with no opt-in, so a plain ObjectMapper or JsonMapper with no polymorphic typing and no special configuration reaches this path. The XML Schema lexical grammar permits numeric components of arbitrary length, which the JDK materializes through the native BigInteger(String) and BigDecimal(String) constructors, both quadratic in digit count. Because the digits sit inside a JSON string token rather than a JSON number token, jackson-core's StreamReadConstraints.maxNumberLength guard never applies; jackson's own NumberDeserializers call validateIntegerLength or validateFPLength before parsing a stringified number, but the XML datatype deserializer omits that pre-check. An unauthenticated attacker can therefore submit a single request of a few megabytes, such as a Duration value consisting of the letter P followed by several million digits and the letter Y, and force tens of seconds to several minutes of single-threaded CPU work; a handful of concurrent requests can saturate a server's worker threads. This affects com.fasterxml.jackson.core:jackson-databind from 2.0.0 before 2.18.10, from 2.19.0 before 2.21.6, and from 2.22.0 before 2.22.2, and tools.jackson.core:jackson-databind from 3.0.0 before 3.1.6 and from 3.2.0 before 3.2.2. Users should upgrade to 2.18.10, 2.21.6, 2.22.2, 3.1.6, or 3.2.2.",
           "Severity": "HIGH",
@@ -8648,7 +8653,7 @@
             "Name": "GitHub Security Advisory Maven",
             "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Amaven"
           },
-          "Fingerprint": "sha256:feec16c04657fae16a4a84bd2c4d618b0805d00a1d3b579ef2ac3f46faf96895",
+          "Fingerprint": "sha256:e886950bbd4580fc02cfe15983c0b02513c9de259c9f6ae4d7e536efa1319ad8",
           "Title": "jackson-databind: com.fasterxml.jackson/jackson-core: jackson-databind: Denial of Service via unbounded cache growth in TypeDeserializerBase",
           "Description": "TypeDeserializerBase._findDeserializer() in FasterXML jackson-databind caches the resolved deserializer under the raw, attacker-supplied type ID. When name-based polymorphism is configured with a fallback, for example @JsonTypeInfo(use = Id.NAME, defaultImpl = ...), every distinct unrecognized type ID resolves to the same fallback deserializer but is retained as its own key in the _deserializers map. That map has no configurable bound and lives for the lifetime of the type deserializer, so an attacker who can repeatedly supply fresh unknown type IDs causes monotonic memory retention across requests. The reporter observed 10,000 retained entries from 10,000 distinct unknown IDs, against a single entry for a control that repeated one unknown ID the same number of times, isolating attacker-controlled key cardinality from request volume. Exploitation requires an application that enables name-based polymorphism with a defaultImpl or equivalent fallback, accepts attacker-influenced type IDs, and reuses a long-lived ObjectMapper across requests. The fix stops caching fallback resolutions for unrecognized IDs and bounds both the number of cached entries and the length of a cacheable type ID.",
           "Severity": "HIGH",
@@ -8714,7 +8719,7 @@
             "Name": "GitHub Security Advisory Maven",
             "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Amaven"
           },
-          "Fingerprint": "sha256:ee8fa0c85bdb9e96e0823da62ab891fdf720225f1a86bac3482de34be7c2bdba",
+          "Fingerprint": "sha256:60034c2590e9e95c7b20b5a5302d2c7669d552eb84dba3ffad106c9612b94956",
           "Title": "com.fasterxml.jackson.core/jackson-databind: tools.jackson.core:jackson-databind: Jackson-databind: Denial of Service via quadratic forward-reference completion",
           "Description": "Forward-reference completion for @JsonIdentityInfo object IDs in FasterXML jackson-databind performs a linear scan of the pending-reference accumulator for every resolved ID. The affected paths are CollectionDeserializer.CollectionReferringAccumulator.resolveForwardReference() and the equivalent implementation in MapDeserializer. When a document first creates N unresolved object-ID references in an identity-enabled collection or map and then defines those same IDs in reverse order, completion performs on the order of N * (N + 1) / 2 identity comparisons, so a shallow document whose size grows linearly causes quadratic CPU work during deserialization. The reporter instrumented equals() calls on the ID class and measured exactly 2,003,000 comparisons at N = 2,000, against zero comparisons in the pending-reference lookup path for an equally sized control in which every reference was already resolved. The input requires no deep nesting and no syntactically unusual JSON. Exploitation requires an application that deserializes attacker-influenced JSON into an identity-enabled collection or map. The fix replaces the repeated linear lookup with a keyed pending-reference structure.",
           "Severity": "HIGH",
@@ -8741,15 +8746,20 @@
             }
           },
           "References": [
-            "https://access.redhat.com/errata/RHSA-2026:85231",
+            "https://access.redhat.com/errata/RHSA-2026:98492",
+            "https://access.redhat.com/errata/RHSA-2026:98606",
             "https://access.redhat.com/security/cve/CVE-2026-91777",
             "https://advisory.echohq.com/cve/CVE-2026-91777",
+            "https://bugzilla.redhat.com/2519756",
+            "https://bugzilla.redhat.com/2519775",
+            "https://bugzilla.redhat.com/2538720",
+            "https://bugzilla.redhat.com/2539084",
             "https://bugzilla.redhat.com/2539085",
             "https://bugzilla.redhat.com/show_bug.cgi?id=2539085",
             "https://creativecommons.org/licenses/by/4.0/",
             "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-91777",
-            "https://errata.almalinux.org/9/ALSA-2026-85231.html",
-            "https://errata.rockylinux.org/RLSA-2026:85231",
+            "https://errata.almalinux.org/10/ALSA-2026-98606.html",
+            "https://errata.rockylinux.org/RLSA-2026:98492",
             "https://github.com/FasterXML/jackson-databind",
             "https://github.com/FasterXML/jackson-databind/commit/37ad9b81712cbb9fb62c2d2c1813593252a24b67",
             "https://github.com/FasterXML/jackson-databind/issues/6204",
@@ -8761,7 +8771,7 @@
             "https://github.com/FasterXML/jackson-databind/releases/tag/jackson-databind-3.2.3",
             "https://github.com/FasterXML/jackson-databind/security/advisories/GHSA-cxp5-3px4-pw24",
             "https://linux.oracle.com/cve/CVE-2026-91777.html",
-            "https://linux.oracle.com/errata/ELSA-2026-90909.html",
+            "https://linux.oracle.com/errata/ELSA-2026-98606.html",
             "https://nvd.nist.gov/vuln/detail/CVE-2026-91777",
             "https://www.cve.org/CVERecord?id=CVE-2026-91777"
           ],
@@ -8792,7 +8802,7 @@
             "Name": "GitHub Security Advisory Maven",
             "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Amaven"
           },
-          "Fingerprint": "sha256:1a6f413971b6cbdabe0283a0dbad5de77bc85a9e98bdc5a77423adbe1b4d4ac3",
+          "Fingerprint": "sha256:f3a1bf2b25235222d40f1cdffc14f683846faff0c4cfa99c0c8bcf53189e1e55",
           "Title": "com.fasterxml.jackson.core/jackson-databind: tools.jackson.core/jackson-databind: Jackson-databind: Uncontrolled URI scheme resolution in Path deserialization",
           "Description": "jackson-databind's deserializer for java.nio.file.Path resolves an attacker-supplied URI without restricting the URI scheme. In JDKFromStringDeserializer.NioPathHelper.deserialize, a string bound from untrusted JSON is passed to new URI(value) and then to Path.of(uri). When that throws FileSystemNotFoundException, the code enumerates ServiceLoader\u003cFileSystemProvider\u003e and calls provider.getPath(uri) on the first provider whose scheme matches the attacker-chosen scheme. Untrusted JSON can therefore select and drive an arbitrary registered FileSystemProvider during readValue under a default JsonMapper, and forces provider class loading at the same time. With only the JDK built-in providers (file, jar/zipfs) present, the resolved path is inert and no mount or network I/O occurs; further impact requires a side-effecting third-party FileSystemProvider on the classpath. This affects com.fasterxml.jackson.core:jackson-databind from 2.8.0 before 2.18.10, from 2.19.0 before 2.21.6, and from 2.22.0 before 2.22.2, and tools.jackson.core:jackson-databind from 3.0.0 before 3.1.6 and from 3.2.0 before 3.2.2. Users should upgrade to 2.18.10, 2.21.6, 2.22.2, 3.1.6, or 3.2.2. Binding java.nio.file.Path from untrusted JSON should be avoided regardless of version.",
           "Severity": "MEDIUM",
@@ -8859,7 +8869,7 @@
             "Name": "GitHub Security Advisory Maven",
             "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Amaven"
           },
-          "Fingerprint": "sha256:09c489cdaf3f5ddfe5b0ead0a58b8abe7506c2baa0c84abc5b632f5342f692d5",
+          "Fingerprint": "sha256:0ff018a0e5209fc51c1380aeab625ec3ab791b26b8e9cddd28ee5a107396d192",
           "Title": "com.fasterxml.jackson.core/jackson-databind: tools.jackson.core/jackson-databind: jackson-databind: Path traversal via incomplete type validation",
           "Description": "DefaultBaseTypeLimitingValidator is the PolymorphicTypeValidator applied automatically whenever @JsonTypeInfo is used without an explicitly configured custom validator. It denies polymorphic resolution only for a fixed set of \"unsafe base types\", and its isSafeSubType method returns true unconditionally for every base type outside that set. java.lang.Comparable was absent from the list despite being implemented by a very large fraction of JDK and application classes, comparable in breadth to java.io.Serializable, which is on the list for that reason. An application declaring an @JsonTypeInfo-annotated property or class with Comparable as its base type, and no custom PolymorphicTypeValidator, will accept a type identifier for essentially any class implementing Comparable. This yields an attacker-controlled object instantiation primitive; a demonstrated case constructs a java.io.File for an arbitrary attacker-chosen path, which becomes path-traversal-adjacent if the application subsequently calls path-sensitive methods on the value. No class implementing Comparable has been identified that yields code execution through deserialization alone. Global Default Typing via activateDefaultTyping is not affected, because that method structurally requires an explicit PolymorphicTypeValidator argument. This affects com.fasterxml.jackson.core:jackson-databind from 2.11.0 before 2.18.10, from 2.19.0 before 2.21.6, and from 2.22.0 before 2.22.2, and tools.jackson.core:jackson-databind from 3.0.0 before 3.1.6 and from 3.2.0 before 3.2.2. Users should upgrade to 2.18.10, 2.21.6, 2.22.2, 3.1.6, or 3.2.2.",
           "Severity": "MEDIUM",
@@ -8870,7 +8880,8 @@
           "VendorSeverity": {
             "amazon": 3,
             "ghsa": 2,
-            "redhat": 2
+            "redhat": 2,
+            "ubuntu": 2
           },
           "CVSS": {
             "ghsa": {
@@ -8926,7 +8937,7 @@
             "Name": "GitHub Security Advisory Maven",
             "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Amaven"
           },
-          "Fingerprint": "sha256:ce4407321695eab5db1a6d800a352c19210b3771be46ddd37f294619cb28d9b0",
+          "Fingerprint": "sha256:1e79e3b36de37fd6383a2ce957672113ca727bf8d903dfd4e1033e3838b3b536",
           "Title": "com.google.guava/guava: Google Guava: Denial of Service via unthrottled memory allocation during deserialization",
           "Description": "Allocation of resources without limits or throttling (CWE-770) during Java object deserialization in Google Guava versions 4.0 through 33.7.1 allows an attacker to cause a Denial of Service via OutOfMemoryError. When deserializing CompactHashMap, CompactHashSet, or MapMakerInternalMap instances, Guava eagerly allocates an array based on a caller-specified size parameter without throttling, permitting memory exhaustion from crafted serialization streams.",
           "Severity": "HIGH",
@@ -8935,9 +8946,14 @@
             "CWE-770"
           ],
           "VendorSeverity": {
+            "alma": 3,
+            "amazon": 2,
             "azure": 2,
             "ghsa": 3,
-            "redhat": 3
+            "oracle-oval": 3,
+            "redhat": 3,
+            "rocky": 3,
+            "ubuntu": 2
           },
           "CVSS": {
             "ghsa": {
@@ -8952,15 +8968,34 @@
             }
           },
           "References": [
+            "github.com/cveproject/cvelistv5/tree/main/cves/2026/102xxx/cve-2026-102554.json",
+            "github.com/google/guava",
+            "github.com/google/guava/commit/a0d0c36432c4cc7aa4b5063bab9f20d3d18fe9fc",
+            "github.com/google/guava/commit/b931fe9d6d5cf00bc55714ad3308d086f71850fe",
+            "github.com/google/guava/releases/tag/v33.7.2",
+            "github.com/google/guava/security/advisories/ghsa-xxph-c9ww-hj94",
+            "https://access.redhat.com/errata/RHSA-2026:98498",
+            "https://access.redhat.com/errata/RHSA-2026:98602",
             "https://access.redhat.com/security/cve/CVE-2026-102554",
             "https://advisory.echohq.com/cve/CVE-2026-102554",
+            "https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1150495",
+            "https://bugzilla.redhat.com/2548685",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2548685",
+            "https://creativecommons.org/licenses/by/4.0/",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-102554",
+            "https://errata.almalinux.org/10/ALSA-2026-98602.html",
+            "https://errata.rockylinux.org/RLSA-2026:98498",
             "https://github.com/advisories/GHSA-xxph-c9ww-hj94",
             "https://github.com/google/guava",
             "https://github.com/google/guava/commit/b931fe9d6d5cf00bc55714ad3308d086f71850fe",
             "https://github.com/google/guava/releases/tag/v33.7.2",
             "https://github.com/google/guava/security/advisories/GHSA-xxph-c9ww-hj94",
+            "https://linux.oracle.com/cve/CVE-2026-102554.html",
+            "https://linux.oracle.com/errata/ELSA-2026-98602.html",
             "https://nvd.nist.gov/vuln/detail/CVE-2026-102554",
-            "https://www.cve.org/CVERecord?id=CVE-2026-102554"
+            "https://www.cve.org/CVERecord?id=CVE-2026-102554",
+            "nvd.nist.gov/vuln/detail/cve-2026-102554",
+            "security-tracker.debian.org/tracker/cve-2026-102554"
           ],
           "PublishedDate": "2026-10-09T16:17:20.41Z",
           "LastModifiedDate": "2026-10-09T18:17:01.38Z"
@@ -8989,7 +9024,7 @@
             "Name": "GitHub Security Advisory Maven",
             "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Amaven"
           },
-          "Fingerprint": "sha256:97e92a89519c9f890cccaaea402bcff7751706b4fc5cd45dde4f5cd527a3ec29",
+          "Fingerprint": "sha256:3bfd181a0211dcf120dcf5212f36d3b172ab046dd618db00232dfaffe5b96e93",
           "Title": "JDBC Driver for SQL Server has improper input validation issue",
           "Description": "Improper input validation in JDBC Driver for SQL Server allows an unauthorized attacker to perform spoofing over a network.",
           "Severity": "HIGH",
@@ -9011,7 +9046,6 @@
             }
           },
           "References": [
-            "https://advisory.echohq.com/cve/CVE-2025-59250",
             "https://github.com/microsoft/mssql-jdbc",
             "https://github.com/microsoft/mssql-jdbc/blob/main/CHANGELOG.md",
             "https://github.com/microsoft/mssql-jdbc/commit/9732e1bbc6ec44166fda2cddab31ce1c86c873dd#diff-45367b99a1951943bfecfc7765e80df687967aa56286a5b2e039f77cd9a0e118",
@@ -9052,7 +9086,7 @@
             "Name": "GitHub Security Advisory Maven",
             "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Amaven"
           },
-          "Fingerprint": "sha256:1cd74c08df7537b9351121f9051a33736c9a45842a0bac51f837cfd7f90ee6d2",
+          "Fingerprint": "sha256:a9097ef5dd5f818755ce68bc566cff8cd396e631b8cedc9e5972c9d1fc4e90c0",
           "Title": "ognl/ognl: ognl: Sandbox bypass via Java reflection objects",
           "Description": "OGNL is an Object Graph Navigation Library for Java. Prior to 3.4.13, the optional stricter-invocation mode in OgnlRuntime.invokeMethod checks the declaring class of the method that OGNL invokes but does not block java.lang.reflect.Method, java.lang.reflect.Constructor, or java.lang.reflect.Field. An attacker-controlled expression can invoke one of these reflection objects as a proxy for a method on a blocked class, causing the real operation to execute inside JDK reflection without passing through the stricter-invocation check again. Exploitation requires an application to evaluate untrusted OGNL expressions, use the default or an equivalently permissive MemberAccess that permits reflection, and rely on stricter invocation as a sandbox. Applications using a restrictive MemberAccess, including Apache Struts with SecurityMemberAccess, are not affected by this bypass. This issue is fixed in 3.4.13.",
           "Severity": "MEDIUM",
@@ -9112,7 +9146,7 @@
             "Name": "GitHub Security Advisory Maven",
             "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Amaven"
           },
-          "Fingerprint": "sha256:6c089ef70a418d401942822c385272427c1b31bf707502ff74e640b48e27a14e",
+          "Fingerprint": "sha256:eaeee1ee2a9f4a5ce9880f93d4650b0eea7819d3206b763f0fd0498f62d0aa05",
           "Title": "org.apache.httpcomponents.client5/httpclient5: Apache HttpComponents Client: Denial of Service due to connection leak",
           "Description": "HttpClient based on the classic i/o model fails to correctly release the underlying connection back to the connection manager if it encounters an invalid or unsupported `Content-Encoding` header value in the response message. Please note this defect does not affect HttpClient based on the async i/o model.\n\nThis issue affects Apache HttpComponents Client: from 5.0-alpha1 through 5.6.2.",
           "Severity": "MEDIUM",
@@ -9173,7 +9207,7 @@
             "Name": "GitHub Security Advisory Maven",
             "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Amaven"
           },
-          "Fingerprint": "sha256:b59c3dff3d9a8926b32e12452b4db943b7260d0f7d8878b9457d88349a99a7ed",
+          "Fingerprint": "sha256:10806b09988d124be1a9030858bf165c84c9a5de79379d423ef509616ca57ae9",
           "Title": "org.apache.httpcomponents.core5/httpcore5: Apache HttpComponents Core: Denial of Service via excessive HTTP headers",
           "Description": "Uncontrolled Resource Consumption vulnerability in the HTTP/1.1 message parser in Apache HttpComponents Core (5.4.2 and earlier, 5.5-beta1 and earlier) allows an remote attacker to cause a denial of service through memory exhaustion by sending messages with excessive number of headers / excessive header length",
           "Severity": "HIGH",
@@ -9183,7 +9217,8 @@
           "VendorSeverity": {
             "amazon": 3,
             "ghsa": 3,
-            "redhat": 3
+            "redhat": 3,
+            "ubuntu": 2
           },
           "CVSS": {
             "ghsa": {
@@ -9233,7 +9268,7 @@
             "Name": "GitHub Security Advisory Maven",
             "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Amaven"
           },
-          "Fingerprint": "sha256:9fbca20d06f0a22b6e2a77380812272605263d9174a363998e0f03dc6cfa6df4",
+          "Fingerprint": "sha256:c135f2dc81d129ee63161f74123084924446a302b5fa4a593d1847d353669a8a",
           "Title": "org.apache.httpcomponents.core5/httpcore5-h2: Apache HttpComponents Core: Denial of Service via oversized HTTP/2 HPACK header blocks",
           "Description": "Allocation of resources without limits or throttling in the HTTP/2 HPACK decoder in Apache HttpComponents Core (5.4.2 and earlier, 5.5-beta1 and earlier) allows an remote attacker to cause a denial of service through memory exhaustion by sending oversized compressed header blocks before the HTTP/2 SETTINGS acknowledgement causes the configured header list size limit to be applied.",
           "Severity": "HIGH",
@@ -9293,7 +9328,7 @@
             "Name": "GitHub Security Advisory Maven",
             "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Amaven"
           },
-          "Fingerprint": "sha256:0fe124a898e8adc06a098c6bc35af70e4ebda888f9e65b78978302da53341c82",
+          "Fingerprint": "sha256:6243470a9d7f4fdd4284cc7ce42d47ac56067636a8308bbfc9631f6bbebeb5e4",
           "Title": "org.apache.logging.log4j/log4j-api: Apache Log4j API: Malformed JSON output due to improper encoding of floating-point values",
           "Description": "Improper encoding of non-finite floating-point values during MapMessage JSON serialization in Apache Log4j API produces output that is not valid JSON. This issue affects Apache Log4j API versions 2.13.1 through 2.25.4 and version 2.26.0.\n\nThe fix for CVE-2026-34481 did not cover all code paths: when a MapMessage contains a non-finite IEEE 754 value (NaN, Infinity, or -Infinity), MapMessage.asJson() emits the corresponding bare token. RFC 8259 does not permit these tokens, so a conformant parser rejects the resulting document.\n\nThe defect is reachable only when both of the following conditions hold:\n\n  *  The application uses the  message resolver https://logging.apache.org/log4j/2.x/manual/json-template-layout.html#event-template-resolver-message  of JsonTemplateLayout or any other layout that relies on MapMessage.asJson() or MapMessage.getFormattedMessage(new String[]{\"JSON\"}).\n  *  The application logs a MapMessage that contains an attacker-controlled floating-point value.\n\n\nAn attacker who can supply a non-finite value can cause the affected layout to emit malformed JSON, which may corrupt the enclosing log record or disrupt downstream log ingestion and parsing.\n\nUsers are advised to upgrade to Apache Log4j API 2.25.5 or 2.26.1, both of which emit RFC 8259-compliant JSON for non-finite values.",
           "Severity": "MEDIUM",
@@ -9304,7 +9339,8 @@
             "amazon": 2,
             "ghsa": 2,
             "nvd": 2,
-            "redhat": 2
+            "redhat": 2,
+            "ubuntu": 2
           },
           "CVSS": {
             "ghsa": {
@@ -9339,6 +9375,68 @@
           "LastModifiedDate": "2026-10-25T15:10:00.147Z"
         },
         {
+          "VulnerabilityID": "CVE-2026-59171",
+          "VendorIDs": [
+            "GHSA-ghc9-756g-vrcv"
+          ],
+          "PkgName": "org.json:json",
+          "PkgPath": "rmlmapper-java/target/rmlmapper-8.1.0-r380-all.jar",
+          "PkgIdentifier": {
+            "PURL": "pkg:maven/org.json/json@20240303",
+            "UID": "e763b4fade80aa2a"
+          },
+          "InstalledVersion": "20240303",
+          "FixedVersion": "20260719",
+          "Status": "fixed",
+          "Layer": {
+            "DiffID": "sha256:f97db7908ad13e3c8136978c58b077605aa8afeb96bdc3be5a12cc76db3771a4"
+          },
+          "SeveritySource": "ghsa",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-59171",
+          "DataSource": {
+            "ID": "ghsa",
+            "Name": "GitHub Security Advisory Maven",
+            "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Amaven"
+          },
+          "Fingerprint": "sha256:f0464ad93f4f367ce192be44e50ad4a23803d980d233fa921fdc4c7e934fe44c",
+          "Title": "org.json/json: JSON-java: Denial of Service via excessively long numeric input",
+          "Description": "JSON-java is a reference implementation of a JSON package in Java. From version 20150729 through 20260522, JSONTokener.nextSimpleValue can accumulate unbounded numeric tokens before JSONObject.stringToNumber passes them to BigInteger or BigDecimal conversion without a length limit. An application that parses attacker-controlled JSON or XML through JSONObject, JSONArray, or XML.toJSONObject can spend super-linear CPU time converting a sufficiently long numeric literal, blocking request-handling threads and causing denial of service. Strict mode and keep-strings settings in JSONParserConfiguration do not prevent the affected conversion path. Version 20260719 limits numeric conversion length.",
+          "Severity": "MEDIUM",
+          "CweIDs": [
+            "CWE-400",
+            "CWE-770"
+          ],
+          "VendorSeverity": {
+            "ghsa": 2,
+            "redhat": 2
+          },
+          "CVSS": {
+            "ghsa": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V3Score": 5.9
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V3Score": 5.9
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2026-59171",
+            "https://github.com/stleary/JSON-java",
+            "https://github.com/stleary/JSON-java/commit/703ac34a55400f9c50889e3d0c778b6d7962e81c",
+            "https://github.com/stleary/JSON-java/commit/ab92bb9088a37f9e346cd1dda66f6a3c40a201e0",
+            "https://github.com/stleary/JSON-java/commit/fce83c91bb229dde472283dea648a9a8955237fd",
+            "https://github.com/stleary/JSON-java/pull/1065",
+            "https://github.com/stleary/JSON-java/pull/1067",
+            "https://github.com/stleary/JSON-java/releases/tag/20260719",
+            "https://github.com/stleary/JSON-java/security/advisories/GHSA-ghc9-756g-vrcv",
+            "https://nvd.nist.gov/vuln/detail/CVE-2026-59171",
+            "https://www.cve.org/CVERecord?id=CVE-2026-59171"
+          ],
+          "PublishedDate": "2026-11-06T21:17:09.39Z",
+          "LastModifiedDate": "2026-11-12T22:11:01.153Z"
+        },
+        {
           "VulnerabilityID": "CVE-2026-75140",
           "VendorIDs": [
             "GHSA-65r4-943x-97jj"
@@ -9362,7 +9460,7 @@
             "Name": "GitHub Security Advisory Maven",
             "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Amaven"
           },
-          "Fingerprint": "sha256:e5750c66d65ee03b341d750847809a65a8e9c4bba324b32c8f4d76f6efa21d1e",
+          "Fingerprint": "sha256:0aee1ac421bf7e99517a12a5832b9c1165bbc62d13ce015a5fa1b8665cb6c828",
           "Title": "org.jsoup/jsoup: jsoup: Denial of Service via deeply nested XML documents",
           "Description": "jsoup through 1.23.2, fixed in commit 862ba2f, contains an uncontrolled resource consumption vulnerability in XmlTreeBuilder that allows remote attackers to exhaust JVM heap memory by supplying a deeply nested XML document with uniquely-namespaced elements. The builder copies the entire inherited namespace map on every start element, causing quadratic time and memory complexity, which attackers can exploit to trigger an OutOfMemoryError and terminate the application.",
           "Severity": "HIGH",
@@ -9387,7 +9485,6 @@
           },
           "References": [
             "https://access.redhat.com/security/cve/CVE-2026-75140",
-            "https://advisory.echohq.com/cve/CVE-2026-75140",
             "https://github.com/jhy/jsoup",
             "https://github.com/jhy/jsoup/commit/862ba2f1d48ee95609183dbcfc848c9fd7afc76a",
             "https://github.com/jhy/jsoup/pull/2556",
@@ -9423,7 +9520,7 @@
             "Name": "GitHub Security Advisory Maven",
             "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Amaven"
           },
-          "Fingerprint": "sha256:70fba3c74cfaa80648209211f358e7633a69d5d0d009fd856393c89aeaa2396f",
+          "Fingerprint": "sha256:fc9dc67fafa94391396df069d9b8d98b2fe40bc6ada6b99a62d14b5ec57f06dc",
           "Title": "org.jsoup/jsoup: jsoup: Cross-site scripting via malformed HTML tag names",
           "Description": "jsoup is a Java library for working with real-world HTML. From 1.14.3 until 1.23.1, jsoup's HTML parser could incorrectly handle a malformed tag name ending in a control character, causing the tag to acquire the parsing behavior of a different element. When a custom Safelist permits certain raw-text elements, this misparsing can cause content that should remain inert text to be emitted as active markup after serialization, potentially resulting in cross-site scripting. jsoup's built-in Safelists are not affected. This issue is fixed in version 1.23.1.",
           "Severity": "MEDIUM",
@@ -9448,7 +9545,6 @@
           },
           "References": [
             "https://access.redhat.com/security/cve/CVE-2026-71497",
-            "https://advisory.echohq.com/cve/CVE-2026-71497",
             "https://github.com/jhy/jsoup",
             "https://github.com/jhy/jsoup/commit/92f1aca552548b484bc7d4b94c51e48b8e6eca70",
             "https://github.com/jhy/jsoup/issues/2538",
@@ -11899,7 +11995,7 @@
             "Name": "GitHub Security Advisory npm",
             "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Anpm"
           },
-          "Fingerprint": "sha256:7e8df8721ad4616a3027d2c797e296fb1cf75a0bdb123692d015a72b6b0649b3",
+          "Fingerprint": "sha256:350a2b566a7dca041b8f72ee49884f12d88d091363eac504c16ff6219cc3f56b",
           "Title": "brace-expansion: brace-expansion: Denial of Service via stack exhaustion from crafted brace patterns",
           "Description": "The brace-expansion library generates arbitrary strings containing a common prefix and suffix. Prior to 1.1.19, 2.1.5, 3.0.7, and 5.0.10, crafted brace patterns can exhaust the native stack in parseCommaParts because parseCommaParts recursively processes the remainder once per brace group and uses push.apply to pass every element of a very large comma-part array as a function argument. Patterns containing many comma-separated brace groups trigger the recursive path, while the large array triggers the argument-array path without deep recursion. These paths cause recursive and argument-array native stack exhaustion before max or maxLength can limit output, potentially terminating the Node.js process in a process-terminating denial of service. This issue is fixed in versions 1.1.19, 2.1.5, 3.0.7, and 5.0.10.",
           "Severity": "HIGH",
@@ -11911,7 +12007,7 @@
             "alma": 3,
             "amazon": 3,
             "ghsa": 3,
-            "oracle-oval": 3,
+            "oracle-oval": 4,
             "redhat": 3,
             "rocky": 3
           },
@@ -11926,51 +12022,64 @@
             }
           },
           "References": [
-            "https://access.redhat.com/errata/RHSA-2026:92378",
+            "https://access.redhat.com/errata/RHSA-2026:98522",
+            "https://access.redhat.com/errata/RHSA-2026:98619",
             "https://access.redhat.com/security/cve/CVE-2026-102276",
             "https://advisory.echohq.com/cve/CVE-2026-102276",
-            "https://bugzilla.redhat.com/2542596",
+            "https://bugzilla.redhat.com/2490521",
+            "https://bugzilla.redhat.com/2491494",
+            "https://bugzilla.redhat.com/2493325",
+            "https://bugzilla.redhat.com/2493326",
+            "https://bugzilla.redhat.com/2493329",
+            "https://bugzilla.redhat.com/2493331",
+            "https://bugzilla.redhat.com/2493332",
+            "https://bugzilla.redhat.com/2493333",
+            "https://bugzilla.redhat.com/2493335",
+            "https://bugzilla.redhat.com/2493336",
+            "https://bugzilla.redhat.com/2493337",
+            "https://bugzilla.redhat.com/2508485",
+            "https://bugzilla.redhat.com/2509171",
+            "https://bugzilla.redhat.com/2509175",
+            "https://bugzilla.redhat.com/2509178",
+            "https://bugzilla.redhat.com/2509179",
+            "https://bugzilla.redhat.com/2509653",
+            "https://bugzilla.redhat.com/2510853",
+            "https://bugzilla.redhat.com/2510854",
+            "https://bugzilla.redhat.com/2510857",
+            "https://bugzilla.redhat.com/2510858",
+            "https://bugzilla.redhat.com/2511089",
             "https://bugzilla.redhat.com/2542700",
-            "https://bugzilla.redhat.com/2542706",
             "https://bugzilla.redhat.com/2542707",
-            "https://bugzilla.redhat.com/2558973",
+            "https://bugzilla.redhat.com/2553656",
+            "https://bugzilla.redhat.com/2553677",
+            "https://bugzilla.redhat.com/2553678",
+            "https://bugzilla.redhat.com/2553679",
             "https://bugzilla.redhat.com/2559870",
             "https://bugzilla.redhat.com/2559873",
             "https://bugzilla.redhat.com/2559875",
-            "https://bugzilla.redhat.com/2560016",
-            "https://bugzilla.redhat.com/2560018",
-            "https://bugzilla.redhat.com/2560019",
-            "https://bugzilla.redhat.com/2560021",
-            "https://bugzilla.redhat.com/2560022",
-            "https://bugzilla.redhat.com/show_bug.cgi?id=2542596",
             "https://bugzilla.redhat.com/show_bug.cgi?id=2542700",
-            "https://bugzilla.redhat.com/show_bug.cgi?id=2542706",
             "https://bugzilla.redhat.com/show_bug.cgi?id=2542707",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2553656",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2553677",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2553678",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2553679",
             "https://bugzilla.redhat.com/show_bug.cgi?id=2558973",
             "https://bugzilla.redhat.com/show_bug.cgi?id=2559870",
             "https://bugzilla.redhat.com/show_bug.cgi?id=2559873",
             "https://bugzilla.redhat.com/show_bug.cgi?id=2559875",
-            "https://bugzilla.redhat.com/show_bug.cgi?id=2560016",
-            "https://bugzilla.redhat.com/show_bug.cgi?id=2560018",
-            "https://bugzilla.redhat.com/show_bug.cgi?id=2560019",
-            "https://bugzilla.redhat.com/show_bug.cgi?id=2560021",
-            "https://bugzilla.redhat.com/show_bug.cgi?id=2560022",
             "https://creativecommons.org/licenses/by/4.0/",
-            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-101911",
             "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-102276",
-            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-102277",
             "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-102278",
-            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-105481",
             "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-105482",
             "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-105483",
             "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-106069",
-            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-106071",
-            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-106072",
-            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-106073",
-            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-106074",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-109383",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-109829",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-109869",
             "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-111497",
-            "https://errata.almalinux.org/9/ALSA-2026-92378.html",
-            "https://errata.rockylinux.org/RLSA-2026:92378",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-87018",
+            "https://errata.almalinux.org/10/ALSA-2026-98619.html",
+            "https://errata.rockylinux.org/RLSA-2026:98522",
             "https://github.com/juliangruber/brace-expansion",
             "https://github.com/juliangruber/brace-expansion/commit/0bcbfc0a5928c3073d48f42999d1ce4fc1c42fbc",
             "https://github.com/juliangruber/brace-expansion/commit/316359e6019c39b3254c8ba8e25dc586a480652c",
@@ -11978,7 +12087,7 @@
             "https://github.com/juliangruber/brace-expansion/commit/6735c94873ca570bcdd6a0690033bdd3126379d3",
             "https://github.com/juliangruber/brace-expansion/security/advisories/GHSA-6j4f-fj2g-mc7p",
             "https://linux.oracle.com/cve/CVE-2026-102276.html",
-            "https://linux.oracle.com/errata/ELSA-2026-92378.html",
+            "https://linux.oracle.com/errata/ELSA-2026-98613.html",
             "https://nvd.nist.gov/vuln/detail/CVE-2026-102276",
             "https://www.cve.org/CVERecord?id=CVE-2026-102276"
           ],
@@ -12010,7 +12119,7 @@
             "Name": "GitHub Security Advisory npm",
             "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Anpm"
           },
-          "Fingerprint": "sha256:fc97fe2e5f25af6f7c775ec11702c492376a3e892812bf3fbdad6759cecb558e",
+          "Fingerprint": "sha256:7b514f16ca68bd5f2d9d3d9a89480772ac95c7ab4e37c1afc5c1287f5060900a",
           "Title": "brace-expansion: brace-expansion: Denial of Service via uncontrolled recursion in nested brace patterns",
           "Description": "The brace-expansion library generates arbitrary strings containing a common prefix and suffix. Prior to 1.1.20, 2.1.6, 3.0.8, and 5.0.11, deeply nested brace groups cause expand_() to recurse once per nesting level at comma-member and single-set expansion sites, exhausting the native stack before output limits can apply and potentially terminating the Node.js process. expand_ performs uncontrolled recursion for nested brace alternatives and single-part sets. deeply nested brace groups supplied as an untrusted pattern. expand_ is affected. expand is affected. Comma members is affected. Single set is affected. native stack exhaustion during nested sub-expansion. process-terminating denial of service. This issue is fixed in versions 1.1.20, 2.1.6, 3.0.8, and 5.0.11.",
           "Severity": "HIGH",
@@ -12021,7 +12130,7 @@
           "VendorSeverity": {
             "alma": 3,
             "ghsa": 3,
-            "oracle-oval": 3,
+            "oracle-oval": 4,
             "redhat": 3,
             "rocky": 3
           },
@@ -12036,58 +12145,71 @@
             }
           },
           "References": [
-            "https://access.redhat.com/errata/RHSA-2026:92378",
+            "https://access.redhat.com/errata/RHSA-2026:98522",
+            "https://access.redhat.com/errata/RHSA-2026:98619",
             "https://access.redhat.com/security/cve/CVE-2026-102278",
             "https://advisory.echohq.com/cve/CVE-2026-102278",
-            "https://bugzilla.redhat.com/2542596",
+            "https://bugzilla.redhat.com/2490521",
+            "https://bugzilla.redhat.com/2491494",
+            "https://bugzilla.redhat.com/2493325",
+            "https://bugzilla.redhat.com/2493326",
+            "https://bugzilla.redhat.com/2493329",
+            "https://bugzilla.redhat.com/2493331",
+            "https://bugzilla.redhat.com/2493332",
+            "https://bugzilla.redhat.com/2493333",
+            "https://bugzilla.redhat.com/2493335",
+            "https://bugzilla.redhat.com/2493336",
+            "https://bugzilla.redhat.com/2493337",
+            "https://bugzilla.redhat.com/2508485",
+            "https://bugzilla.redhat.com/2509171",
+            "https://bugzilla.redhat.com/2509175",
+            "https://bugzilla.redhat.com/2509178",
+            "https://bugzilla.redhat.com/2509179",
+            "https://bugzilla.redhat.com/2509653",
+            "https://bugzilla.redhat.com/2510853",
+            "https://bugzilla.redhat.com/2510854",
+            "https://bugzilla.redhat.com/2510857",
+            "https://bugzilla.redhat.com/2510858",
+            "https://bugzilla.redhat.com/2511089",
             "https://bugzilla.redhat.com/2542700",
-            "https://bugzilla.redhat.com/2542706",
             "https://bugzilla.redhat.com/2542707",
-            "https://bugzilla.redhat.com/2558973",
+            "https://bugzilla.redhat.com/2553656",
+            "https://bugzilla.redhat.com/2553677",
+            "https://bugzilla.redhat.com/2553678",
+            "https://bugzilla.redhat.com/2553679",
             "https://bugzilla.redhat.com/2559870",
             "https://bugzilla.redhat.com/2559873",
             "https://bugzilla.redhat.com/2559875",
-            "https://bugzilla.redhat.com/2560016",
-            "https://bugzilla.redhat.com/2560018",
-            "https://bugzilla.redhat.com/2560019",
-            "https://bugzilla.redhat.com/2560021",
-            "https://bugzilla.redhat.com/2560022",
-            "https://bugzilla.redhat.com/show_bug.cgi?id=2542596",
             "https://bugzilla.redhat.com/show_bug.cgi?id=2542700",
-            "https://bugzilla.redhat.com/show_bug.cgi?id=2542706",
             "https://bugzilla.redhat.com/show_bug.cgi?id=2542707",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2553656",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2553677",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2553678",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2553679",
             "https://bugzilla.redhat.com/show_bug.cgi?id=2558973",
             "https://bugzilla.redhat.com/show_bug.cgi?id=2559870",
             "https://bugzilla.redhat.com/show_bug.cgi?id=2559873",
             "https://bugzilla.redhat.com/show_bug.cgi?id=2559875",
-            "https://bugzilla.redhat.com/show_bug.cgi?id=2560016",
-            "https://bugzilla.redhat.com/show_bug.cgi?id=2560018",
-            "https://bugzilla.redhat.com/show_bug.cgi?id=2560019",
-            "https://bugzilla.redhat.com/show_bug.cgi?id=2560021",
-            "https://bugzilla.redhat.com/show_bug.cgi?id=2560022",
             "https://creativecommons.org/licenses/by/4.0/",
-            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-101911",
             "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-102276",
-            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-102277",
             "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-102278",
-            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-105481",
             "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-105482",
             "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-105483",
             "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-106069",
-            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-106071",
-            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-106072",
-            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-106073",
-            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-106074",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-109383",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-109829",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-109869",
             "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-111497",
-            "https://errata.almalinux.org/9/ALSA-2026-92378.html",
-            "https://errata.rockylinux.org/RLSA-2026:92378",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-87018",
+            "https://errata.almalinux.org/10/ALSA-2026-98619.html",
+            "https://errata.rockylinux.org/RLSA-2026:98522",
             "https://github.com/juliangruber/brace-expansion",
             "https://github.com/juliangruber/brace-expansion/commit/1efee7c397c191da6287a78ec19512476a966a7b",
             "https://github.com/juliangruber/brace-expansion/commit/935d78f32f335b2ff76578e5c5e877d31ae9888c",
             "https://github.com/juliangruber/brace-expansion/commit/de84f144e9816f30e25fc8179e2e1249ab6df0db",
             "https://github.com/juliangruber/brace-expansion/security/advisories/GHSA-qhr7-859c-m2p7",
             "https://linux.oracle.com/cve/CVE-2026-102278.html",
-            "https://linux.oracle.com/errata/ELSA-2026-92378.html",
+            "https://linux.oracle.com/errata/ELSA-2026-98613.html",
             "https://nvd.nist.gov/vuln/detail/CVE-2026-102278",
             "https://www.cve.org/CVERecord?id=CVE-2026-102278"
           ],
@@ -12119,7 +12241,7 @@
             "Name": "GitHub Security Advisory npm",
             "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Anpm"
           },
-          "Fingerprint": "sha256:e07d4b4cce3e0303fe62a09684eeee7c0e00f316e273d5b512f4b3424c99250f",
+          "Fingerprint": "sha256:488facbfe886ccc9b729e8c9b4093fa194d76af97fbba9619a7e143bc11f4d65",
           "Title": "brace-expansion: brace-expansion: Denial of Service via crafted brace patterns",
           "Description": "The brace-expansion library generates arbitrary strings containing a common prefix and suffix. Prior to 1.1.21, 2.1.7, 3.0.9, and 5.0.12, the expand function handles untrusted {a},b}-shaped patterns with many trailing closing braces by restarting its scan once for each trailing closing brace. The successive full-input rescans with linear working-string growth cause quadratic CPU time and memory pressure that can block the Node.js event loop. The process eventually recovers, making the impact a recoverable CPU denial of service. This issue is fixed in versions 1.1.21, 2.1.7, 3.0.9, and 5.0.12.",
           "Severity": "MEDIUM",
@@ -12229,7 +12351,7 @@
             "Name": "GitHub Security Advisory npm",
             "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Anpm"
           },
-          "Fingerprint": "sha256:df51ceb6d11e353e628b1d70791a163967da1fd074ef4cc8b6475b91e74d28e9",
+          "Fingerprint": "sha256:90bbd9bce18965264e85c4ea390c9112d8b8151d4658b7b4e6fb06fa33ffdb88",
           "Title": "glob: glob: Denial of Service (DoS) via incomplete traversal cancellation",
           "Description": "Glob matches files using patterns the shell uses. From 9.0.0 until 14.0.2, abort branches in src/walker.ts, including GlobUtil.walkCB(), GlobUtil.walkCB2(), GlobUtil.walkCBSync(), and GlobUtil.walkCB2Sync(), invoke the callbacks without returning. After AbortSignal or AbortSignal.timeout() rejects or emits an error, execution can continue into processor.processPatterns(), readdirCB(), and recursive traversal. The issue affects glob() and globStream() when applications expose attacker-influenced patterns or directory trees and rely on cancellation as a traversal budget. Repeated timed-out requests can stack background filesystem operations and CPU work, degrading worker throughput or service availability; no confidentiality or integrity impact was observed. This issue is fixed in 14.0.2.",
           "Severity": "MEDIUM",
@@ -12252,7 +12374,6 @@
           },
           "References": [
             "https://access.redhat.com/security/cve/CVE-2026-118773",
-            "https://advisory.echohq.com/cve/CVE-2026-118773",
             "https://github.com/isaacs/node-glob",
             "https://github.com/isaacs/node-glob/commit/4682e8c9babee1b385202ede36389634e12076d7",
             "https://github.com/isaacs/node-glob/releases/tag/v14.0.2",
@@ -12288,7 +12409,7 @@
             "Name": "GitHub Security Advisory npm",
             "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Anpm"
           },
-          "Fingerprint": "sha256:99d28af3788539032d866eef6f25e817ac4af22dad79db4c6d48d149035e7ea6",
+          "Fingerprint": "sha256:d42016625d5404d003436a113879be2bb61aedf636883fd20af040f8209378c8",
           "Title": "minimatch: minimatch: Denial of Service via crafted glob pattern expansion",
           "Description": "minimatch is a minimal matching utility for converting glob expressions into JavaScript RegExp objects. Starting in 7.0.0 and prior to 11.0.1, src/index.ts implements firstPhasePreProcess() so that, at optimizationLevel 2 or higher, it repeatedly expands attacker-controlled **/.. pattern segments inside a fixpoint loop, allowing generated globParts entries to be processed and expanded again. secondPhasePreProcess() then compares the expanded entries pairwise, so a short malicious glob can cause excessive CPU and memory consumption during pattern compilation. This issue is fixed in version 11.0.1.",
           "Severity": "MEDIUM",
@@ -12296,8 +12417,11 @@
             "CWE-405"
           ],
           "VendorSeverity": {
+            "alma": 3,
             "ghsa": 2,
-            "redhat": 2
+            "oracle-oval": 3,
+            "redhat": 2,
+            "rocky": 3
           },
           "CVSS": {
             "ghsa": {
@@ -12310,14 +12434,48 @@
             }
           },
           "References": [
+            "https://access.redhat.com/errata/RHSA-2026:96226",
             "https://access.redhat.com/security/cve/CVE-2026-118764",
             "https://advisory.echohq.com/cve/CVE-2026-118764",
+            "https://bugzilla.redhat.com/2528759",
+            "https://bugzilla.redhat.com/2542700",
+            "https://bugzilla.redhat.com/2542707",
+            "https://bugzilla.redhat.com/2553656",
+            "https://bugzilla.redhat.com/2553677",
+            "https://bugzilla.redhat.com/2553678",
+            "https://bugzilla.redhat.com/2563607",
+            "https://bugzilla.redhat.com/2563953",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2528759",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2542700",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2542707",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2553656",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2553677",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2553678",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2563607",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2563953",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2563955",
+            "https://bugzilla.redhat.com/show_bug.cgi?id=2563978",
+            "https://creativecommons.org/licenses/by/4.0/",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-102276",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-102278",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-109383",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-109869",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-118764",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-119373",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-119374",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-119379",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-19534",
+            "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2026-87018",
+            "https://errata.almalinux.org/9/ALSA-2026-96226.html",
+            "https://errata.rockylinux.org/RLSA-2026:96226",
             "https://github.com/isaacs/minimatch",
             "https://github.com/isaacs/minimatch/commit/297b6c1a01f2410b3ba1ebed14ba222d0c3c1033",
             "https://github.com/isaacs/minimatch/commit/77a0f5c4b80bdc641c3c930a1d9edf5ad2db57f8",
             "https://github.com/isaacs/minimatch/commit/fd0b3ab9cbc5bf1aff1c99f1f46e413c2b3340da",
             "https://github.com/isaacs/minimatch/releases/tag/v11.0.1",
             "https://github.com/isaacs/minimatch/security/advisories/GHSA-g3hv-75wg-m249",
+            "https://linux.oracle.com/cve/CVE-2026-118764.html",
+            "https://linux.oracle.com/errata/ELSA-2026-96226.html",
             "https://nvd.nist.gov/vuln/detail/CVE-2026-118764",
             "https://www.cve.org/CVERecord?id=CVE-2026-118764"
           ],
@@ -12343,7 +12501,7 @@
             "BSD-2-Clause"
           ],
           "Layer": {
-            "DiffID": "sha256:0987c680e48b36fdec71da9d7a6c9bdbf11115847781e520dcc5457a1614c96c"
+            "DiffID": "sha256:71d49d48a110113b96dba11baf7e740d800125ec6f3e934e72222ba22c1ee451"
           },
           "FilePath": "usr/lib/ruby/gems/3.2.0/specifications/base64-0.3.0.gemspec",
           "AnalyzedBy": "gemspec"
@@ -12359,7 +12517,7 @@
             "MIT"
           ],
           "Layer": {
-            "DiffID": "sha256:0987c680e48b36fdec71da9d7a6c9bdbf11115847781e520dcc5457a1614c96c"
+            "DiffID": "sha256:71d49d48a110113b96dba11baf7e740d800125ec6f3e934e72222ba22c1ee451"
           },
           "FilePath": "usr/lib/ruby/gems/3.2.0/specifications/bundler-4.0.9.gemspec",
           "AnalyzedBy": "gemspec"
@@ -12376,7 +12534,7 @@
             "BSD-2-Clause"
           ],
           "Layer": {
-            "DiffID": "sha256:0987c680e48b36fdec71da9d7a6c9bdbf11115847781e520dcc5457a1614c96c"
+            "DiffID": "sha256:71d49d48a110113b96dba11baf7e740d800125ec6f3e934e72222ba22c1ee451"
           },
           "FilePath": "usr/lib/ruby/gems/3.2.0/specifications/csv-3.3.5.gemspec",
           "AnalyzedBy": "gemspec"
@@ -12392,7 +12550,7 @@
             "MIT"
           ],
           "Layer": {
-            "DiffID": "sha256:0987c680e48b36fdec71da9d7a6c9bdbf11115847781e520dcc5457a1614c96c"
+            "DiffID": "sha256:71d49d48a110113b96dba11baf7e740d800125ec6f3e934e72222ba22c1ee451"
           },
           "FilePath": "usr/lib/ruby/gems/3.2.0/specifications/daemons-1.4.1.gemspec",
           "AnalyzedBy": "gemspec"
@@ -12409,7 +12567,7 @@
             "GPL-2.0-only"
           ],
           "Layer": {
-            "DiffID": "sha256:0987c680e48b36fdec71da9d7a6c9bdbf11115847781e520dcc5457a1614c96c"
+            "DiffID": "sha256:71d49d48a110113b96dba11baf7e740d800125ec6f3e934e72222ba22c1ee451"
           },
           "FilePath": "usr/lib/ruby/gems/3.2.0/specifications/eventmachine-1.2.7.gemspec",
           "AnalyzedBy": "gemspec"
@@ -12426,7 +12584,7 @@
             "BSD-2-Clause"
           ],
           "Layer": {
-            "DiffID": "sha256:0987c680e48b36fdec71da9d7a6c9bdbf11115847781e520dcc5457a1614c96c"
+            "DiffID": "sha256:71d49d48a110113b96dba11baf7e740d800125ec6f3e934e72222ba22c1ee451"
           },
           "FilePath": "usr/lib/ruby/gems/3.2.0/specifications/fileutils-1.8.0.gemspec",
           "AnalyzedBy": "gemspec"
@@ -12443,7 +12601,7 @@
             "BSD-2-Clause"
           ],
           "Layer": {
-            "DiffID": "sha256:0987c680e48b36fdec71da9d7a6c9bdbf11115847781e520dcc5457a1614c96c"
+            "DiffID": "sha256:71d49d48a110113b96dba11baf7e740d800125ec6f3e934e72222ba22c1ee451"
           },
           "FilePath": "usr/lib/ruby/gems/3.2.0/specifications/logger-1.7.0.gemspec",
           "AnalyzedBy": "gemspec"
@@ -12459,7 +12617,7 @@
             "MIT"
           ],
           "Layer": {
-            "DiffID": "sha256:0987c680e48b36fdec71da9d7a6c9bdbf11115847781e520dcc5457a1614c96c"
+            "DiffID": "sha256:71d49d48a110113b96dba11baf7e740d800125ec6f3e934e72222ba22c1ee451"
           },
           "FilePath": "usr/lib/ruby/gems/3.2.0/specifications/mustermann-3.1.1.gemspec",
           "AnalyzedBy": "gemspec"
@@ -12476,7 +12634,7 @@
             "BSD-2-Clause"
           ],
           "Layer": {
-            "DiffID": "sha256:0987c680e48b36fdec71da9d7a6c9bdbf11115847781e520dcc5457a1614c96c"
+            "DiffID": "sha256:71d49d48a110113b96dba11baf7e740d800125ec6f3e934e72222ba22c1ee451"
           },
           "FilePath": "usr/lib/ruby/gems/3.2.0/specifications/nio4r-2.7.5.gemspec",
           "AnalyzedBy": "gemspec"
@@ -12493,7 +12651,7 @@
             "BSD-2-Clause"
           ],
           "Layer": {
-            "DiffID": "sha256:0987c680e48b36fdec71da9d7a6c9bdbf11115847781e520dcc5457a1614c96c"
+            "DiffID": "sha256:71d49d48a110113b96dba11baf7e740d800125ec6f3e934e72222ba22c1ee451"
           },
           "FilePath": "usr/lib/ruby/gems/3.2.0/specifications/open3-0.2.1.gemspec",
           "AnalyzedBy": "gemspec"
@@ -12501,49 +12659,49 @@
         {
           "Name": "puma",
           "Identifier": {
-            "PURL": "pkg:gem/puma@8.0.2",
-            "UID": "dda3512f2c68988"
+            "PURL": "pkg:gem/puma@8.1.3",
+            "UID": "6df5676d1de9bf35"
           },
-          "Version": "8.0.2",
+          "Version": "8.1.3",
           "Licenses": [
             "BSD-3-Clause"
           ],
           "Layer": {
-            "DiffID": "sha256:0987c680e48b36fdec71da9d7a6c9bdbf11115847781e520dcc5457a1614c96c"
+            "DiffID": "sha256:71d49d48a110113b96dba11baf7e740d800125ec6f3e934e72222ba22c1ee451"
           },
-          "FilePath": "usr/lib/ruby/gems/3.2.0/specifications/puma-8.0.2.gemspec",
+          "FilePath": "usr/lib/ruby/gems/3.2.0/specifications/puma-8.1.3.gemspec",
           "AnalyzedBy": "gemspec"
         },
         {
           "Name": "rack",
           "Identifier": {
-            "PURL": "pkg:gem/rack@3.2.8",
-            "UID": "cd2b24491ab35f9b"
+            "PURL": "pkg:gem/rack@3.2.9",
+            "UID": "88e9fec46b170e3a"
           },
-          "Version": "3.2.8",
+          "Version": "3.2.9",
           "Licenses": [
             "MIT"
           ],
           "Layer": {
-            "DiffID": "sha256:0987c680e48b36fdec71da9d7a6c9bdbf11115847781e520dcc5457a1614c96c"
+            "DiffID": "sha256:71d49d48a110113b96dba11baf7e740d800125ec6f3e934e72222ba22c1ee451"
           },
-          "FilePath": "usr/lib/ruby/gems/3.2.0/specifications/rack-3.2.8.gemspec",
+          "FilePath": "usr/lib/ruby/gems/3.2.0/specifications/rack-3.2.9.gemspec",
           "AnalyzedBy": "gemspec"
         },
         {
           "Name": "rack-protection",
           "Identifier": {
-            "PURL": "pkg:gem/rack-protection@4.2.1",
-            "UID": "f6383500bf6098a2"
+            "PURL": "pkg:gem/rack-protection@4.2.2",
+            "UID": "e5e4beb0e8585c0"
           },
-          "Version": "4.2.1",
+          "Version": "4.2.2",
           "Licenses": [
             "MIT"
           ],
           "Layer": {
-            "DiffID": "sha256:0987c680e48b36fdec71da9d7a6c9bdbf11115847781e520dcc5457a1614c96c"
+            "DiffID": "sha256:71d49d48a110113b96dba11baf7e740d800125ec6f3e934e72222ba22c1ee451"
           },
-          "FilePath": "usr/lib/ruby/gems/3.2.0/specifications/rack-protection-4.2.1.gemspec",
+          "FilePath": "usr/lib/ruby/gems/3.2.0/specifications/rack-protection-4.2.2.gemspec",
           "AnalyzedBy": "gemspec"
         },
         {
@@ -12557,7 +12715,7 @@
             "MIT"
           ],
           "Layer": {
-            "DiffID": "sha256:0987c680e48b36fdec71da9d7a6c9bdbf11115847781e520dcc5457a1614c96c"
+            "DiffID": "sha256:71d49d48a110113b96dba11baf7e740d800125ec6f3e934e72222ba22c1ee451"
           },
           "FilePath": "usr/lib/ruby/gems/3.2.0/specifications/rack-session-2.1.2.gemspec",
           "AnalyzedBy": "gemspec"
@@ -12573,7 +12731,7 @@
             "MIT"
           ],
           "Layer": {
-            "DiffID": "sha256:0987c680e48b36fdec71da9d7a6c9bdbf11115847781e520dcc5457a1614c96c"
+            "DiffID": "sha256:71d49d48a110113b96dba11baf7e740d800125ec6f3e934e72222ba22c1ee451"
           },
           "FilePath": "usr/lib/ruby/gems/3.2.0/specifications/rackup-2.3.1.gemspec",
           "AnalyzedBy": "gemspec"
@@ -12581,17 +12739,17 @@
         {
           "Name": "sinatra",
           "Identifier": {
-            "PURL": "pkg:gem/sinatra@4.2.1",
-            "UID": "5c834ecab0a997ff"
+            "PURL": "pkg:gem/sinatra@4.2.2",
+            "UID": "b742a630fa0012cf"
           },
-          "Version": "4.2.1",
+          "Version": "4.2.2",
           "Licenses": [
             "MIT"
           ],
           "Layer": {
-            "DiffID": "sha256:0987c680e48b36fdec71da9d7a6c9bdbf11115847781e520dcc5457a1614c96c"
+            "DiffID": "sha256:71d49d48a110113b96dba11baf7e740d800125ec6f3e934e72222ba22c1ee451"
           },
-          "FilePath": "usr/lib/ruby/gems/3.2.0/specifications/sinatra-4.2.1.gemspec",
+          "FilePath": "usr/lib/ruby/gems/3.2.0/specifications/sinatra-4.2.2.gemspec",
           "AnalyzedBy": "gemspec"
         },
         {
@@ -12606,7 +12764,7 @@
             "Ruby"
           ],
           "Layer": {
-            "DiffID": "sha256:0987c680e48b36fdec71da9d7a6c9bdbf11115847781e520dcc5457a1614c96c"
+            "DiffID": "sha256:71d49d48a110113b96dba11baf7e740d800125ec6f3e934e72222ba22c1ee451"
           },
           "FilePath": "usr/lib/ruby/gems/3.2.0/specifications/thin-2.0.1.gemspec",
           "AnalyzedBy": "gemspec"
@@ -12614,17 +12772,17 @@
         {
           "Name": "tilt",
           "Identifier": {
-            "PURL": "pkg:gem/tilt@2.8.0",
-            "UID": "f301b26add9d4a13"
+            "PURL": "pkg:gem/tilt@2.9.0",
+            "UID": "62d38a25279e6de7"
           },
-          "Version": "2.8.0",
+          "Version": "2.9.0",
           "Licenses": [
             "MIT"
           ],
           "Layer": {
-            "DiffID": "sha256:0987c680e48b36fdec71da9d7a6c9bdbf11115847781e520dcc5457a1614c96c"
+            "DiffID": "sha256:71d49d48a110113b96dba11baf7e740d800125ec6f3e934e72222ba22c1ee451"
           },
-          "FilePath": "usr/lib/ruby/gems/3.2.0/specifications/tilt-2.8.0.gemspec",
+          "FilePath": "usr/lib/ruby/gems/3.2.0/specifications/tilt-2.9.0.gemspec",
           "AnalyzedBy": "gemspec"
         }
       ]

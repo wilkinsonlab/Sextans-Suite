@@ -1,4 +1,6 @@
 Target,VulnerabilityID,Package,InstalledVersion,FixedVersion,Severity,Title,PrimaryURL,BundlerShadowed,BundlerShadowedDetail
+fairdatasystems/care2:2026-11-26 (alpine 3.22.2),CVE-2026-124709,libcrypto3,3.5.9-r0,3.5.9-r2,HIGH,openssl: openssl: Denial of Service via memory leak in QUIC stream handling,https://avd.aquasec.com/nvd/cve-2026-124709,"",""
+fairdatasystems/care2:2026-11-26 (alpine 3.22.2),CVE-2026-124709,libssl3,3.5.9-r0,3.5.9-r2,HIGH,openssl: openssl: Denial of Service via memory leak in QUIC stream handling,https://avd.aquasec.com/nvd/cve-2026-124709,"",""
 Python,CVE-2025-8869,pip,25.0.1,25.3,MEDIUM,pip: pip missing checks on symbolic link extraction,https://avd.aquasec.com/nvd/cve-2025-8869,"",""
 Python,CVE-2026-13346,pip,25.0.1,26.2.0,MEDIUM,pip: pip: Arbitrary file installation via malicious package indexes,https://avd.aquasec.com/nvd/cve-2026-13346,"",""
 Python,CVE-2026-3219,pip,25.0.1,26.1,MEDIUM,pip: pip: Incorrect file installation due to improper archive handling,https://avd.aquasec.com/nvd/cve-2026-3219,"",""

@@ -3,10 +3,10 @@
   "Trivy": {
     "Version": "0.69.1"
   },
-  "ReportID": "01a1bc34-b633-74e2-9074-088452d73b4b",
-  "CreatedAt": "2026-11-08T18:28:53.555730126+01:00",
+  "ReportID": "01a216dd-ce30-7293-9c9c-e0daf0051bc2",
+  "CreatedAt": "2026-11-26T08:59:24.720172592+01:00",
   "ArtifactID": "sha256:17fae5fdf8215e5c9c614d50f83d2d91faaf04a13033dea67e21670df976d910",
-  "ArtifactName": "fairdatasystems/care2:2026-11-08",
+  "ArtifactName": "fairdatasystems/care2:2026-11-26",
   "ArtifactType": "container_image",
   "Metadata": {
     "Size": 261479424,
@@ -27,12 +27,13 @@
     ],
     "RepoTags": [
       "fairdatasystems/care2:2026-11-06",
-      "fairdatasystems/care2:2026-11-08"
+      "fairdatasystems/care2:2026-11-08",
+      "fairdatasystems/care2:2026-11-26"
     ],
     "RepoDigests": [
       "fairdatasystems/care2@sha256:585b2a41cecd4b3d5de02897e8d9f2fdbe489d94ba697e373866934caa0af2f9"
     ],
-    "Reference": "fairdatasystems/care2:2026-11-08",
+    "Reference": "fairdatasystems/care2:2026-11-26",
     "ImageConfig": {
       "architecture": "amd64",
       "created": "2026-11-06T18:22:26.39415834+01:00",
@@ -205,7 +206,7 @@
   },
   "Results": [
     {
-      "Target": "fairdatasystems/care2:2026-11-08 (alpine 3.22.2)",
+      "Target": "fairdatasystems/care2:2026-11-26 (alpine 3.22.2)",
       "Class": "os-pkgs",
       "Type": "alpine",
       "Packages": [
@@ -2160,6 +2161,692 @@
       ],
       "Vulnerabilities": [
         {
+          "VulnerabilityID": "CVE-2026-124709",
+          "PkgID": "libcrypto3@3.5.9-r0",
+          "PkgName": "libcrypto3",
+          "PkgIdentifier": {
+            "PURL": "pkg:apk/alpine/libcrypto3@3.5.9-r0?arch=x86_64\u0026distro=3.22.2",
+            "UID": "5611d6aa5bf08335"
+          },
+          "InstalledVersion": "3.5.9-r0",
+          "FixedVersion": "3.5.9-r2",
+          "Status": "fixed",
+          "Layer": {
+            "DiffID": "sha256:4f7d21128c4a72700cd5927cd451ce930a949d271ccf6544b08763c973d8aff9"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-124709",
+          "DataSource": {
+            "ID": "alpine",
+            "Name": "Alpine Secdb",
+            "URL": "https://secdb.alpinelinux.org/"
+          },
+          "Fingerprint": "sha256:742ce32fcbb2f9bf8f306fb3e2b7e1313250611c3ccb26e0799c861ef5869ea0",
+          "Title": "openssl: openssl: Denial of Service via memory leak in QUIC stream handling",
+          "Description": "Issue summary: A QUIC server that rejects a stream opened by the peer may\nretain that stream's state for the lifetime of the connection if the peer\nresets the stream before the rejection is signalled, even though the peer's\nstream credit is returned.\n\nImpact summary: A remote client that completes a QUIC handshake can repeatedly\nopen and reset streams, causing server memory to grow without bound until the\nprocess runs out of memory and every connection on it is lost. This is a\nDenial of Service.\n\nCWE: CWE-401: Missing Release of Memory after Effective Lifetime\n\nDescription: QUIC servers track each stream the peer opens. When the incoming\nstream policy rejects a stream, OpenSSL schedules a STOP_SENDING frame, marks\nthe stream deleted and returns the peer's stream credit. A deleted stream is\ncollected only once its receive part is fully drained, which for a rejected\nstream means the STOP_SENDING has been acknowledged. If the peer sends\nRESET_STREAM first, the reset cancels the pending STOP_SENDING, so it is never\nsent or acknowledged and the stream is never collected.\n\nThe default configuration reaches this path. Once a connection has a default\nstream, meaning the application has read from or written to the connection as\nthe tutorial server does, the effective incoming stream policy rejects streams\nthe application does not accept. Applications that set the REJECT policy\nexplicitly are affected too.\n\nEach retained stream costs about 300 bytes, and the peer's stream credit\nwindow paces how quickly they accumulate. A client that keeps the connection\nopen and keeps opening and resetting streams grows server memory without\nbound. The severity is Low because growth is slow, needs a long-lived\nconnection, and causes no memory corruption or disclosure.\n\nFIPS impact: no\nThe affected code is outside the FIPS module boundary.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-401"
+          ],
+          "VendorSeverity": {
+            "redhat": 3,
+            "ubuntu": 2
+          },
+          "CVSS": {
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V3Score": 7.5
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2026-124709",
+            "https://github.com/openssl/openssl/commit/22291a6af12f158fbb13bfbd572a33dbdbf290d2",
+            "https://github.com/openssl/openssl/commit/ead311df1037e7994a6d86c7e862d71ad59c52c7",
+            "https://github.com/openssl/openssl/commit/f3acb0a3328046741479482c51cec815839e1b05",
+            "https://nvd.nist.gov/vuln/detail/CVE-2026-124709",
+            "https://openssl-library.org/news/secadv/20261117.txt",
+            "https://www.cve.org/CVERecord?id=CVE-2026-124709"
+          ],
+          "PublishedDate": "2026-11-17T09:17:27.227Z",
+          "LastModifiedDate": "2026-11-17T22:17:22.377Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-107496",
+          "PkgID": "libcrypto3@3.5.9-r0",
+          "PkgName": "libcrypto3",
+          "PkgIdentifier": {
+            "PURL": "pkg:apk/alpine/libcrypto3@3.5.9-r0?arch=x86_64\u0026distro=3.22.2",
+            "UID": "5611d6aa5bf08335"
+          },
+          "InstalledVersion": "3.5.9-r0",
+          "FixedVersion": "3.5.9-r1",
+          "Status": "fixed",
+          "Layer": {
+            "DiffID": "sha256:4f7d21128c4a72700cd5927cd451ce930a949d271ccf6544b08763c973d8aff9"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-107496",
+          "DataSource": {
+            "ID": "alpine",
+            "Name": "Alpine Secdb",
+            "URL": "https://secdb.alpinelinux.org/"
+          },
+          "Fingerprint": "sha256:90749d5566e775f2efff3549c037d96a5a8a37a7c290bbc05db352996c5d4e89",
+          "Title": "openssl: openssl: Denial of Service via crafted EC certificate in CMS encryption",
+          "Description": "Issue summary: Encrypting a CMS message to an EC certificate whose group order\nis 1 may cause CMS_encrypt() or CMS_encrypt_ex() to loop indefinitely.\n\nImpact summary: An attacker able to supply the recipient certificate to an\napplication performing CMS encryption can cause that application to loop\nindefinitely, consuming CPU and resulting in Denial of Service.\n\nCWE: CWE-835: Loop with Unreachable Exit Condition ('Infinite Loop')\n\nDescription: CMS_encrypt() and CMS_encrypt_ex() encrypt a message to one or\nmore recipient certificates and, for an EC recipient, generate an ephemeral\nkey in the recipient's group. If the certificate declares a group order of 1,\nrandom scalar generation can only produce zero. The key generation routine\nthen retries without limit while waiting for a nonzero private scalar, so the\ncall never returns.\n\nThe OpenSSL TLS and QUIC implementations do not use this path. An application\nis exposed only if it calls CMS_encrypt() or CMS_encrypt_ex() with a recipient\ncertificate whose EC parameters are attacker-controlled. Certificates with\nnormal EC group orders do not trigger the loop.\n\nOpenSSL 4.0 and later reject unknown explicit EC groups in default builds.\nThese versions are affected only when configured with the\nenable-ec_explicit_curves option.\n\nThe result is a hang that consumes a CPU core until the process is\ninterrupted, a Denial of Service. The severity is Low because the attacker\nmust supply the recipient certificate and the application must choose to\nencrypt to it; ordinary CMS encryption to trusted recipients is unaffected.\n\nThe fix makes EC key generation fail when the group has no valid nonzero\nprivate scalar, instead of retrying indefinitely.\n\nFIPS impact: no\nThe FIPS modules in 4.1, 4.0, 3.5 and 3.0 are not affected. The FIPS provider\ndoes not support arbitrary explicit EC domain parameters, so an order-1 group\nis rejected during key import before the vulnerable key generation path is\nreached.",
+          "Severity": "MEDIUM",
+          "CweIDs": [
+            "CWE-835"
+          ],
+          "VendorSeverity": {
+            "redhat": 2,
+            "ubuntu": 2
+          },
+          "CVSS": {
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V3Score": 5.9
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2026-107496",
+            "https://github.com/openssl/openssl/commit/36e15b618decdff1b116eead6747718e6e729ad2",
+            "https://github.com/openssl/openssl/commit/a0051cfe699bf5a047bc1c4faef65f80f7987366",
+            "https://github.com/openssl/openssl/commit/a8531368ddb1f86d2a2782a8b693926bb67b59e7",
+            "https://nvd.nist.gov/vuln/detail/CVE-2026-107496",
+            "https://openssl-library.org/news/secadv/20261110.txt",
+            "https://www.cve.org/CVERecord?id=CVE-2026-107496"
+          ],
+          "PublishedDate": "2026-11-10T19:18:02.583Z",
+          "LastModifiedDate": "2026-11-16T19:17:24.6Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-95691",
+          "PkgID": "libcrypto3@3.5.9-r0",
+          "PkgName": "libcrypto3",
+          "PkgIdentifier": {
+            "PURL": "pkg:apk/alpine/libcrypto3@3.5.9-r0?arch=x86_64\u0026distro=3.22.2",
+            "UID": "5611d6aa5bf08335"
+          },
+          "InstalledVersion": "3.5.9-r0",
+          "FixedVersion": "3.5.9-r1",
+          "Status": "fixed",
+          "Layer": {
+            "DiffID": "sha256:4f7d21128c4a72700cd5927cd451ce930a949d271ccf6544b08763c973d8aff9"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-95691",
+          "DataSource": {
+            "ID": "alpine",
+            "Name": "Alpine Secdb",
+            "URL": "https://secdb.alpinelinux.org/"
+          },
+          "Fingerprint": "sha256:17c3a778a30484b7e02a9fc0a6e74a4d400d7187773085d4d466deb704e68a41",
+          "Title": "openssl: openssl: Denial of Service via overlapping QUIC CRYPTO frame processing",
+          "Description": "Issue summary: A retransmitted QUIC CRYPTO frame can release packet storage\nwhile the TLS record layer retains a direct pointer into that storage causing\nuse after free.\n\nImpact summary: A malicious QUIC server can cause a heap-use-after-free read\nin the OpenSSL QUIC client. The server can also identify one allocator-adjacent\nbyte through the client's protected Handshake response.\n\nCWE: CWE-416: Use After Free\n\nDescription: During CRYPTO stream processing, a pointer into the first frame's\nmemory on the stream is lent to the TLS handshake processing. The memory\nmust remain stable until it is processed and released. However the processing\nof retransmitted CRYPTO frames could release the memory if the retransmitted\nframe fully overlapped the existing frame. This then causes use-after-free read\nwhen the TLS handshake processing continues.\n\nThe use-after-free read can lead to a Denial-of-Service of the client\napplication or a minor leak of information about the heap memory contents\nthat might be overwritten with other data, subsequently allocated by\nthe application, to the peer.\n\nFIPS impact: no\nThe FIPS module is not affected as the QUIC implementation is outside of\nthe OpenSSL FIPS module boundary.",
+          "Severity": "MEDIUM",
+          "CweIDs": [
+            "CWE-416"
+          ],
+          "VendorSeverity": {
+            "redhat": 2,
+            "ubuntu": 2
+          },
+          "CVSS": {
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:N/A:L",
+              "V3Score": 5.4
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2026-95691",
+            "https://github.com/openssl/openssl/commit/dd90ceb99a3c2ddba336bb4a00be9ebabd84c2a1",
+            "https://github.com/openssl/openssl/commit/ec9d4de9d03989b29db5a3d7efdb4c285deaf386",
+            "https://github.com/openssl/openssl/commit/f6244675833e097c2429a40d1b206d95385bd42f",
+            "https://nvd.nist.gov/vuln/detail/CVE-2026-95691",
+            "https://openssl-library.org/news/secadv/20261110.txt",
+            "https://www.cve.org/CVERecord?id=CVE-2026-95691"
+          ],
+          "PublishedDate": "2026-11-10T19:21:39.377Z",
+          "LastModifiedDate": "2026-11-16T20:19:19.43Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-95692",
+          "PkgID": "libcrypto3@3.5.9-r0",
+          "PkgName": "libcrypto3",
+          "PkgIdentifier": {
+            "PURL": "pkg:apk/alpine/libcrypto3@3.5.9-r0?arch=x86_64\u0026distro=3.22.2",
+            "UID": "5611d6aa5bf08335"
+          },
+          "InstalledVersion": "3.5.9-r0",
+          "FixedVersion": "3.5.9-r1",
+          "Status": "fixed",
+          "Layer": {
+            "DiffID": "sha256:4f7d21128c4a72700cd5927cd451ce930a949d271ccf6544b08763c973d8aff9"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-95692",
+          "DataSource": {
+            "ID": "alpine",
+            "Name": "Alpine Secdb",
+            "URL": "https://secdb.alpinelinux.org/"
+          },
+          "Fingerprint": "sha256:7441c3069f4d7521c9d6e757c0c30c1835d662423de41987d4a642fab596147b",
+          "Title": "openssl: OpenSSL: Denial of Service via out-of-bounds read in AES-GCM-SIV",
+          "Description": "Issue summary: Setting an AES-GCM-SIV IV shorter than the expected nonce\nlength via EVP_CipherInit_ex() may trigger a heap out-of-bounds read.\nSupplying a longer IV is silently truncated instead of rejected.\n\nImpact summary: An application passing a caller-supplied IV of the wrong\nlength may crash or read beyond its buffer. Because trailing IV bytes are\nignored, an attacker who knows one message and tag may forge messages under a\ndifferent IV.\n\nCWE: CWE-125: Out-of-bounds Read\n\nDescription: AES-GCM-SIV copies the caller-supplied IV or nonce into its\ninternal state using a copy whose length is taken from the expected nonce size\nrather than from the length the caller actually provided. When the caller\npasses a shorter IV, the copy reads past the end of the caller's buffer;\nAddressSanitizer confirms a heap out-of-bounds read reached through\nEVP_CipherInit_ex() into ossl_aes_gcm_siv_init(). When the caller passes a\nlonger IV, the implementation silently discards the trailing bytes instead of\nrejecting the length.\n\nThe truncation breaks the binding between the IV and the computed\nauthentication tag. An attacker who has observed a message and its tag under\none IV can produce a message and tag that verify under a different IV whose\nfirst bytes match, since the surplus bytes never influence the computation.\nThe message itself is unchanged, so this is a failure of IV commitment rather\nthan a classic existential forgery.\n\nOnly applications that call EVP_CipherInit_ex() (or the equivalent provider\ncipher initialization) with an IV length other than the standard 12 bytes for\nAES-GCM-SIV are affected. The severity is limited because the out-of-bounds\nread is small and attacker-controlled only in length, and the forgery requires\nan unusual IV length choice by the application.\n\nFIPS impact: no\nThe FIPS modules are not affected by this issue, as AES-GCM-SIV is not an\napproved algorithm.",
+          "Severity": "MEDIUM",
+          "CweIDs": [
+            "CWE-125"
+          ],
+          "VendorSeverity": {
+            "redhat": 2,
+            "ubuntu": 2
+          },
+          "CVSS": {
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:L",
+              "V3Score": 4.8
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2026-95692",
+            "https://github.com/openssl/openssl/commit/257a3427aa0ef8d9dd2ef5b3e2d1c021a221b116",
+            "https://github.com/openssl/openssl/commit/510872388f5d145cf870868b3d288a23822cb776",
+            "https://github.com/openssl/openssl/commit/70a47ac78b6f3be1b22fb1551bd0bfcff4f29613",
+            "https://nvd.nist.gov/vuln/detail/CVE-2026-95692",
+            "https://openssl-library.org/news/secadv/20261110.txt",
+            "https://www.cve.org/CVERecord?id=CVE-2026-95692"
+          ],
+          "PublishedDate": "2026-11-10T19:21:39.53Z",
+          "LastModifiedDate": "2026-11-16T19:17:54.88Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-107493",
+          "PkgID": "libcrypto3@3.5.9-r0",
+          "PkgName": "libcrypto3",
+          "PkgIdentifier": {
+            "PURL": "pkg:apk/alpine/libcrypto3@3.5.9-r0?arch=x86_64\u0026distro=3.22.2",
+            "UID": "5611d6aa5bf08335"
+          },
+          "InstalledVersion": "3.5.9-r0",
+          "FixedVersion": "3.5.9-r2",
+          "Status": "fixed",
+          "Layer": {
+            "DiffID": "sha256:4f7d21128c4a72700cd5927cd451ce930a949d271ccf6544b08763c973d8aff9"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-107493",
+          "DataSource": {
+            "ID": "alpine",
+            "Name": "Alpine Secdb",
+            "URL": "https://secdb.alpinelinux.org/"
+          },
+          "Fingerprint": "sha256:7111ae4c733d6ea651955e805759918f7b2c7749eede8d09ec99eb20086005cf",
+          "Title": "openssl: openssl: Denial of Service via malformed PEM data in PEM_X509_INFO_read_bio_ex",
+          "Description": "Issue summary: When an application passes a stack to\nPEM_X509_INFO_read_bio_ex() to add entries to, and reading fails,\nOpenSSL frees every entry in the stack, both the old ones and any new\nones, but leaves them in the stack.\n\nImpact summary: An application that passes an existing stack to\nPEM_X509_INFO_read_bio_ex() and keeps using it after a failed read may\nuse memory that was already freed. This can cause a crash or, in\nprinciple, memory corruption. Malformed PEM data can make the read fail,\nbut only applications that pass an existing stack are affected, and\nOpenSSL itself does not do this.\n\nCWE: CWE-416: Use After Free\n\nDescription: PEM_X509_INFO_read_bio_ex() reads certificates, CRLs and\nprivate keys from PEM data and adds them to a stack of X509_INFO\nstructures. If the application passes a stack that is not NULL, the\nfunction adds the new entries to it and must leave the entries that are\nalready there unchanged.\n\nIf reading fails, the function frees every entry in the stack. This\nincludes the entries that were there before the call, and the entries\nadded by the call. It does not remove these entries from the stack, so\nthe stack keeps pointers to freed memory. The failure can happen at any\npoint, even before any entry was added. A PEM item with invalid content\nis enough.  This also happens if the stack was empty: entries added\nbefore the failure are freed but stay in the stack.\n\nAn application that then reads or frees the stack will use memory that\nwas already freed. This can crash the application or, in principle,\ncorrupt memory.\n\nOnly applications that pass a stack that is not NULL are affected.\nOpenSSL itself never does this. Its own callers, including the code that\nTLS uses to load CA certificates, always pass NULL. When the stack is\nNULL, the function frees only the entries that it created itself, which\nis safe. We expect that very few applications pass an existing stack. An\nattacker can make the read fail with malformed PEM data, but cannot make\nan application pass an existing stack.\n\nThe same problem affects PEM_X509_INFO_read_bio(), PEM_X509_INFO_read()\nand PEM_X509_INFO_read_ex(), which use the same code. OpenSSL 1.1.1 and\n1.0.2 have only the first two of these functions.\n\nFIPS impact: no\nThe affected code is outside the FIPS module boundary.",
+          "Severity": "LOW",
+          "CweIDs": [
+            "CWE-416"
+          ],
+          "VendorSeverity": {
+            "redhat": 1,
+            "ubuntu": 2
+          },
+          "CVSS": {
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
+              "V3Score": 3.7
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2026-107493",
+            "https://github.com/openssl/openssl/commit/0486dfadfec558e1808f59d35a8d79e541c4e7d7",
+            "https://github.com/openssl/openssl/commit/c57a5ccf0c060755b5494a6870922b7c6cdd7dd8",
+            "https://github.com/openssl/openssl/commit/c8f6d04f8e6d40b1bf83334e4a2ec9daf5943a3d",
+            "https://nvd.nist.gov/vuln/detail/CVE-2026-107493",
+            "https://openssl-library.org/news/secadv/20261117.txt",
+            "https://www.cve.org/CVERecord?id=CVE-2026-107493"
+          ],
+          "PublishedDate": "2026-11-17T09:17:25.87Z",
+          "LastModifiedDate": "2026-11-17T22:17:20.83Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-88822",
+          "PkgID": "libcrypto3@3.5.9-r0",
+          "PkgName": "libcrypto3",
+          "PkgIdentifier": {
+            "PURL": "pkg:apk/alpine/libcrypto3@3.5.9-r0?arch=x86_64\u0026distro=3.22.2",
+            "UID": "5611d6aa5bf08335"
+          },
+          "InstalledVersion": "3.5.9-r0",
+          "FixedVersion": "3.5.9-r1",
+          "Status": "fixed",
+          "Layer": {
+            "DiffID": "sha256:4f7d21128c4a72700cd5927cd451ce930a949d271ccf6544b08763c973d8aff9"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-88822",
+          "DataSource": {
+            "ID": "alpine",
+            "Name": "Alpine Secdb",
+            "URL": "https://secdb.alpinelinux.org/"
+          },
+          "Fingerprint": "sha256:7d1c9f2d25e56c148e8a43d7f3f155a44a0c50af61ce46dbe21c94d89d81d36a",
+          "Title": "openssl: openssl: Information disclosure via uninitialized memory in QUIC peer detection",
+          "Description": "Issue summary: QUIC, when performing automated peer detection, may allow\nuninitialized stack data to leak into the received address which is then used\nas the destination for outgoing packets.\n\nImpact summary: Applications using QUIC's automated peer detection mechanism\nmay receive an invalid address, leading to connection loss and disclosure of\nuninitialized stack data to an attacker observing the outgoing network traffic.\n\nCWE: CWE-457 (Use of Uninitialized Variable)\n\nDescription: The OpenSSL QUIC stack contains a feature in which, when using an\nalready connected socket, it will auto-detect the peer address during the SSL\nhandshake.  This feature uses the getpeername() function, passing a buffer of\nsufficient length to hold any supported address family, but passes a buffer\nlength that is only sized such that larger addresses, such as IPv6, cannot be\nretrieved. The getpeername() function however, still returns the full address\nlength, which is accepted as the valid input buffer length, leading to the\naddress buffer containing uninitialized stack data instead of the actual peer\naddress. The invalid peer address is then used as destination for the outgoing\npackets which leads to a connectivity breakage and a leakage of the\nuninitialized stack data to passive network observers.\n\nFIPS impact: no\nThe FIPS modules in 4.0, 3.6, 3.5, 3.4, and 3.0 are not affected by this CVE as\nthe affected protocol is not implemented in the FIPS module.",
+          "Severity": "LOW",
+          "CweIDs": [
+            "CWE-457"
+          ],
+          "VendorSeverity": {
+            "redhat": 1,
+            "ubuntu": 2
+          },
+          "CVSS": {
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N",
+              "V3Score": 3.7
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2026-88822",
+            "https://github.com/openssl/openssl/commit/1a73dc590cbad62d6f0329ea4779eadaa8d8fd75",
+            "https://github.com/openssl/openssl/commit/7b4f5344aa0401e7b777640050b5257ed2a70e88",
+            "https://github.com/openssl/openssl/commit/911eee8eb7550b95a206f1ad8cbdb986098982f3",
+            "https://nvd.nist.gov/vuln/detail/CVE-2026-88822",
+            "https://openssl-library.org/news/secadv/20261110.txt",
+            "https://www.cve.org/CVERecord?id=CVE-2026-88822"
+          ],
+          "PublishedDate": "2026-11-10T19:21:34.623Z",
+          "LastModifiedDate": "2026-11-16T20:19:17.693Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-88823",
+          "PkgID": "libcrypto3@3.5.9-r0",
+          "PkgName": "libcrypto3",
+          "PkgIdentifier": {
+            "PURL": "pkg:apk/alpine/libcrypto3@3.5.9-r0?arch=x86_64\u0026distro=3.22.2",
+            "UID": "5611d6aa5bf08335"
+          },
+          "InstalledVersion": "3.5.9-r0",
+          "FixedVersion": "3.5.9-r1",
+          "Status": "fixed",
+          "Layer": {
+            "DiffID": "sha256:4f7d21128c4a72700cd5927cd451ce930a949d271ccf6544b08763c973d8aff9"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-88823",
+          "DataSource": {
+            "ID": "alpine",
+            "Name": "Alpine Secdb",
+            "URL": "https://secdb.alpinelinux.org/"
+          },
+          "Fingerprint": "sha256:21d75e39d25f3f6862773fcfa3537ccc51a0b0c9843da3b0ef0e1a2b3c19b51d",
+          "Title": "openssl: OpenSSL: Message authentication bypass via zero-length AAD update",
+          "Description": "Issue summary: The AES-GCM-SIV implementation treats a zero-length Additional\nAuthenticated Data (AAD) update as a reset of all the AAD supplied so far,\ninstead of leaving the AAD unchanged. An application that supplies its AAD in\nseveral fragments, one of which is empty, therefore produces or verifies\nmessages whose authentication tag does not cover the AAD supplied before\nthe empty fragment.\n\nImpact summary: Data an application intended to authenticate alongside a\nmessage is silently left unauthenticated. An attacker can forge the AAD of such\na message.\n\nCWE: CWE-325: Missing Cryptographic Step\n\nDescription: An application passing AAD in multiple chunks of which some have\nzero length will have the previous AAD chunks effectively unauthenticated. Also,\non context re-initialisation, the AAD was not reset, which meant that any AAD\naccumulated from the previous context usage were also included in the AAD of the\nnew message.\n\nThe fix makes a zero-length AAD update a no-op and clears any accumulated AAD\nwhenever the context is re-initialised with a key or a nonce.\nA re-initialisation that only changes parameters keeps the AAD.\n\nFIPS impact: no\nThe FIPS modules are not affected, as AES-GCM-SIV is not a FIPS approved\nalgorithm and is implemented only in the default provider, outside the\nOpenSSL FIPS module boundary.",
+          "Severity": "LOW",
+          "CweIDs": [
+            "CWE-325"
+          ],
+          "VendorSeverity": {
+            "redhat": 1,
+            "ubuntu": 2
+          },
+          "CVSS": {
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:N",
+              "V3Score": 3.7
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2026-88823",
+            "https://github.com/openssl/openssl/commit/159e1de0c448d7b9f09ad768c8e141def4aa1eb4",
+            "https://github.com/openssl/openssl/commit/2f5fc833ff9b5bfe00b32f8b5c74f73c5773c682",
+            "https://github.com/openssl/openssl/commit/6747b1a278816dd7db46438040a70b0b5e5e0a90",
+            "https://nvd.nist.gov/vuln/detail/CVE-2026-88823",
+            "https://openssl-library.org/news/secadv/20261110.txt",
+            "https://www.cve.org/CVERecord?id=CVE-2026-88823"
+          ],
+          "PublishedDate": "2026-11-10T19:21:34.847Z",
+          "LastModifiedDate": "2026-11-16T20:19:17.89Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-124709",
+          "PkgID": "libssl3@3.5.9-r0",
+          "PkgName": "libssl3",
+          "PkgIdentifier": {
+            "PURL": "pkg:apk/alpine/libssl3@3.5.9-r0?arch=x86_64\u0026distro=3.22.2",
+            "UID": "448c3d26049f332a"
+          },
+          "InstalledVersion": "3.5.9-r0",
+          "FixedVersion": "3.5.9-r2",
+          "Status": "fixed",
+          "Layer": {
+            "DiffID": "sha256:4f7d21128c4a72700cd5927cd451ce930a949d271ccf6544b08763c973d8aff9"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-124709",
+          "DataSource": {
+            "ID": "alpine",
+            "Name": "Alpine Secdb",
+            "URL": "https://secdb.alpinelinux.org/"
+          },
+          "Fingerprint": "sha256:7ffbb990179fa14cd096064414add08fe1f20ade76afd4bd9cec51610c4f5385",
+          "Title": "openssl: openssl: Denial of Service via memory leak in QUIC stream handling",
+          "Description": "Issue summary: A QUIC server that rejects a stream opened by the peer may\nretain that stream's state for the lifetime of the connection if the peer\nresets the stream before the rejection is signalled, even though the peer's\nstream credit is returned.\n\nImpact summary: A remote client that completes a QUIC handshake can repeatedly\nopen and reset streams, causing server memory to grow without bound until the\nprocess runs out of memory and every connection on it is lost. This is a\nDenial of Service.\n\nCWE: CWE-401: Missing Release of Memory after Effective Lifetime\n\nDescription: QUIC servers track each stream the peer opens. When the incoming\nstream policy rejects a stream, OpenSSL schedules a STOP_SENDING frame, marks\nthe stream deleted and returns the peer's stream credit. A deleted stream is\ncollected only once its receive part is fully drained, which for a rejected\nstream means the STOP_SENDING has been acknowledged. If the peer sends\nRESET_STREAM first, the reset cancels the pending STOP_SENDING, so it is never\nsent or acknowledged and the stream is never collected.\n\nThe default configuration reaches this path. Once a connection has a default\nstream, meaning the application has read from or written to the connection as\nthe tutorial server does, the effective incoming stream policy rejects streams\nthe application does not accept. Applications that set the REJECT policy\nexplicitly are affected too.\n\nEach retained stream costs about 300 bytes, and the peer's stream credit\nwindow paces how quickly they accumulate. A client that keeps the connection\nopen and keeps opening and resetting streams grows server memory without\nbound. The severity is Low because growth is slow, needs a long-lived\nconnection, and causes no memory corruption or disclosure.\n\nFIPS impact: no\nThe affected code is outside the FIPS module boundary.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-401"
+          ],
+          "VendorSeverity": {
+            "redhat": 3,
+            "ubuntu": 2
+          },
+          "CVSS": {
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V3Score": 7.5
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2026-124709",
+            "https://github.com/openssl/openssl/commit/22291a6af12f158fbb13bfbd572a33dbdbf290d2",
+            "https://github.com/openssl/openssl/commit/ead311df1037e7994a6d86c7e862d71ad59c52c7",
+            "https://github.com/openssl/openssl/commit/f3acb0a3328046741479482c51cec815839e1b05",
+            "https://nvd.nist.gov/vuln/detail/CVE-2026-124709",
+            "https://openssl-library.org/news/secadv/20261117.txt",
+            "https://www.cve.org/CVERecord?id=CVE-2026-124709"
+          ],
+          "PublishedDate": "2026-11-17T09:17:27.227Z",
+          "LastModifiedDate": "2026-11-17T22:17:22.377Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-107496",
+          "PkgID": "libssl3@3.5.9-r0",
+          "PkgName": "libssl3",
+          "PkgIdentifier": {
+            "PURL": "pkg:apk/alpine/libssl3@3.5.9-r0?arch=x86_64\u0026distro=3.22.2",
+            "UID": "448c3d26049f332a"
+          },
+          "InstalledVersion": "3.5.9-r0",
+          "FixedVersion": "3.5.9-r1",
+          "Status": "fixed",
+          "Layer": {
+            "DiffID": "sha256:4f7d21128c4a72700cd5927cd451ce930a949d271ccf6544b08763c973d8aff9"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-107496",
+          "DataSource": {
+            "ID": "alpine",
+            "Name": "Alpine Secdb",
+            "URL": "https://secdb.alpinelinux.org/"
+          },
+          "Fingerprint": "sha256:f73fdd3b17d98da4b19f17a9e1a9c152fe791a66f9c5aa6beecc29d0af5cdd8e",
+          "Title": "openssl: openssl: Denial of Service via crafted EC certificate in CMS encryption",
+          "Description": "Issue summary: Encrypting a CMS message to an EC certificate whose group order\nis 1 may cause CMS_encrypt() or CMS_encrypt_ex() to loop indefinitely.\n\nImpact summary: An attacker able to supply the recipient certificate to an\napplication performing CMS encryption can cause that application to loop\nindefinitely, consuming CPU and resulting in Denial of Service.\n\nCWE: CWE-835: Loop with Unreachable Exit Condition ('Infinite Loop')\n\nDescription: CMS_encrypt() and CMS_encrypt_ex() encrypt a message to one or\nmore recipient certificates and, for an EC recipient, generate an ephemeral\nkey in the recipient's group. If the certificate declares a group order of 1,\nrandom scalar generation can only produce zero. The key generation routine\nthen retries without limit while waiting for a nonzero private scalar, so the\ncall never returns.\n\nThe OpenSSL TLS and QUIC implementations do not use this path. An application\nis exposed only if it calls CMS_encrypt() or CMS_encrypt_ex() with a recipient\ncertificate whose EC parameters are attacker-controlled. Certificates with\nnormal EC group orders do not trigger the loop.\n\nOpenSSL 4.0 and later reject unknown explicit EC groups in default builds.\nThese versions are affected only when configured with the\nenable-ec_explicit_curves option.\n\nThe result is a hang that consumes a CPU core until the process is\ninterrupted, a Denial of Service. The severity is Low because the attacker\nmust supply the recipient certificate and the application must choose to\nencrypt to it; ordinary CMS encryption to trusted recipients is unaffected.\n\nThe fix makes EC key generation fail when the group has no valid nonzero\nprivate scalar, instead of retrying indefinitely.\n\nFIPS impact: no\nThe FIPS modules in 4.1, 4.0, 3.5 and 3.0 are not affected. The FIPS provider\ndoes not support arbitrary explicit EC domain parameters, so an order-1 group\nis rejected during key import before the vulnerable key generation path is\nreached.",
+          "Severity": "MEDIUM",
+          "CweIDs": [
+            "CWE-835"
+          ],
+          "VendorSeverity": {
+            "redhat": 2,
+            "ubuntu": 2
+          },
+          "CVSS": {
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V3Score": 5.9
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2026-107496",
+            "https://github.com/openssl/openssl/commit/36e15b618decdff1b116eead6747718e6e729ad2",
+            "https://github.com/openssl/openssl/commit/a0051cfe699bf5a047bc1c4faef65f80f7987366",
+            "https://github.com/openssl/openssl/commit/a8531368ddb1f86d2a2782a8b693926bb67b59e7",
+            "https://nvd.nist.gov/vuln/detail/CVE-2026-107496",
+            "https://openssl-library.org/news/secadv/20261110.txt",
+            "https://www.cve.org/CVERecord?id=CVE-2026-107496"
+          ],
+          "PublishedDate": "2026-11-10T19:18:02.583Z",
+          "LastModifiedDate": "2026-11-16T19:17:24.6Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-95691",
+          "PkgID": "libssl3@3.5.9-r0",
+          "PkgName": "libssl3",
+          "PkgIdentifier": {
+            "PURL": "pkg:apk/alpine/libssl3@3.5.9-r0?arch=x86_64\u0026distro=3.22.2",
+            "UID": "448c3d26049f332a"
+          },
+          "InstalledVersion": "3.5.9-r0",
+          "FixedVersion": "3.5.9-r1",
+          "Status": "fixed",
+          "Layer": {
+            "DiffID": "sha256:4f7d21128c4a72700cd5927cd451ce930a949d271ccf6544b08763c973d8aff9"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-95691",
+          "DataSource": {
+            "ID": "alpine",
+            "Name": "Alpine Secdb",
+            "URL": "https://secdb.alpinelinux.org/"
+          },
+          "Fingerprint": "sha256:896d7329e736356cd64a09092002f0f692c7da17c99be5a61520b34c6589cdd6",
+          "Title": "openssl: openssl: Denial of Service via overlapping QUIC CRYPTO frame processing",
+          "Description": "Issue summary: A retransmitted QUIC CRYPTO frame can release packet storage\nwhile the TLS record layer retains a direct pointer into that storage causing\nuse after free.\n\nImpact summary: A malicious QUIC server can cause a heap-use-after-free read\nin the OpenSSL QUIC client. The server can also identify one allocator-adjacent\nbyte through the client's protected Handshake response.\n\nCWE: CWE-416: Use After Free\n\nDescription: During CRYPTO stream processing, a pointer into the first frame's\nmemory on the stream is lent to the TLS handshake processing. The memory\nmust remain stable until it is processed and released. However the processing\nof retransmitted CRYPTO frames could release the memory if the retransmitted\nframe fully overlapped the existing frame. This then causes use-after-free read\nwhen the TLS handshake processing continues.\n\nThe use-after-free read can lead to a Denial-of-Service of the client\napplication or a minor leak of information about the heap memory contents\nthat might be overwritten with other data, subsequently allocated by\nthe application, to the peer.\n\nFIPS impact: no\nThe FIPS module is not affected as the QUIC implementation is outside of\nthe OpenSSL FIPS module boundary.",
+          "Severity": "MEDIUM",
+          "CweIDs": [
+            "CWE-416"
+          ],
+          "VendorSeverity": {
+            "redhat": 2,
+            "ubuntu": 2
+          },
+          "CVSS": {
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:N/A:L",
+              "V3Score": 5.4
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2026-95691",
+            "https://github.com/openssl/openssl/commit/dd90ceb99a3c2ddba336bb4a00be9ebabd84c2a1",
+            "https://github.com/openssl/openssl/commit/ec9d4de9d03989b29db5a3d7efdb4c285deaf386",
+            "https://github.com/openssl/openssl/commit/f6244675833e097c2429a40d1b206d95385bd42f",
+            "https://nvd.nist.gov/vuln/detail/CVE-2026-95691",
+            "https://openssl-library.org/news/secadv/20261110.txt",
+            "https://www.cve.org/CVERecord?id=CVE-2026-95691"
+          ],
+          "PublishedDate": "2026-11-10T19:21:39.377Z",
+          "LastModifiedDate": "2026-11-16T20:19:19.43Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-95692",
+          "PkgID": "libssl3@3.5.9-r0",
+          "PkgName": "libssl3",
+          "PkgIdentifier": {
+            "PURL": "pkg:apk/alpine/libssl3@3.5.9-r0?arch=x86_64\u0026distro=3.22.2",
+            "UID": "448c3d26049f332a"
+          },
+          "InstalledVersion": "3.5.9-r0",
+          "FixedVersion": "3.5.9-r1",
+          "Status": "fixed",
+          "Layer": {
+            "DiffID": "sha256:4f7d21128c4a72700cd5927cd451ce930a949d271ccf6544b08763c973d8aff9"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-95692",
+          "DataSource": {
+            "ID": "alpine",
+            "Name": "Alpine Secdb",
+            "URL": "https://secdb.alpinelinux.org/"
+          },
+          "Fingerprint": "sha256:6325b84d4feb68e15c33f4e624c3614827fe1ca0228c27a4f9a438d6e31025cc",
+          "Title": "openssl: OpenSSL: Denial of Service via out-of-bounds read in AES-GCM-SIV",
+          "Description": "Issue summary: Setting an AES-GCM-SIV IV shorter than the expected nonce\nlength via EVP_CipherInit_ex() may trigger a heap out-of-bounds read.\nSupplying a longer IV is silently truncated instead of rejected.\n\nImpact summary: An application passing a caller-supplied IV of the wrong\nlength may crash or read beyond its buffer. Because trailing IV bytes are\nignored, an attacker who knows one message and tag may forge messages under a\ndifferent IV.\n\nCWE: CWE-125: Out-of-bounds Read\n\nDescription: AES-GCM-SIV copies the caller-supplied IV or nonce into its\ninternal state using a copy whose length is taken from the expected nonce size\nrather than from the length the caller actually provided. When the caller\npasses a shorter IV, the copy reads past the end of the caller's buffer;\nAddressSanitizer confirms a heap out-of-bounds read reached through\nEVP_CipherInit_ex() into ossl_aes_gcm_siv_init(). When the caller passes a\nlonger IV, the implementation silently discards the trailing bytes instead of\nrejecting the length.\n\nThe truncation breaks the binding between the IV and the computed\nauthentication tag. An attacker who has observed a message and its tag under\none IV can produce a message and tag that verify under a different IV whose\nfirst bytes match, since the surplus bytes never influence the computation.\nThe message itself is unchanged, so this is a failure of IV commitment rather\nthan a classic existential forgery.\n\nOnly applications that call EVP_CipherInit_ex() (or the equivalent provider\ncipher initialization) with an IV length other than the standard 12 bytes for\nAES-GCM-SIV are affected. The severity is limited because the out-of-bounds\nread is small and attacker-controlled only in length, and the forgery requires\nan unusual IV length choice by the application.\n\nFIPS impact: no\nThe FIPS modules are not affected by this issue, as AES-GCM-SIV is not an\napproved algorithm.",
+          "Severity": "MEDIUM",
+          "CweIDs": [
+            "CWE-125"
+          ],
+          "VendorSeverity": {
+            "redhat": 2,
+            "ubuntu": 2
+          },
+          "CVSS": {
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:L",
+              "V3Score": 4.8
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2026-95692",
+            "https://github.com/openssl/openssl/commit/257a3427aa0ef8d9dd2ef5b3e2d1c021a221b116",
+            "https://github.com/openssl/openssl/commit/510872388f5d145cf870868b3d288a23822cb776",
+            "https://github.com/openssl/openssl/commit/70a47ac78b6f3be1b22fb1551bd0bfcff4f29613",
+            "https://nvd.nist.gov/vuln/detail/CVE-2026-95692",
+            "https://openssl-library.org/news/secadv/20261110.txt",
+            "https://www.cve.org/CVERecord?id=CVE-2026-95692"
+          ],
+          "PublishedDate": "2026-11-10T19:21:39.53Z",
+          "LastModifiedDate": "2026-11-16T19:17:54.88Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-107493",
+          "PkgID": "libssl3@3.5.9-r0",
+          "PkgName": "libssl3",
+          "PkgIdentifier": {
+            "PURL": "pkg:apk/alpine/libssl3@3.5.9-r0?arch=x86_64\u0026distro=3.22.2",
+            "UID": "448c3d26049f332a"
+          },
+          "InstalledVersion": "3.5.9-r0",
+          "FixedVersion": "3.5.9-r2",
+          "Status": "fixed",
+          "Layer": {
+            "DiffID": "sha256:4f7d21128c4a72700cd5927cd451ce930a949d271ccf6544b08763c973d8aff9"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-107493",
+          "DataSource": {
+            "ID": "alpine",
+            "Name": "Alpine Secdb",
+            "URL": "https://secdb.alpinelinux.org/"
+          },
+          "Fingerprint": "sha256:3ae1f46a454c4557302ed4a4dc0b326838ecc6b538388b8365fe0d7fed44d1cc",
+          "Title": "openssl: openssl: Denial of Service via malformed PEM data in PEM_X509_INFO_read_bio_ex",
+          "Description": "Issue summary: When an application passes a stack to\nPEM_X509_INFO_read_bio_ex() to add entries to, and reading fails,\nOpenSSL frees every entry in the stack, both the old ones and any new\nones, but leaves them in the stack.\n\nImpact summary: An application that passes an existing stack to\nPEM_X509_INFO_read_bio_ex() and keeps using it after a failed read may\nuse memory that was already freed. This can cause a crash or, in\nprinciple, memory corruption. Malformed PEM data can make the read fail,\nbut only applications that pass an existing stack are affected, and\nOpenSSL itself does not do this.\n\nCWE: CWE-416: Use After Free\n\nDescription: PEM_X509_INFO_read_bio_ex() reads certificates, CRLs and\nprivate keys from PEM data and adds them to a stack of X509_INFO\nstructures. If the application passes a stack that is not NULL, the\nfunction adds the new entries to it and must leave the entries that are\nalready there unchanged.\n\nIf reading fails, the function frees every entry in the stack. This\nincludes the entries that were there before the call, and the entries\nadded by the call. It does not remove these entries from the stack, so\nthe stack keeps pointers to freed memory. The failure can happen at any\npoint, even before any entry was added. A PEM item with invalid content\nis enough.  This also happens if the stack was empty: entries added\nbefore the failure are freed but stay in the stack.\n\nAn application that then reads or frees the stack will use memory that\nwas already freed. This can crash the application or, in principle,\ncorrupt memory.\n\nOnly applications that pass a stack that is not NULL are affected.\nOpenSSL itself never does this. Its own callers, including the code that\nTLS uses to load CA certificates, always pass NULL. When the stack is\nNULL, the function frees only the entries that it created itself, which\nis safe. We expect that very few applications pass an existing stack. An\nattacker can make the read fail with malformed PEM data, but cannot make\nan application pass an existing stack.\n\nThe same problem affects PEM_X509_INFO_read_bio(), PEM_X509_INFO_read()\nand PEM_X509_INFO_read_ex(), which use the same code. OpenSSL 1.1.1 and\n1.0.2 have only the first two of these functions.\n\nFIPS impact: no\nThe affected code is outside the FIPS module boundary.",
+          "Severity": "LOW",
+          "CweIDs": [
+            "CWE-416"
+          ],
+          "VendorSeverity": {
+            "redhat": 1,
+            "ubuntu": 2
+          },
+          "CVSS": {
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
+              "V3Score": 3.7
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2026-107493",
+            "https://github.com/openssl/openssl/commit/0486dfadfec558e1808f59d35a8d79e541c4e7d7",
+            "https://github.com/openssl/openssl/commit/c57a5ccf0c060755b5494a6870922b7c6cdd7dd8",
+            "https://github.com/openssl/openssl/commit/c8f6d04f8e6d40b1bf83334e4a2ec9daf5943a3d",
+            "https://nvd.nist.gov/vuln/detail/CVE-2026-107493",
+            "https://openssl-library.org/news/secadv/20261117.txt",
+            "https://www.cve.org/CVERecord?id=CVE-2026-107493"
+          ],
+          "PublishedDate": "2026-11-17T09:17:25.87Z",
+          "LastModifiedDate": "2026-11-17T22:17:20.83Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-88822",
+          "PkgID": "libssl3@3.5.9-r0",
+          "PkgName": "libssl3",
+          "PkgIdentifier": {
+            "PURL": "pkg:apk/alpine/libssl3@3.5.9-r0?arch=x86_64\u0026distro=3.22.2",
+            "UID": "448c3d26049f332a"
+          },
+          "InstalledVersion": "3.5.9-r0",
+          "FixedVersion": "3.5.9-r1",
+          "Status": "fixed",
+          "Layer": {
+            "DiffID": "sha256:4f7d21128c4a72700cd5927cd451ce930a949d271ccf6544b08763c973d8aff9"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-88822",
+          "DataSource": {
+            "ID": "alpine",
+            "Name": "Alpine Secdb",
+            "URL": "https://secdb.alpinelinux.org/"
+          },
+          "Fingerprint": "sha256:ed66249f1ee49ecc46dfe65ba3e4c3b59244e6faa2dca656b36847c26422f55c",
+          "Title": "openssl: openssl: Information disclosure via uninitialized memory in QUIC peer detection",
+          "Description": "Issue summary: QUIC, when performing automated peer detection, may allow\nuninitialized stack data to leak into the received address which is then used\nas the destination for outgoing packets.\n\nImpact summary: Applications using QUIC's automated peer detection mechanism\nmay receive an invalid address, leading to connection loss and disclosure of\nuninitialized stack data to an attacker observing the outgoing network traffic.\n\nCWE: CWE-457 (Use of Uninitialized Variable)\n\nDescription: The OpenSSL QUIC stack contains a feature in which, when using an\nalready connected socket, it will auto-detect the peer address during the SSL\nhandshake.  This feature uses the getpeername() function, passing a buffer of\nsufficient length to hold any supported address family, but passes a buffer\nlength that is only sized such that larger addresses, such as IPv6, cannot be\nretrieved. The getpeername() function however, still returns the full address\nlength, which is accepted as the valid input buffer length, leading to the\naddress buffer containing uninitialized stack data instead of the actual peer\naddress. The invalid peer address is then used as destination for the outgoing\npackets which leads to a connectivity breakage and a leakage of the\nuninitialized stack data to passive network observers.\n\nFIPS impact: no\nThe FIPS modules in 4.0, 3.6, 3.5, 3.4, and 3.0 are not affected by this CVE as\nthe affected protocol is not implemented in the FIPS module.",
+          "Severity": "LOW",
+          "CweIDs": [
+            "CWE-457"
+          ],
+          "VendorSeverity": {
+            "redhat": 1,
+            "ubuntu": 2
+          },
+          "CVSS": {
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N",
+              "V3Score": 3.7
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2026-88822",
+            "https://github.com/openssl/openssl/commit/1a73dc590cbad62d6f0329ea4779eadaa8d8fd75",
+            "https://github.com/openssl/openssl/commit/7b4f5344aa0401e7b777640050b5257ed2a70e88",
+            "https://github.com/openssl/openssl/commit/911eee8eb7550b95a206f1ad8cbdb986098982f3",
+            "https://nvd.nist.gov/vuln/detail/CVE-2026-88822",
+            "https://openssl-library.org/news/secadv/20261110.txt",
+            "https://www.cve.org/CVERecord?id=CVE-2026-88822"
+          ],
+          "PublishedDate": "2026-11-10T19:21:34.623Z",
+          "LastModifiedDate": "2026-11-16T20:19:17.693Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-88823",
+          "PkgID": "libssl3@3.5.9-r0",
+          "PkgName": "libssl3",
+          "PkgIdentifier": {
+            "PURL": "pkg:apk/alpine/libssl3@3.5.9-r0?arch=x86_64\u0026distro=3.22.2",
+            "UID": "448c3d26049f332a"
+          },
+          "InstalledVersion": "3.5.9-r0",
+          "FixedVersion": "3.5.9-r1",
+          "Status": "fixed",
+          "Layer": {
+            "DiffID": "sha256:4f7d21128c4a72700cd5927cd451ce930a949d271ccf6544b08763c973d8aff9"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-88823",
+          "DataSource": {
+            "ID": "alpine",
+            "Name": "Alpine Secdb",
+            "URL": "https://secdb.alpinelinux.org/"
+          },
+          "Fingerprint": "sha256:3f6e3f1373e36f6156cabc19636063a69237c825ef408f381da4cb07ed2bee99",
+          "Title": "openssl: OpenSSL: Message authentication bypass via zero-length AAD update",
+          "Description": "Issue summary: The AES-GCM-SIV implementation treats a zero-length Additional\nAuthenticated Data (AAD) update as a reset of all the AAD supplied so far,\ninstead of leaving the AAD unchanged. An application that supplies its AAD in\nseveral fragments, one of which is empty, therefore produces or verifies\nmessages whose authentication tag does not cover the AAD supplied before\nthe empty fragment.\n\nImpact summary: Data an application intended to authenticate alongside a\nmessage is silently left unauthenticated. An attacker can forge the AAD of such\na message.\n\nCWE: CWE-325: Missing Cryptographic Step\n\nDescription: An application passing AAD in multiple chunks of which some have\nzero length will have the previous AAD chunks effectively unauthenticated. Also,\non context re-initialisation, the AAD was not reset, which meant that any AAD\naccumulated from the previous context usage were also included in the AAD of the\nnew message.\n\nThe fix makes a zero-length AAD update a no-op and clears any accumulated AAD\nwhenever the context is re-initialised with a key or a nonce.\nA re-initialisation that only changes parameters keeps the AAD.\n\nFIPS impact: no\nThe FIPS modules are not affected, as AES-GCM-SIV is not a FIPS approved\nalgorithm and is implemented only in the default provider, outside the\nOpenSSL FIPS module boundary.",
+          "Severity": "LOW",
+          "CweIDs": [
+            "CWE-325"
+          ],
+          "VendorSeverity": {
+            "redhat": 1,
+            "ubuntu": 2
+          },
+          "CVSS": {
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:N",
+              "V3Score": 3.7
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2026-88823",
+            "https://github.com/openssl/openssl/commit/159e1de0c448d7b9f09ad768c8e141def4aa1eb4",
+            "https://github.com/openssl/openssl/commit/2f5fc833ff9b5bfe00b32f8b5c74f73c5773c682",
+            "https://github.com/openssl/openssl/commit/6747b1a278816dd7db46438040a70b0b5e5e0a90",
+            "https://nvd.nist.gov/vuln/detail/CVE-2026-88823",
+            "https://openssl-library.org/news/secadv/20261110.txt",
+            "https://www.cve.org/CVERecord?id=CVE-2026-88823"
+          ],
+          "PublishedDate": "2026-11-10T19:21:34.847Z",
+          "LastModifiedDate": "2026-11-16T20:19:17.89Z"
+        },
+        {
           "VulnerabilityID": "CVE-2026-4738",
           "PkgID": "zlib@1.3.2-r1",
           "PkgName": "zlib",
@@ -2179,7 +2866,7 @@
             "Name": "Alpine Secdb",
             "URL": "https://secdb.alpinelinux.org/"
           },
-          "Fingerprint": "sha256:9080f57df3249e787b33b928d8e51318b9803f15666a4d0ad47fd2fee33f54ca",
+          "Fingerprint": "sha256:8716ec3f936007362fc91da811b56c3e53f6b93298d1a49ead95520d38de80e0",
           "Title": "Improper Restriction of Operations within the Bounds of a Memory Buffe ...",
           "Description": "Improper Restriction of Operations within the Bounds of a Memory Buffer vulnerability in OSGeo gdal (frmts/zlib/contrib/infback9 modules). This vulnerability is associated with program files inftree9.C‎.\n\nThis issue affects gdal: before 3.11.0.",
           "Severity": "MEDIUM",
@@ -2748,7 +3435,8 @@
             "ghsa": 2,
             "nvd": 2,
             "photon": 2,
-            "redhat": 2
+            "redhat": 2,
+            "ubuntu": 2
           },
           "CVSS": {
             "ghsa": {

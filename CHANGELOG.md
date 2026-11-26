@@ -6,6 +6,28 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Security (2026-11-26 rebuild/rescan)
+
+- **Took every *reachable* CRITICAL in the suite to zero.** A full seven-image rebuild/rescan
+  surfaced 8 new CRITICALs in `fdpserv2` (Spring-webmvc, Tomcat-embed, Netty -- all
+  Spring-Boot-managed). Fixed by bumping `spring-boot-starter-parent` 4.1.0 -> 4.1.3 in the
+  `markwilkinson/FAIRDataPoint` fork `fdpserv2` builds from -- a patch-level bump that carries only
+  the fixed dependency versions (verified against the 4.1.3 BOM: spring-framework 7.0.11,
+  tomcat-embed 11.0.27, netty 4.2.20), deliberately *not* merging upstream's entangled behavioral
+  changes. `fdpserv2`: 8C/20H -> 0C/11H. The only CRITICAL left in the suite is `mdb`'s
+  `CVE-2025-68121`, which is `NOT REACHABLE` (inert Go tooling MongoDB never invokes).
+- **Patched the owned Sinatra-app gems in `cdeb2` and `yrml`.** Bumped both Gemfiles to
+  `sinatra >= 4.2.2` (pins `rack-protection 4.2.2`) and `puma >= 8.1.3`, regenerating each lockfile
+  in the image's own build base. This also corrected a mis-classification: `yrml`'s gem findings
+  had been `wrapper -> TRACK`, but `yarrrml-rml/Gemfile` is as much ours as the daemon's, so they
+  are `owned -> PATCH` and are now fixed.
+- **Disposition accuracy:** `cdeb2`'s three `git` CVEs moved PATCH -> `TRACK` (the fixed
+  `git 2.54.1-r0` isn't in Alpine 3.24/main yet, so there's nothing for us to patch to until Alpine
+  ships it); four stale Spring/Tomcat `REVIEW` entries were pruned from `build_register.py` (cleared
+  by the Spring Boot bump). Remaining HIGHs are transitive Java deps (rmlmapper/FDP fork) and
+  Tier-3 `mdb` tooling -- deferred, documented in `Security/VULNERABILITY_TRIAGE.md`
+  ("2026-11-26 re-scan review").
+
 ### Changed
 
 - **The security pipeline now scans at every severity, with two new build gates.** `security-patch.sh`

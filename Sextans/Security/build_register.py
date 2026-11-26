@@ -99,30 +99,13 @@ IMAGE_INFO = {
 # Keyed by VulnerabilityID; applies across every image it appears in unless
 # overridden by a more specific (Image, VulnerabilityID) key.
 MANUAL_DECISIONS = {
-    "CVE-2026-22732": (
-        "REVIEW",
-        "Spring Security: HTTP security response headers omitted under certain "
-        "conditions (not an injection/RCE bug). Real but lower practical severity "
-        "than the CRITICAL label suggests for us; verify our security-header "
-        "posture isn't relying solely on Spring's default headers, then track "
-        "upstream Spring Boot bump in fdpserv2's next FAIRDataPoint release."
-    ),
-    "CVE-2026-41293": (
-        "REVIEW",
-        "Apache Tomcat improper input validation (embedded in fdpserv2's Spring "
-        "Boot runtime). Need the specific advisory text to judge exploitability -- "
-        "flagged for a closer read before deciding bump vs. accept."
-    ),
-    "CVE-2026-43512": (
-        "REVIEW",
-        "Tomcat-related per NVD/VulDB but full advisory text wasn't accessible "
-        "during triage. Flagged for a closer read; track upstream in the meantime."
-    ),
-    "CVE-2026-43515": (
-        "REVIEW",
-        "Same as CVE-2026-43512 -- Tomcat-related, needs a closer read of the full "
-        "advisory before deciding."
-    ),
+    # Four Spring-Security/Tomcat REVIEW entries (CVE-2026-22732, -41293, -43512,
+    # -43515) lived here until 2026-11-26. They were all fdpserv2 Spring-Boot-managed
+    # findings; bumping the fork's spring-boot-starter-parent 4.1.0 -> 4.1.3 (pulling
+    # spring-framework 7.0.11 / tomcat-embed 11.0.27) cleared every one of them from
+    # fdpserv2's scan, so they no longer match any (image, cve) pair and the entries
+    # became dead no-ops. Removed. See VULNERABILITY_TRIAGE.md, "2026-11-26 re-scan review".
+    #
     # CVE-2026-31789 and CVE-2025-58050 used to have global RESOLVED entries here,
     # from when they were confirmed fixed in fdpclient specifically. Removed
     # 2026-11-06: fdpclient dropping a CVE from its own scan already makes that
@@ -194,6 +177,29 @@ MANUAL_DECISIONS = {
         "(mongodump/mongoexport/etc.) that our MongoDB deployment never invokes and that parses no "
         "HTML in our use -- same inert-Go-tooling basis as mdb's other findings. Re-verify if we "
         "ever call those CLI tools directly."
+    ),
+    # cdeb2's three git CVEs (2026-11-26). Trivy reports a FixedVersion (git 2.54.1-r0), so the
+    # (tier2, owned, has_fix) default calls them PATCH -- but 2.54.1-r0 is NOT yet published to
+    # Alpine 3.24/main (confirmed: `apk policy git` in the freshly rebuilt image still offers only
+    # 2.54.0-r0). We don't fork git; we pick the fix up automatically the moment Alpine ships it and
+    # we rebuild. That is TRACK by our own legend ("fix depends on an upstream vendor shipping a new
+    # release"), not PATCH ("our Dockerfile/dependency to bump"). git here is used only to clone the
+    # CARE-SM-2 mapping from a fixed GitHub URL (no attacker-controlled repo), on the internal-only
+    # transformation daemon (tier 2).
+    ("cdeb2", "CVE-2026-105437"): (
+        "TRACK",
+        "git vulnerability; fix 2.54.1-r0 not yet in Alpine 3.24/main. Clears on the next rebuild "
+        "once Alpine publishes it. See the note above this block."
+    ),
+    ("cdeb2", "CVE-2026-111760"): (
+        "TRACK",
+        "git vulnerability; fix 2.54.1-r0 not yet in Alpine 3.24/main. Clears on the next rebuild "
+        "once Alpine publishes it. See the note above this block."
+    ),
+    ("cdeb2", "CVE-2026-114466"): (
+        "TRACK",
+        "git vulnerability; fix 2.54.1-r0 not yet in Alpine 3.24/main. Clears on the next rebuild "
+        "once Alpine publishes it. See the note above this block."
     ),
 }
 
