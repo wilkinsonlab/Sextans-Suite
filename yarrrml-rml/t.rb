@@ -111,15 +111,27 @@ get '/:type' do
   tmp_dir = File.join(work_dir, 'tmp')
   triples_dir = File.join(work_dir, 'triples')
 
-  begin
-    FileUtils.mkdir_p(triples_dir)
-  rescue StandardError
-    warn "triples folder coiuldn't be created.  Might already exist"
-  end
-  begin
-    FileUtils.mkdir_p(tmp_dir)
-  rescue StandardError
-    warn "tmp folder coiuldn't be created.  Might already exist"
+  # Create this type's work directories. FileUtils.mkdir_p is idempotent -- it
+  # does NOT raise merely because the directory already exists -- so any error
+  # here is a real one. In practice it's almost always that this fixed-UID
+  # container can't write the bind-mounted /mnt/data (a file or folder added to
+  # ./data after install that didn't inherit the installer's "other"-writable
+  # permission). Previously this was rescued and only warned ("Might already
+  # exist"), which swallowed exactly the failure that matters: the run then
+  # marched on to split_csv, whose File.open(..., 'w') inside the never-created
+  # tmp dir raised a cryptic `Errno::ENOENT -- No such file or directory` with
+  # nothing pointing at the actual cause (reported as Sextans-Suite issue #5).
+  # Fail loudly here instead, naming the fix.
+  [triples_dir, tmp_dir].each do |dir|
+    FileUtils.mkdir_p(dir)
+  rescue SystemCallError => e
+    msg = "could not create work directory '#{dir}' (#{e.class}: #{e.message}). " \
+          'The data folder is almost certainly not writable by this container. ' \
+          "On the host, run 'chmod -R o+rwX <your-install-dir>/data' (the " \
+          'installer also sets a default ACL so new files stay writable), then ' \
+          're-trigger the transformation.'
+    warn "FATAL: #{msg}"
+    halt 500, "#{msg}\n"
   end
   FileUtils.rm_rf(Dir.glob(File.join(tmp_dir, '*')))
   FileUtils.rm_rf(Dir.glob(File.join(triples_dir, '*')))
